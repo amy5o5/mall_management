@@ -1,0 +1,19 @@
+.form-container {
+    max-width: 400px;
+    margin: 50px auto;
+  }
+  
+  .form-switch {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  
+  .form-section {
+    display: none;
+  }
+  
+  .form-section.active {
+    display: block;
+  }
+  

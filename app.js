@@ -1,17 +1,14 @@
-const express = require('express');
+const express = require("express");
 const app = express();
 
-app.set('view engine', 'ejs');
+app.set("view engine", "ejs");
 
-app.use(express.static('public'));
+app.use(express.static("public"));
 
-
-app.get('/', (req, res) => {
-  res.send('Hello, world!');
+app.get("/", (req, res) => {
+  res.send("Hello, world!");
 });
 
-
-
 app.listen(3000, () => {
-  console.log('Server is running on http://192.168.1.183:3000');
+  console.log("Server is running on http://192.168.1.183:3000");
 });

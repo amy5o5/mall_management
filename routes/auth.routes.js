@@ -1,15 +1,8 @@
+require("dotenv").config();
 const express = require("express");
 const router = express.Router();
-const bcrypt = require("bcrypt");
-const session = require("express-session");
+const jwt = require("jsonwebtoken");
 const db_connect = require("./../database/db_connect");
-
-router.use(session({
-    secret: "mySecretKey",  // مقدار دلخواه
-    resave: false,
-    saveUninitialized: true,
-    cookie: { secure: false }  // برای HTTPS باید true باشه
-  }));
 
 router.get("/login", (req, res) => {
   res.render("login", { error: null });
@@ -23,39 +16,39 @@ router.post("/login", async (req, res) => {
     db_connect.query(
       "SELECT * FROM shop_owners WHERE email = ?",
       [email],
-      async (err, rows) => {
+      (err, results) => {
         if (err) {
-          console.error("❌ Error in DB query:", err);
-          return res.render("login", { error: "خطایی رخ داده" });
+          console.error("❌ Database error:", err);
+          return res.status(500).json({ error: "خطای سرور" });
+        }
+        if (results.length === 0 || results[0].password !== password) {
+          return res
+            .status(401)
+            .json({ error: "نام کاربری یا رمز عبور اشتباه است" });
         }
 
-        console.log("Rows type:", typeof rows);
+        const user = {
+          id: results[0].id,
+          full_name: results[0].full_name,
+          email: results[0].email,
+        };
 
-        if (rows.length === 0) {
-          return res.render("login", {
-            error: "نام کاربری یا رمز اشتباه است خالی",
-          });
-        }
-
-        const user = rows[0];
-        console.log("🔹 Query Result:", rows);
-
-        // مقایسه رمز عبور
-        if (password !== user.password) {
-          return res.render("login", { error: "نام کاربری یا رمز اشتباه است" });
-        }
-
-        req.session.user = {
-            id: user.id,
-            full_name: user.full_name,
-            email: user.email
-          };
-        res.redirect("/");
+        const token = jwt.sign(user, process.env.JWT_SECRET, {
+          expiresIn: "1m", // توکن بعد از 1 دقیقه منقضی می‌شود
+        });
+        
+        res.cookie("token", token, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === "production",
+          maxAge: 60 * 1000, // کوکی هم بعد از 1 دقیقه منقضی می‌شود
+        });
+        
+        res.json({ message: "ورود موفق", token });
       }
     );
   } catch (err) {
-    console.error("❌ Unexpected error:", err);
-    res.render("login", { error: "خطایی رخ داده" });
+    console.error(err);
+    res.status(500).json({ error: "خطایی رخ داده" });
   }
 });
 

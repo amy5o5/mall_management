@@ -2,7 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
-const db_connect = require("./../database/db_connect");
+const db_connect = require("../database/db_connect");
 
 router.get("/login", (req, res) => {
   res.render("login", { error: null });
@@ -10,7 +10,7 @@ router.get("/login", (req, res) => {
 
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
-  console.log("req:", req.body);
+  // console.log("req:", req.body);
 
   try {
     db_connect.query(
@@ -36,13 +36,13 @@ router.post("/login", async (req, res) => {
         const token = jwt.sign(user, process.env.JWT_SECRET, {
           expiresIn: "1m", // توکن بعد از 1 دقیقه منقضی می‌شود
         });
-        
+
         res.cookie("token", token, {
           httpOnly: true,
           secure: process.env.NODE_ENV === "production",
           maxAge: 60 * 1000, // کوکی هم بعد از 1 دقیقه منقضی می‌شود
         });
-        
+
         res.json({ message: "ورود موفق", token });
       }
     );

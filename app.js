@@ -20,8 +20,11 @@ app.get("/", authMiddleware, (req, res) => {
   res.send("Hello, world!");
 });
 
-const authRoutes = require('./routes/auth.routes');
-app.use('/auth', authRoutes);
+const adminRoute = require('./routes/admin.route');
+app.use('/admin', adminRoute);
+
+const authRoute = require('./routes/auth.route');
+app.use('/auth', authRoute);
 
 const IP = process.env.IP || "127.0.0.1";
 const PORT = process.env.PORT || 3000;

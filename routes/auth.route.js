@@ -8,48 +8,64 @@ router.get("/login", (req, res) => {
   res.render("login", { error: null });
 });
 
-router.post("/login", async (req, res) => {
+router.post("/login", (req, res) => {
   const { email, password } = req.body;
-  // console.log("req:", req.body);
 
-  try {
-    db_connect.query(
-      "SELECT * FROM shop_owners WHERE email = ?",
-      [email],
-      (err, results) => {
-        if (err) {
-          console.error("❌ Database error:", err);
-          return res.status(500).json({ error: "خطای سرور" });
-        }
-        if (results.length === 0 || results[0].password !== password) {
-          return res
-            .status(401)
-            .json({ error: "نام کاربری یا رمز عبور اشتباه است" });
-        }
-
-        const user = {
-          id: results[0].id,
-          full_name: results[0].full_name,
-          email: results[0].email,
-        };
-
-        const token = jwt.sign(user, process.env.JWT_SECRET, {
-          expiresIn: "1m", // توکن بعد از 1 دقیقه منقضی می‌شود
-        });
-
-        res.cookie("token", token, {
-          httpOnly: true,
-          secure: process.env.NODE_ENV === "production",
-          maxAge: 60 * 1000, // کوکی هم بعد از 1 دقیقه منقضی می‌شود
-        });
-
-        res.json({ message: "ورود موفق", token });
+  db_connect.query(
+    "SELECT * FROM shop_owners WHERE email = ?",
+    [email],
+    (err, results) => {
+      if (err) {
+        console.error("❌ Database error:", err);
+        return res.status(500).json({ error: "خطای سرور" });
       }
-    );
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "خطایی رخ داده" });
-  }
+
+      // بررسی اینکه آیا کاربر وجود دارد یا نه
+      if (results.length === 0) {
+        return res
+          .status(401)
+          .json({ error: "نام کاربری یا رمز عبور اشتباه است" });
+      }
+
+      const user = results[0];
+
+      // بررسی رمز عبور (بدون هش)
+      if (user.password !== password) {
+        return res
+          .status(401)
+          .json({ error: "نام کاربری یا رمز عبور اشتباه است" });
+      }
+
+      // بررسی اینکه کاربر ادمین است یا نه
+      const isAdmin = user.is_admin === 1;
+
+      // ایجاد توکن JWT
+      const token = jwt.sign(
+        {
+          id: user.id,
+          full_name: user.full_name,
+          email: user.email,
+          admin: isAdmin,
+        },
+        process.env.JWT_SECRET,
+        { expiresIn: "2m" }
+      );
+
+      // ذخیره توکن در کوکی
+      res.cookie("token", token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        maxAge: 120 * 1000, // 2 دقیقه
+      });
+
+      // هدایت (Redirect) به صفحه مناسب
+      if (isAdmin) {
+        return res.redirect("/admin/panel");
+      } else {
+        return res.redirect("/");
+      }
+    }
+  );
 });
 
 module.exports = router;

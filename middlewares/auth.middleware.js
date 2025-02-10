@@ -6,8 +6,10 @@ function verifyToken(req, res, next) {
   const token = req.cookies.token; // خواندن توکن از کوکی
 
   if (!token) {
-    // return res.status(401).json({ error: 'Access denied' });
-    return res.redirect("/auth/login");
+    return res.status(401).json({
+      error: "دسترسی غیرمجاز",
+      redirect: "/login",
+    });
   }
 
   try {

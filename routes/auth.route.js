@@ -48,7 +48,7 @@ router.post("/login", (req, res) => {
           admin: isAdmin,
         },
         process.env.JWT_SECRET,
-        { expiresIn: "2m" }
+        { expiresIn: "20m" }
       );
 
       // ذخیره توکن در کوکی

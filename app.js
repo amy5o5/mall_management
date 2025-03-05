@@ -3,7 +3,7 @@ const app = express();
 const path = require("path");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
-const checkAccess = require("./middlewares/check-actor.middleware");
+
 
 //const db_connect = require('./database/db_connect');
 require("dotenv").config();
@@ -16,15 +16,10 @@ app.set("views", path.join(__dirname, "views"));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.get("/", checkAccess(["user"]), (req, res) => {
-  res.send("youre just a normal user!");
+app.get("/", (req, res) => {
+  res.render("main");
 });
 
-const adminRoute = require("./routes/admin.route");
-app.use("/admin", adminRoute);
-
-const authRoute = require("./routes/auth.route");
-app.use("/auth", authRoute);
 
 const IP = process.env.IP;
 const PORT = process.env.PORT;

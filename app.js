@@ -53,8 +53,10 @@ app.get('/forgot-password', (req, res) => {
 
 
 
-app.get('/reset-password/:token', (req, res) => {
-  res.render('reset-password', { token: req.params.token });
+app.get("/doctor-reset-password/:token", (req, res) => {
+  const { token } = req.params;
+  
+  res.render("doctor-reset-password", { token, errorMessage: null });
 });
 
 

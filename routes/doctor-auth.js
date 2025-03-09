@@ -148,7 +148,7 @@ router.post("/forgot-password", (req, res) => {
                     }
 
                     // ارسال ایمیل به پزشک
-                    const resetLink = `http://localhost:3000/reset-password/${resetToken}`;
+                    const resetLink = `http://192.168.1.183:5000/doctor-reset-password/${resetToken}`;
                     const mailOptions = {
                         from: process.env.EMAIL_USER,
                         to: userEmail,
@@ -172,45 +172,51 @@ router.post("/forgot-password", (req, res) => {
 
 
 
-router.post("/reset-password", async (req, res) => {
+router.post("/set-new-docPassword", async (req, res) => {
     const { token, password, confirm_password } = req.body;
+    console.log(req.body);
 
     if (password !== confirm_password) {
         return res.status(400).json({ message: "Passwords do not match" });
     }
 
-    // هش کردن رمز عبور جدید
-    const hashedPassword = await bcrypt.hash(password, 10);
+    try {
+        // هش کردن رمز عبور جدید
+        const hashedPassword = await bcrypt.hash(password, 10);
 
-    // بررسی توکن و تنظیم رمز جدید
-    connection.query(
-        "SELECT email FROM Users WHERE reset_token = ? AND reset_token_expiry > NOW()",
-        [token],
-        (err, result) => {
-            if (err) {
-                return res.status(500).json({ message: "Database error" });
-            }
-
-            if (result.length === 0) {
-                return res.status(400).json({ message: "Invalid or expired token" });
-            }
-
-            const userEmail = result[0].email;
-
-            connection.query(
-                "UPDATE Users SET password = ?, reset_token = NULL, reset_token_expiry = NULL WHERE email = ?",
-                [hashedPassword, userEmail],
-                (err) => {
-                    if (err) {
-                        return res.status(500).json({ message: "Database error" });
-                    }
-
-                    res.json({ message: "Password successfully reset" });
+        // بررسی توکن و تنظیم رمز جدید
+        connection.query(
+            "SELECT email FROM Doctors WHERE reset_token = ? AND reset_token_expiry > NOW()",
+            [token],
+            (err, result) => {
+                if (err) {
+                    return res.status(500).json({ message: "Database error" });
                 }
-            );
-        }
-    );
+
+                if (result.length === 0) {
+                    return res.status(400).json({ message: "Invalid or expired token" });
+                }
+
+                const userEmail = result[0].email;
+
+                connection.query(
+                    "UPDATE Doctors SET password = ?, reset_token = NULL, reset_token_expiry = NULL WHERE email = ?",
+                    [hashedPassword, userEmail],
+                    (err) => {
+                        if (err) {
+                            return res.status(500).json({ message: "Database error" });
+                        }
+
+                        res.json({ message: "Password successfully reset" });
+                    }
+                );
+            }
+        );
+    } catch (error) {
+        return res.status(500).json({ message: "Error hashing password", error });
+    }
 });
+
 
 
 

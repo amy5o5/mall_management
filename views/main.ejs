@@ -1,31 +1,55 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fa">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>صفحه اصلی</title>
-  <link rel="stylesheet" href="/CSS/styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>انتخاب نوع ورود</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+            padding: 50px;
+        }
+        .container {
+            width: 300px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            margin-bottom: 20px;
+        }
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            text-decoration: none;
+            color: white;
+            font-size: 16px;
+            border-radius: 5px;
+        }
+        .btn-patient {
+            background-color: #28a745;
+        }
+        .btn-doctor {
+            background-color: #007bff;
+        }
+        .btn:hover {
+            opacity: 0.8;
+        }
+    </style>
 </head>
 <body>
-  <header>
-    <nav>
-      <ul>
-        <li><a href="/">خانه</a></li>
-        <li><a href="#">درباره</a></li>
-        <li><a href="#">تماس</a></li>
-      </ul>
-    </nav>
-  </header>
 
-  <main>
-    <section class="hero">
-      <h1>به سایت ما خوش آمدید!</h1>
-      <p>این یک صفحه اصلی است که به درستی در تمامی دستگاه‌ها نمایش داده می‌شود.</p>
-    </section>
-  </main>
+    <div class="container">
+        <h2>ورود به سامانه</h2>
+        <a href="/login" class="btn btn-patient">ورود بیماران</a>
+        <a href="/doctor-login" class="btn btn-doctor">ورود پزشکان</a>
+    </div>
 
-  <footer>
-    <p>تمامی حقوق محفوظ است.</p>
-  </footer>
 </body>
 </html>

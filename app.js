@@ -47,12 +47,24 @@ app.get("/doctor-login", (req, res) => {
   res.render("doctor-login");
 });
 
+app.get('/forgot-password', (req, res) => {
+  res.render('doctor-forgot-password');
+});
+
+
+
+app.get('/reset-password/:token', (req, res) => {
+  res.render('reset-password', { token: req.params.token });
+});
+
+
 
 const userAuth = require('./routes/user-auth');
 app.use('/api/auth', userAuth);
 
 const doctorAuth = require('./routes/doctor-auth');
 app.use('/doctor/auth', doctorAuth);
+
 
 
 const IP = process.env.IP;

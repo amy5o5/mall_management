@@ -43,20 +43,20 @@ app.get("/login", (req, res) => {
   res.render("login");
 });
 
-app.get("/doctor-login", (req, res) => {
-  res.render("doctor-login");
+app.get("/secGuy-login", (req, res) => {
+  res.render("securityGuy-login");
 });
 
-app.get('/forgot-password', (req, res) => {
-  res.render('doctor-forgot-password');
+app.get('/secGuy-forgot-password', (req, res) => {
+  res.render('securityGuy-forgot-password');
 });
 
 
 
-app.get("/doctor-reset-password/:token", (req, res) => {
+app.get("/securityGuy-reset-password/:token", (req, res) => {
   const { token } = req.params;
   
-  res.render("doctor-reset-password", { token, errorMessage: null });
+  res.render("securityGuy-reset-password", { token, errorMessage: null });
 });
 
 
@@ -64,10 +64,17 @@ app.get("/doctor-reset-password/:token", (req, res) => {
 const userAuth = require('./routes/user-auth');
 app.use('/api/auth', userAuth);
 
-const doctorAuth = require('./routes/doctor-auth');
-app.use('/doctor/auth', doctorAuth);
+const SecurityGuyAuth = require('./routes/SecurityGuy-auth');
+app.use('/sec/auth', SecurityGuyAuth);
 
 
+connection.connect((err) => {
+  if (err) {
+      console.error("❌ خطا در اتصال به دیتابیس:", err);
+  } else {
+      console.log("✅ اتصال به دیتابیس برقرار شد!");
+  }
+});
 
 const IP = process.env.IP;
 const PORT = process.env.PORT;
@@ -75,3 +82,5 @@ const PORT = process.env.PORT;
 app.listen(PORT, IP, () => {
   console.log(`App listening on port ${PORT} and ${IP}`);
 });
+
+

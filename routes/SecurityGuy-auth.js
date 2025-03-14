@@ -1,6 +1,6 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
-const connection = require('./../database/db_connect');
+const connection = require('../database/db_connect');
 const router = express.Router();
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
@@ -8,7 +8,7 @@ const crypto = require('crypto');
 
 // ثبت نام پزشک
 router.post('/signup', async (req, res) => {
-    const { full_name, specialty, medical_license_number, email, username, password } = req.body;
+    const { full_name, email, username, password } = req.body;
 
     // بررسی اینکه همه فیلدها ارسال شده باشند
     if (!full_name || !specialty || !medical_license_number || !email || !username || !password) {
@@ -18,7 +18,7 @@ router.post('/signup', async (req, res) => {
     try {
         // بررسی اینکه ایمیل یا نام کاربری قبلاً ثبت شده است
         connection.query(
-            'SELECT * FROM Doctors WHERE email = ? OR username = ?',
+            'SELECT * FROM security_guy WHERE email = ? OR username = ?',
             [email, username],
             async (err, result) => {
                 if (err) {
@@ -33,8 +33,8 @@ router.post('/signup', async (req, res) => {
 
                 // ذخیره پزشک در پایگاه داده
                 connection.query(
-                    'INSERT INTO Doctors (full_name, specialty, medical_license_number, email, username, password) VALUES (?, ?, ?, ?, ?, ?)',
-                    [full_name, specialty, medical_license_number, email, username, hashedPassword],
+                    'INSERT INTO security_guy (full_name, email, username, password) VALUES (?, ?, ?, ?, ?, ?)',
+                    [full_name, email, username, hashedPassword],
                     (err, result) => {
                         if (err) {
                             return res.status(500).json({ message: 'Database error' });
@@ -52,47 +52,63 @@ router.post('/signup', async (req, res) => {
 
 router.post('/login', (req, res) => {
     const { emailOrPhone, password } = req.body;
+    console.log("📩 درخواست لاگین دریافت شد:", emailOrPhone, password);
 
     if (!emailOrPhone || !password) {
+        console.log("⚠️ فیلدها خالی هستند!");
         return res.status(400).json({ message: 'Please provide email/phone and password' });
     }
 
-    // جستجو در دیتابیس با ایمیل یا شماره موبایل
     connection.query(
-        'SELECT * FROM Doctors WHERE email = ? OR mobile = ?',
+        'SELECT * FROM security_guy WHERE email = ? OR mobile = ?',
         [emailOrPhone, emailOrPhone],
         async (err, result) => {
             if (err) {
+                console.log("❌ خطای دیتابیس:", err);
                 return res.status(500).json({ message: 'Database error' });
             }
 
+            console.log("✅ نتیجه جستجو از دیتابیس:", result);
+
             if (result.length === 0) {
+                console.log("⚠️ کاربر یافت نشد!");
                 return res.status(400).json({ message: 'Invalid email, phone, or password' });
             }
 
-            const doctor = result[0];
+            const secGuy = result[0];
+            console.log(secGuy);
+            console.log("🔑 کاربر پیدا شد:", secGuy);
 
-            // بررسی رمز عبور
-            const isMatch = await bcrypt.compare(password, doctor.password);
-            if (!isMatch) {
-                return res.status(400).json({ message: 'Invalid email, phone, or password' });
+            try {
+                const isMatch = await bcrypt.compare(password, secGuy.password);
+                console.log("🔍 بررسی رمز عبور:", isMatch);
+
+                if (!isMatch) {
+                    console.log("❌ رمز اشتباه است!");
+                    return res.status(400).json({ message: 'Invalid email, phone, or password' });
+                }
+
+                req.session.secGuy = {
+                    id: secGuy.security_guy_id,
+                    full_name: secGuy.full_name,
+                    email: secGuy.email,
+                    mobile: secGuy.mobile
+                };
+                console.log("✅ ورود موفق!");
+
+                res.json({ message: 'Login successful' });
+
+            } catch (error) {
+                console.log("❌ خطای bcrypt:", error);
+                return res.status(500).json({ message: 'Server error' });
             }
-
-            req.session.doctor = {
-                id: doctor.doctor_id,
-                full_name: doctor.full_name,
-                email: doctor.email,
-                mobile: doctor.mobile
-            };
-
-            res.json({ message: 'Login successful' });
         }
     );
 });
 
 
 
-router.post('/doctor/logout', (req, res) => {
+router.post('/secGuy/logout', (req, res) => {
     req.session.destroy((err) => {
         if (err) {
             return res.status(500).json({ message: 'Logout failed' });
@@ -200,7 +216,7 @@ router.post("/set-new-docPassword", async (req, res) => {
                 const userEmail = result[0].email;
 
                 connection.query(
-                    "UPDATE Doctors SET password = ?, reset_token = NULL, reset_token_expiry = NULL WHERE email = ?",
+                    "UPDATE security_guy SET password = ?, reset_token = NULL, reset_token_expiry = NULL WHERE email = ?",
                     [hashedPassword, userEmail],
                     (err) => {
                         if (err) {

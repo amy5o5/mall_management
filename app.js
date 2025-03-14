@@ -43,6 +43,10 @@ app.get("/login", (req, res) => {
   res.render("login");
 });
 
+app.get("/signup", (req, res) => {
+  res.render("login");
+});
+
 app.get("/secGuy-login", (req, res) => {
   res.render("securityGuy-login");
 });
@@ -62,7 +66,7 @@ app.get("/securityGuy-reset-password/:token", (req, res) => {
 
 
 const userAuth = require('./routes/user-auth');
-app.use('/api/auth', userAuth);
+app.use('/user/auth', userAuth);
 
 const SecurityGuyAuth = require('./routes/SecurityGuy-auth');
 app.use('/sec/auth', SecurityGuyAuth);

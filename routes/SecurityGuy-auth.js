@@ -8,48 +8,52 @@ const crypto = require('crypto');
 
 // ثبت نام پزشک
 router.post('/signup', async (req, res) => {
-    const { full_name, email, username, password } = req.body;
+    const { full_name, email, username, password, mobile } = req.body;
+    console.log(req.body);
 
-    // بررسی اینکه همه فیلدها ارسال شده باشند
-    if (!full_name || !specialty || !medical_license_number || !email || !username || !password) {
+    // بررسی اینکه همه فیلدهای ضروری ارسال شده باشند
+    if (!full_name || !email || !username || !password || !mobile) {
         return res.status(400).json({ message: 'Please provide all required fields' });
     }
 
     try {
-        // بررسی اینکه ایمیل یا نام کاربری قبلاً ثبت شده است
+        // بررسی اینکه ایمیل، نام کاربری یا شماره موبایل تکراری نباشد
         connection.query(
-            'SELECT * FROM security_guy WHERE email = ? OR username = ?',
-            [email, username],
+            'SELECT * FROM security_guy WHERE email = ? OR username = ? OR mobile = ?',
+            [email, username, mobile],
             async (err, result) => {
                 if (err) {
-                    return res.status(500).json({ message: 'Database error' });
+                    console.error("❌ Database error:", err);
+                    return res.status(500).json({ message: 'Database error', error: err });
                 }
+
                 if (result.length > 0) {
-                    return res.status(400).json({ message: 'Email or username already exists' });
+                    return res.status(400).json({ message: 'Email, username, or mobile already exists' });
                 }
 
                 // هش کردن رمز عبور
                 const hashedPassword = await bcrypt.hash(password, 10);
 
-                // ذخیره پزشک در پایگاه داده
+                // ثبت اطلاعات در دیتابیس
                 connection.query(
-                    'INSERT INTO security_guy (full_name, email, username, password) VALUES (?, ?, ?, ?, ?, ?)',
-                    [full_name, email, username, hashedPassword],
+                    'INSERT INTO security_guy (full_name, email, username, password, mobile) VALUES (?, ?, ?, ?, ?)',
+                    [full_name, email, username, hashedPassword, mobile],
                     (err, result) => {
                         if (err) {
-                            return res.status(500).json({ message: 'Database error' });
+                            console.error("❌ Database insert error:", err);
+                            return res.status(500).json({ message: 'Database error', error: err });
                         }
-                        res.status(201).json({ message: 'Doctor registered successfully' });
+
+                        res.status(201).json({ message: 'Security guy registered successfully' });
                     }
                 );
             }
         );
     } catch (error) {
-        console.error(error);
+        console.error("❌ Server error:", error);
         res.status(500).json({ message: 'Internal server error' });
     }
 });
-
 router.post('/login', (req, res) => {
     const { emailOrPhone, password } = req.body;
     console.log("📩 درخواست لاگین دریافت شد:", emailOrPhone, password);
@@ -138,7 +142,7 @@ router.post("/forgot-password", (req, res) => {
 
     // جستجو در دیتابیس برای پزشک بر اساس ایمیل یا شماره موبایل
     connection.query(
-        "SELECT email FROM Doctors WHERE email = ? OR mobile = ?",
+        "SELECT email FROM security_guy WHERE email = ? OR mobile = ?",
         [emailOrPhone, emailOrPhone],
         (err, result) => {
             if (err) {
@@ -156,7 +160,7 @@ router.post("/forgot-password", (req, res) => {
 
             // ذخیره توکن در دیتابیس
             connection.query(
-                "UPDATE Doctors SET reset_token = ?, reset_token_expiry = DATE_ADD(NOW(), INTERVAL 30 MINUTE) WHERE email = ?",
+                "UPDATE security_guy SET reset_token = ?, reset_token_expiry = DATE_ADD(NOW(), INTERVAL 30 MINUTE) WHERE email = ?",
                 [resetToken, userEmail],
                 (err) => {
                     if (err) {
@@ -164,7 +168,7 @@ router.post("/forgot-password", (req, res) => {
                     }
 
                     // ارسال ایمیل به پزشک
-                    const resetLink = `http://192.168.1.183:5000/doctor-reset-password/${resetToken}`;
+                    const resetLink = `http://192.168.1.183:5000/securityGuy-reset-password/${resetToken}`;
                     const mailOptions = {
                         from: process.env.EMAIL_USER,
                         to: userEmail,
@@ -202,7 +206,7 @@ router.post("/set-new-docPassword", async (req, res) => {
 
         // بررسی توکن و تنظیم رمز جدید
         connection.query(
-            "SELECT email FROM Doctors WHERE reset_token = ? AND reset_token_expiry > NOW()",
+            "SELECT email FROM security_guy WHERE reset_token = ? AND reset_token_expiry > NOW()",
             [token],
             (err, result) => {
                 if (err) {

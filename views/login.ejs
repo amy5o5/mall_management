@@ -41,7 +41,7 @@
     </div>
 
     <!-- Login Form -->
-    <form id="login-form" action="/api/auth/login" method="POST" style="display: block;">
+    <form id="login-form" action="/user/auth/login" method="POST" style="display: block;">
       <div class="input-group">
         <label for="email">ایمیل یا شماره تلفن</label>
         <input type="text" id="emailOrPhone" name="emailOrPhone" placeholder="Enter email or phone" required>
@@ -53,16 +53,17 @@
       </div>
       <button type="submit" class="btn">Login</button>
       <p class="forgot-password">
-        <a href="/forgot-password">رمز عبور خود را فراموش کرده‌اید؟</a>
+        <a href="/user/auth/forgot-password">رمز عبور خود را فراموش کرده‌اید؟</a>
     </p>
     <p class="forgot-password">
-      <a href="/forgot-password">عضو نیستید؟ ثبتنام کنید</a>
+      <a href="javascript:void(0);" onclick="switchForm('signup')">عضو نیستید؟ ثبتنام کنید</a>
     </p>
+    
 
     </form>
 
     <!-- Sign Up Form -->
-<form id="signup-form" action="/api/auth/signup" method="POST" style="display: none;">
+<form id="signup-form" action="/user/auth/signup" method="POST" style="display: none;">
   
   <div class="input-group">
     <label for="full_name">Full Name</label>
@@ -71,7 +72,7 @@
 
   <div class="input-group">
     <label for="national_id">National ID</label>
-    <input type="text" id="national_id" name="national_id" required>
+    <input type="text" id="national_id" name="national_id" >
   </div>
 
   <div class="input-group">
@@ -82,6 +83,11 @@
   <div class="input-group">
     <label for="email">Email</label>
     <input type="email" id="email-signup" name="email" required>
+  </div>
+
+  <div class="input-group">
+    <label for="username">username</label>
+    <input type="username" id="username" name="username" required>
   </div>
 
   <div class="input-group">

@@ -181,7 +181,7 @@ router.post("/user-forgot-password", (req, res) => {
 
 
 
-router.post("/set-user-new-secPassword", async (req, res) => {
+router.post("/set-user-new-Password", async (req, res) => {
     const { token, password, confirm_password } = req.body;
     console.log(req.body);
 

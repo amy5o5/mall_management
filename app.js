@@ -51,6 +51,10 @@ app.get("/secGuy-login", (req, res) => {
   res.render("securityGuy-login");
 });
 
+
+const SecurityGuyAuth = require('./routes/SecurityGuy-auth');
+app.use('/sec/auth', SecurityGuyAuth);
+
 app.get('/secGuy-forgot-password', (req, res) => {
   res.render('securityGuy-forgot-password');
 });
@@ -68,8 +72,16 @@ app.get("/securityGuy-reset-password/:token", (req, res) => {
 const userAuth = require('./routes/user-auth');
 app.use('/user/auth', userAuth);
 
-const SecurityGuyAuth = require('./routes/SecurityGuy-auth');
-app.use('/sec/auth', SecurityGuyAuth);
+app.get('/user-forgot-password', (req, res) => {
+  res.render('user-forgot-password');
+});
+
+app.get("/user-reset-password/:token", (req, res) => {
+  const { token } = req.params;
+  
+  res.render("user-reset-password", { token, errorMessage: null });
+});
+
 
 
 connection.connect((err) => {

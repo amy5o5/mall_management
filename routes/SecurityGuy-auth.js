@@ -135,7 +135,7 @@ const transporter = nodemailer.createTransport({
 });
 
 
-router.post("/forgot-password", (req, res) => {
+router.post("/sec-guy-forgot-password", (req, res) => {
     const { emailOrPhone } = req.body;
 
     console.log(emailOrPhone);
@@ -192,7 +192,7 @@ router.post("/forgot-password", (req, res) => {
 
 
 
-router.post("/set-new-docPassword", async (req, res) => {
+router.post("/set-new-secPassword", async (req, res) => {
     const { token, password, confirm_password } = req.body;
     console.log(req.body);
 

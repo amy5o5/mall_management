@@ -2,6 +2,9 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const connection = require('./../database/db_connect');
 const router = express.Router();
+const crypto = require("crypto");
+const nodemailer = require('nodemailer');
+
 
 router.post('/signup', async (req, res) => {
     const { full_name, national_id, mobile, email, username, password } = req.body;
@@ -109,5 +112,119 @@ router.get('/logout', (req, res) => {
         res.redirect('/login');
     });
 });
+
+
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS 
+    }
+});
+
+
+router.post("/user-forgot-password", (req, res) => {
+    const { emailOrPhone } = req.body;
+
+    if (!emailOrPhone) {
+        return res.status(400).json({ message: "Please provide email or phone number" });
+    }
+
+    connection.query(
+        "SELECT email FROM Users WHERE email = ? OR mobile = ?",
+        [emailOrPhone, emailOrPhone],
+        (err, result) => {
+            if (err) {
+                console.error("Database Error:", err);
+                return res.status(500).json({ message: "Database error", error: err.sqlMessage });
+            }
+
+            if (result.length === 0) {
+                return res.status(404).json({ message: "User not found" });
+            }
+
+            const userEmail = result[0].email;
+            const resetToken = crypto.randomBytes(32).toString("hex");
+
+            connection.query(
+                "UPDATE Users SET reset_token = ?, reset_token_expiry = DATE_ADD(NOW(), INTERVAL 30 MINUTE) WHERE email = ?",
+                [resetToken, userEmail],
+                (err) => {
+                    if (err) {
+                        console.error("Database Update Error:", err);
+                        return res.status(500).json({ message: "Database error", error: err.sqlMessage });
+                    }
+
+                    const resetLink = `http://192.168.1.183:5000/user-reset-password/${resetToken}`;
+                    const mailOptions = {
+                        from: process.env.EMAIL_USER,
+                        to: userEmail,
+                        subject: "بازیابی رمز عبور",
+                        text: `برای تغییر رمز عبور روی لینک زیر کلیک کنید:\n${resetLink}`
+                    };
+
+                    transporter.sendMail(mailOptions, (err, info) => {
+                        if (err) {
+                            console.error("Email Sending Error:", err);
+                            return res.status(500).json({ message: "Failed to send email", error: err.message });
+                        }
+
+                        res.json({ message: "Password reset link sent to your email" });
+                    });
+                }
+            );
+        }
+    );
+});
+
+
+
+
+
+router.post("/set-user-new-secPassword", async (req, res) => {
+    const { token, password, confirm_password } = req.body;
+    console.log(req.body);
+
+    if (password !== confirm_password) {
+        return res.status(400).json({ message: "Passwords do not match" });
+    }
+
+    try {
+        // هش کردن رمز عبور جدید
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        // بررسی توکن و تنظیم رمز جدید
+        connection.query(
+            "SELECT email FROM Users WHERE reset_token = ? AND reset_token_expiry > NOW()",
+            [token],
+            (err, result) => {
+                if (err) {
+                    return res.status(500).json({ message: "Database error" });
+                }
+
+                if (result.length === 0) {
+                    return res.status(400).json({ message: "Invalid or expired token" });
+                }
+
+                const userEmail = result[0].email;
+
+                connection.query(
+                    "UPDATE Users SET password = ?, reset_token = NULL, reset_token_expiry = NULL WHERE email = ?",
+                    [hashedPassword, userEmail],
+                    (err) => {
+                        if (err) {
+                            return res.status(500).json({ message: "Database error" });
+                        }
+
+                        res.json({ message: "Password successfully reset" });
+                    }
+                );
+            }
+        );
+    } catch (error) {
+        return res.status(500).json({ message: "Error hashing password", error });
+    }
+});
+
 
 module.exports = router;

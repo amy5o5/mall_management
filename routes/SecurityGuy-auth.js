@@ -100,7 +100,8 @@ router.post('/login', (req, res) => {
                 };
                 console.log("✅ ورود موفق!");
 
-                res.json({ message: 'Login successful' });
+                //res.json({ message: 'Login successful' });
+                res.redirect('/sec-dashboard');
 
             } catch (error) {
                 console.log("❌ خطای bcrypt:", error);

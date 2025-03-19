@@ -51,6 +51,11 @@ app.get("/secGuy-login", (req, res) => {
   res.render("securityGuy-login");
 });
 
+app.get("/sec-dashboard", (req, res) => {
+  res.render("sec-dashboard");
+});
+
+
 
 const SecurityGuyAuth = require('./routes/SecurityGuy-auth');
 app.use('/sec/auth', SecurityGuyAuth);

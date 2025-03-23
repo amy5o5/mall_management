@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login / Sign Up</title>
+  <link rel="stylesheet" href="/CSS/login.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>
+    function switchForm(formType) {
+      const loginForm = document.getElementById("login-form");
+      const signupForm = document.getElementById("signup-form");
+      const loginButton = document.getElementById("login-btn");
+      const signupButton = document.getElementById("signup-btn");
+      
+      if (formType === 'login') {
+        loginForm.style.display = 'block';
+        signupForm.style.display = 'none';
+        loginForm.classList.add('active-form');
+        signupForm.classList.remove('active-form');
+        loginButton.classList.add('active');
+        signupButton.classList.remove('active');
+      } else {
+        loginForm.style.display = 'none';
+        signupForm.style.display = 'block';
+        signupForm.classList.add('active-form');
+        loginForm.classList.remove('active-form');
+        signupButton.classList.add('active');
+        loginButton.classList.remove('active');
+      }
+    }
+  </script>
+</head>
+<body>
+  <div class="form-container">
+    <h2></h2>
+    <!-- Buttons to switch between forms -->
+    <div class="tabs">
+      <button id="login-btn" onclick="switchForm('login')" class="tab-button active">وورد</button>
+      <button id="signup-btn" onclick="switchForm('signup')" class="tab-button">ثبتنام</button>
+    </div>
+
+    <!-- Login Form -->
+    <form id="login-form" action="/shopkeeper/auth/login" method="POST" style="display: block;">
+      <div class="input-group">
+        <label for="email">ایمیل یا شماره تلفن</label>
+        <input type="text" id="emailOrPhone" name="emailOrPhone" placeholder="Enter email or phone" required>
+
+      </div>
+      <div class="input-group">
+        <label for="password">رمز عبور</label>
+        <input type="password" id="password" name="password" required>
+      </div>
+      <button type="submit" class="btn">Login</button>
+      <p class="forgot-password">
+        <a href="/shkeeper-forgot-password">رمز عبور خود را فراموش کرده‌اید؟</a>
+    </p>
+    <p class="forgot-password">
+      <a href="javascript:void(0);" onclick="switchForm('signup')">عضو نیستید؟ ثبتنام کنید</a>
+    </p>
+    
+
+    </form>
+
+    <!-- Sign Up Form -->
+<form id="signup-form" action="/shopkeeper/auth/signup" method="POST" style="display: none;">
+  
+  <div class="input-group">
+    <label for="full_name">Full Name</label>
+    <input type="text" id="full_name" name="full_name" required>
+  </div>
+
+  <div class="input-group">
+    <label for="national_id">National ID</label>
+    <input type="text" id="national_id" name="national_id" >
+  </div>
+
+  <div class="input-group">
+    <label for="mobile">Mobile</label>
+    <input type="tel" id="mobile" name="mobile" required>
+  </div>
+
+  <div class="input-group">
+    <label for="email">Email</label>
+    <input type="email" id="email-signup" name="email" required>
+  </div>
+
+  <div class="input-group">
+    <label for="username">username</label>
+    <input type="username" id="username" name="username" required>
+  </div>
+
+  <div class="input-group">
+    <label for="password">Password</label>
+    <input type="password" id="password-signup" name="password" required>
+  </div>
+
+  <div class="input-group">
+    <label for="confirm-password">Confirm Password</label>
+    <input type="password" id="confirm-password" name="confirm_password" required>
+  </div>
+
+  <button type="submit" class="btn">Sign Up</button>
+
+</form>
+
+  </div>
+</body>
+</html>

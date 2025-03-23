@@ -40,19 +40,40 @@ app.get("/", (req, res) => {
 });
 
 app.get("/login", (req, res) => {
-  res.render("login");
+  res.render("user/login");
 });
 
 app.get("/signup", (req, res) => {
-  res.render("login");
+  res.render("user/login");
 });
 
 app.get("/secGuy-login", (req, res) => {
-  res.render("securityGuy-login");
+  res.render("sec_guy/securityGuy-login");
 });
 
 app.get("/sec-dashboard", (req, res) => {
-  res.render("sec-dashboard");
+  res.render("sec_guy/sec-dashboard");
+});
+
+
+
+
+const shopkeeperAuth = require('./routes/shopkeeper-auth');
+app.use('/shopkeeper/auth', shopkeeperAuth);
+
+app.get("/shopkeeper-login", (req, res) => {
+  res.render("shop_keeper/shopkeeper-login");
+});
+
+
+app.get('/shkeeper-forgot-password', (req, res) => {
+  res.render('shop_keeper/shkeeper-forgot-password');
+});
+
+app.get("/set-shkeeper-new-Password/:token", (req, res) => {
+  const { token } = req.params;
+  
+  res.render("sshop_keeper/shkeeper-reset-password", { token, errorMessage: null });
 });
 
 
@@ -61,7 +82,7 @@ const SecurityGuyAuth = require('./routes/SecurityGuy-auth');
 app.use('/sec/auth', SecurityGuyAuth);
 
 app.get('/secGuy-forgot-password', (req, res) => {
-  res.render('securityGuy-forgot-password');
+  res.render('sec_guy/securityGuy-forgot-password');
 });
 
 
@@ -69,7 +90,7 @@ app.get('/secGuy-forgot-password', (req, res) => {
 app.get("/securityGuy-reset-password/:token", (req, res) => {
   const { token } = req.params;
   
-  res.render("securityGuy-reset-password", { token, errorMessage: null });
+  res.render("sec_guy/securityGuy-reset-password", { token, errorMessage: null });
 });
 
 
@@ -78,13 +99,13 @@ const userAuth = require('./routes/user-auth');
 app.use('/user/auth', userAuth);
 
 app.get('/user-forgot-password', (req, res) => {
-  res.render('user-forgot-password');
+  res.render('user/user-forgot-password');
 });
 
 app.get("/user-reset-password/:token", (req, res) => {
   const { token } = req.params;
   
-  res.render("user-reset-password", { token, errorMessage: null });
+  res.render("user/user-reset-password", { token, errorMessage: null });
 });
 
 

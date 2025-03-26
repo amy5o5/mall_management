@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ورود / ثبت‌نام</title>
+  <link rel="stylesheet" href="/CSS/login.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>
+    function switchForm(formType) {
+      document.getElementById("login-form").style.display = formType === 'login' ? 'block' : 'none';
+      document.getElementById("signup-form").style.display = formType === 'signup' ? 'block' : 'none';
+      document.getElementById("login-btn").classList.toggle('active', formType === 'login');
+      document.getElementById("signup-btn").classList.toggle('active', formType === 'signup');
+    }
+    
+    function showSuccessMessage(message) {
+      Swal.fire({
+        title: 'موفقیت!',
+        text: message,
+        icon: 'success',
+        confirmButtonText: 'باشه'
+      });
+    }
+  </script>
+</head>
+<body>
+  <div class="form-container">
+    <h2>ورود / ثبت‌نام</h2>
+    <div class="tabs">
+      <button id="login-btn" onclick="switchForm('login')" class="tab-button active">ورود</button>
+      <button id="signup-btn" onclick="switchForm('signup')" class="tab-button">ثبت‌نام</button>
+    </div>
+
+    <form id="login-form" action="/admin/auth/login" method="POST" style="display: block;" onsubmit="showSuccessMessage('با موفقیت وارد شدید!'); return false;">
+      <div class="input-group">
+        <label for="emailOrusername">ایمیل یا نام کاربری</label>
+        <input type="text" id="emailOrusername" name="emailOrusername" placeholder="Enter email or username" required>
+      </div>
+      <div class="input-group">
+        <label for="password">رمز عبور</label>
+        <input type="password" id="password" name="password" required>
+      </div>
+      <button type="submit" class="btn">ورود</button>
+      <p class="forgot-password"><a href="/admin-fg-password">رمز عبور خود را فراموش کرده‌اید؟</a></p>
+    </form>
+
+    <form id="signup-form" action="/admin/auth/signup" method="POST" style="display: none;" onsubmit="showSuccessMessage('ثبت‌نام با موفقیت انجام شد!'); return false;">
+      <div class="input-group">
+        <label for="full_name">نام کامل</label>
+        <input type="text" id="full_name" name="full_name" required>
+      </div>
+      <div class="input-group">
+        <label for="email">ایمیل</label>
+        <input type="email" id="email-signup" name="email" required>
+      </div>
+      <div class="input-group">
+        <label for="username">نام کاربری</label>
+        <input type="text" id="username" name="username" required>
+      </div>
+      <div class="input-group">
+        <label for="mobile">موبایل</label>
+        <input type="tel" id="mobile" name="mobile" required>
+      </div>
+      <div class="input-group">
+        <label for="password-signup">رمز عبور</label>
+        <input type="password" id="password-signup" name="password" required>
+      </div>
+      <div class="input-group">
+        <label for="confirm-password">تایید رمز عبور</label>
+        <input type="password" id="confirm-password" name="confirm_password" required>
+      </div>
+      <button type="submit" class="btn">ثبت‌نام</button>
+    </form>
+  </div>
+</body>
+</html>

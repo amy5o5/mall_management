@@ -6,27 +6,34 @@
   <title>Login / Sign Up</title>
   <link rel="stylesheet" href="/CSS/login.css">
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <style>
+    .form-container {
+      position: relative;
+      overflow: hidden;
+    }
+    .form-wrapper {
+      display: flex;
+      transition: transform 0.5s ease-in-out;
+    }
+    .form-wrapper form {
+      min-width: 100%;
+      transition: opacity 0.3s ease-in-out;
+    }
+  </style>
   <script>
     function switchForm(formType) {
-      const loginForm = document.getElementById("login-form");
-      const signupForm = document.getElementById("signup-form");
+      const formWrapper = document.querySelector(".form-wrapper");
       const loginButton = document.getElementById("login-btn");
       const signupButton = document.getElementById("signup-btn");
       
       if (formType === 'login') {
-        loginForm.style.display = 'block';
-        signupForm.style.display = 'none';
-        loginForm.classList.add('active-form');
-        signupForm.classList.remove('active-form');
-        loginButton.classList.add('active');
-        signupButton.classList.remove('active');
+        formWrapper.style.transform = "translateX(0)";
+        loginButton.classList.add("active");
+        signupButton.classList.remove("active");
       } else {
-        loginForm.style.display = 'none';
-        signupForm.style.display = 'block';
-        signupForm.classList.add('active-form');
-        loginForm.classList.remove('active-form');
-        signupButton.classList.add('active');
-        loginButton.classList.remove('active');
+        formWrapper.style.transform = "translateX(-100%)";
+        signupButton.classList.add("active");
+        loginButton.classList.remove("active");
       }
     }
   </script>
@@ -34,76 +41,38 @@
 <body>
   <div class="form-container">
     <h2></h2>
-    <!-- Buttons to switch between forms -->
     <div class="tabs">
-      <button id="login-btn" onclick="switchForm('login')" class="tab-button active">وورد</button>
-      <button id="signup-btn" onclick="switchForm('signup')" class="tab-button">ثبتنام</button>
+      <button id="login-btn" onclick="switchForm('login')" class="tab-button active">ورود</button>
+      <button id="signup-btn" onclick="switchForm('signup')" class="tab-button">ثبت‌نام</button>
     </div>
-
-    <!-- Login Form -->
-    <form id="login-form" action="/user/auth/login" method="POST" style="display: block;">
-      <div class="input-group">
-        <label for="email">ایمیل یا شماره تلفن</label>
-        <input type="text" id="emailOrPhone" name="emailOrPhone" placeholder="Enter email or phone" required>
-
-      </div>
-      <div class="input-group">
-        <label for="password">رمز عبور</label>
-        <input type="password" id="password" name="password" required>
-      </div>
-      <button type="submit" class="btn">Login</button>
-      <p class="forgot-password">
-        <a href="/user-forgot-password">رمز عبور خود را فراموش کرده‌اید؟</a>
-    </p>
-    <p class="forgot-password">
-      <a href="javascript:void(0);" onclick="switchForm('signup')">عضو نیستید؟ ثبتنام کنید</a>
-    </p>
-    
-
-    </form>
-
-    <!-- Sign Up Form -->
-<form id="signup-form" action="/user/auth/signup" method="POST" style="display: none;">
-  
-  <div class="input-group">
-    <label for="full_name">Full Name</label>
-    <input type="text" id="full_name" name="full_name" required>
-  </div>
-
-  <div class="input-group">
-    <label for="national_id">National ID</label>
-    <input type="text" id="national_id" name="national_id" >
-  </div>
-
-  <div class="input-group">
-    <label for="mobile">Mobile</label>
-    <input type="tel" id="mobile" name="mobile" required>
-  </div>
-
-  <div class="input-group">
-    <label for="email">Email</label>
-    <input type="email" id="email-signup" name="email" required>
-  </div>
-
-  <div class="input-group">
-    <label for="username">username</label>
-    <input type="username" id="username" name="username" required>
-  </div>
-
-  <div class="input-group">
-    <label for="password">Password</label>
-    <input type="password" id="password-signup" name="password" required>
-  </div>
-
-  <div class="input-group">
-    <label for="confirm-password">Confirm Password</label>
-    <input type="password" id="confirm-password" name="confirm_password" required>
-  </div>
-
-  <button type="submit" class="btn">Sign Up</button>
-
-</form>
-
+    <div class="form-wrapper">
+      <form id="login-form" action="/user/auth/login" method="POST">
+        <div class="input-group">
+          <label for="emailOrPhone">ایمیل یا شماره تلفن</label>
+          <input type="text" id="emailOrPhone" name="emailOrPhone" required>
+        </div>
+        <div class="input-group">
+          <label for="password">رمز عبور</label>
+          <input type="password" id="password" name="password" required>
+        </div>
+        <button type="submit" class="btn">ورود</button>
+      </form>
+      <form id="signup-form" action="/user/auth/signup" method="POST">
+        <div class="input-group">
+          <label for="full_name">نام کامل</label>
+          <input type="text" id="full_name" name="full_name" required>
+        </div>
+        <div class="input-group">
+          <label for="email">ایمیل</label>
+          <input type="email" id="email-signup" name="email" required>
+        </div>
+        <div class="input-group">
+          <label for="password-signup">رمز عبور</label>
+          <input type="password" id="password-signup" name="password" required>
+        </div>
+        <button type="submit" class="btn">ثبت‌نام</button>
+      </form>
+    </div>
   </div>
 </body>
 </html>

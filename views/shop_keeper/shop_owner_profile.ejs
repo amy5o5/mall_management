@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ویرایش اطلاعات مغازه</title>
+    <style>
+        body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+}
+
+form {
+    max-width: 600px;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+fieldset {
+    border: 1px solid #ccc;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+legend {
+    font-weight: bold;
+    color: #333;
+}
+
+label {
+    display: block;
+    margin: 10px 0 5px;
+}
+
+input, textarea {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+    </style>
+</head>
+<body>
+
+    <h1>ویرایش اطلاعات مغازه</h1>
+
+    <form action="/update-shop" method="POST">
+        <!-- بخش مغازه -->
+        <fieldset>
+            <legend>اطلاعات مغازه</legend>
+            <label for="shop_name">نام مغازه:</label>
+            <input type="text" id="shop_name" name="shop_name" value="<%= shop.shop_name %>" required><br>
+
+            <label for="website">وبسایت:</label>
+            <input type="url" id="website" name="website" value="<%= shop.website %>"><br>
+
+            <label for="working_hours">ساعات کاری:</label>
+            <input type="text" id="working_hours" name="working_hours" value="<%= shop.working_hours %>"><br>
+
+            <label for="unit_number">کد مغازه:</label>
+            <input type="text" id="unit_number" name="unit_number" value="<%= shop.unit_number %>" required><br>
+
+            <label for="owner_phone">تلفن صاحب مغازه:</label>
+            <input type="text" id="owner_phone" name="owner_phone" value="<%= shop.owner_phone %>" required><br>
+
+            <label for="banner_image">تصویر بنر فروشگاه:</label>
+            <input type="text" id="banner_image" name="banner_image" value="<%= shop.banner_image %>"><br>
+
+            <label for="description">توضیحات:</label>
+            <textarea id="description" name="description"><%= shop.description %></textarea><br>
+        </fieldset>
+
+        <!-- بخش صاحب مغازه -->
+        <fieldset>
+            <legend>اطلاعات صاحب مغازه</legend>
+            <label for="full_name">نام کامل:</label>
+            <input type="text" id="full_name" name="full_name" value="<%= owner.full_name %>" required><br>
+
+            <label for="email">ایمیل:</label>
+            <input type="email" id="email" name="email" value="<%= owner.email %>" required><br>
+
+            <label for="mobile">شماره موبایل:</label>
+            <input type="text" id="mobile" name="mobile" value="<%= owner.mobile %>" required><br>
+
+            <label for="national_id">کد ملی:</label>
+            <input type="text" id="national_id" name="national_id" value="<%= owner.national_id %>" required><br>
+
+            <label for="username">نام کاربری:</label>
+            <input type="text" id="username" name="username" value="<%= owner.username %>" required><br>
+        </fieldset>
+
+        <button type="submit">ویرایش اطلاعات</button>
+    </form>
+
+</body>
+</html>
+

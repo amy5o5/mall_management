@@ -76,6 +76,32 @@ app.get("/set-shkeeper-new-Password/:token", (req, res) => {
   res.render("sshop_keeper/shkeeper-reset-password", { token, errorMessage: null });
 });
 
+app.get("/sh-profile", (req, res) => {
+  const { token } = req.params;
+  
+  res.render("shop_keeper/shop_owner_profile");
+});
+
+
+
+
+const adminAuth = require('./routes/adminAuth');
+app.use('/admin/auth', adminAuth);
+
+app.get('/admin-login', (req,res) => {
+  res.render('admin/admin-login');
+});
+
+app.get('/admin-fg-password', (req, res) => {
+  res.render('admin/admin-forgot-password');
+});
+
+app.get("/admin-reset-password/:token", (req, res) => {
+  const { token } = req.params;
+  
+  res.render("admin/admin-reset-password", { token, errorMessage: null });
+});
+
 
 
 const SecurityGuyAuth = require('./routes/SecurityGuy-auth');

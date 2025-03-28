@@ -112,7 +112,6 @@ app.get("/sec-dashboard", (req, res) => {
 });
 
 
-
 app.get("/securityGuy-reset-password/:token", (req, res) => {
   const { token } = req.params;
   

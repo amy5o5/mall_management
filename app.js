@@ -47,14 +47,6 @@ app.get("/signup", (req, res) => {
   res.render("user/login");
 });
 
-app.get("/secGuy-login", (req, res) => {
-  res.render("sec_guy/securityGuy-login");
-});
-
-app.get("/sec-dashboard", (req, res) => {
-  res.render("sec_guy/sec-dashboard");
-});
-
 
 
 
@@ -109,6 +101,14 @@ app.use('/sec/auth', SecurityGuyAuth);
 
 app.get('/secGuy-forgot-password', (req, res) => {
   res.render('sec_guy/securityGuy-forgot-password');
+});
+
+app.get("/secGuy-login", (req, res) => {
+  res.render("sec_guy/securityGuy-login");
+});
+
+app.get("/sec-dashboard", (req, res) => {
+  res.render("sec_guy/sec-dashboard");
 });
 
 

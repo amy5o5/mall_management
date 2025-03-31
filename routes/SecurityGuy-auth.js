@@ -6,18 +6,18 @@ const nodemailer = require('nodemailer');
 const crypto = require('crypto');
 
 
-// ثبت نام پزشک
+
 router.post('/signup', async (req, res) => {
     const { full_name, email, username, password, mobile } = req.body;
     console.log(req.body);
 
-    // بررسی اینکه همه فیلدهای ضروری ارسال شده باشند
+ 
     if (!full_name || !email || !username || !password || !mobile) {
         return res.status(400).json({ message: 'Please provide all required fields' });
     }
 
     try {
-        // بررسی اینکه ایمیل، نام کاربری یا شماره موبایل تکراری نباشد
+
         connection.query(
             'SELECT * FROM security_guy WHERE email = ? OR username = ? OR mobile = ?',
             [email, username, mobile],
@@ -31,10 +31,10 @@ router.post('/signup', async (req, res) => {
                     return res.status(400).json({ message: 'Email, username, or mobile already exists' });
                 }
 
-                // هش کردن رمز عبور
+          
                 const hashedPassword = await bcrypt.hash(password, 10);
 
-                // ثبت اطلاعات در دیتابیس
+
                 connection.query(
                     'INSERT INTO security_guy (full_name, email, username, password, mobile) VALUES (?, ?, ?, ?, ?)',
                     [full_name, email, username, hashedPassword, mobile],
@@ -118,7 +118,7 @@ router.post('/secGuy/logout', (req, res) => {
         if (err) {
             return res.status(500).json({ message: 'Logout failed' });
         }
-        res.clearCookie('connect.sid'); // حذف کوکی سشن
+        res.clearCookie('connect.sid'); 
         res.json({ message: 'Logged out successfully' });
     });
 });
@@ -141,7 +141,7 @@ router.post("/sec-guy-forgot-password", (req, res) => {
 
     console.log(emailOrPhone);
 
-    // جستجو در دیتابیس برای پزشک بر اساس ایمیل یا شماره موبایل
+
     connection.query(
         "SELECT email FROM security_guy WHERE email = ? OR mobile = ?",
         [emailOrPhone, emailOrPhone],
@@ -156,10 +156,10 @@ router.post("/sec-guy-forgot-password", (req, res) => {
 
             const userEmail = result[0].email;
 
-            // ایجاد توکن ریست پسورد
+
             const resetToken = crypto.randomBytes(32).toString("hex");
 
-            // ذخیره توکن در دیتابیس
+
             connection.query(
                 "UPDATE security_guy SET reset_token = ?, reset_token_expiry = DATE_ADD(NOW(), INTERVAL 30 MINUTE) WHERE email = ?",
                 [resetToken, userEmail],
@@ -202,10 +202,10 @@ router.post("/set-new-secPassword", async (req, res) => {
     }
 
     try {
-        // هش کردن رمز عبور جدید
+
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        // بررسی توکن و تنظیم رمز جدید
+
         connection.query(
             "SELECT email FROM security_guy WHERE reset_token = ? AND reset_token_expiry > NOW()",
             [token],

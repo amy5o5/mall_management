@@ -7,7 +7,7 @@ const nodemailer = require('nodemailer');
 
 
 router.post('/signup', async (req, res) => {
-    const { full_name, national_id, mobile, email, username, password } = req.body;
+    const { full_name, mobile, email, username, password } = req.body;
     console.log(req.body);
     // بررسی اینکه آیا اطلاعات لازم ارسال شده است
     if (!full_name || !mobile || !email || !username || !password) {
@@ -43,8 +43,8 @@ router.post('/signup', async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 10);
 
         // ذخیره کاربر در پایگاه داده
-        const insertUserQuery = 'INSERT INTO Users (full_name, national_id, mobile, email, username, password) VALUES (?, ?, ?, ?, ?, ?)';
-        await connection.promise().query(insertUserQuery, [full_name, national_id, mobile, email, username, hashedPassword]);
+        const insertUserQuery = 'INSERT INTO Users (full_name, mobile, email, username, password) VALUES (?, ?, ?, ?, ?)';
+        await connection.promise().query(insertUserQuery, [full_name, mobile, email, username, hashedPassword]);
 
         res.status(201).json({ message: 'User registered successfully' });
 
@@ -59,17 +59,17 @@ router.post('/signup', async (req, res) => {
 router.post('/login', (req, res) => {
     const { emailOrPhone, password } = req.body;
 
-    // بررسی اینکه آیا ایمیل یا شماره تلفن و رمز عبور ارسال شده است
+
     if (!emailOrPhone || !password) {
         return res.status(400).json({ message: 'Please provide email/phone and password' });
     }
 
-    // تشخیص اینکه ورودی ایمیل است یا شماره تلفن
+
     const query = emailOrPhone.includes('@') ? 
         'SELECT * FROM Users WHERE email = ?' : 
         'SELECT * FROM Users WHERE mobile = ?';
 
-    // بررسی اینکه آیا کاربر در سیستم موجود است
+
     connection.query(query, [emailOrPhone], async (err, result) => {
         if (err) {
             return res.status(500).json({ message: 'Database error' });
@@ -81,7 +81,7 @@ router.post('/login', (req, res) => {
 
         const user = result[0];
 
-        // مقایسه رمز عبور ورودی با رمز عبور ذخیره‌شده
+
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
             return res.status(400).json({ message: 'Invalid email/phone or password' });

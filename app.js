@@ -135,6 +135,7 @@ app.get("/user-reset-password/:token", (req, res) => {
 
 
 
+console.log("🔍 تلاش برای اتصال به دیتابیس...");
 connection.connect((err) => {
   if (err) {
       console.error("❌ خطا در اتصال به دیتابیس:", err);
@@ -142,6 +143,7 @@ connection.connect((err) => {
       console.log("✅ اتصال به دیتابیس برقرار شد!");
   }
 });
+
 
 const IP = process.env.IP;
 const PORT = process.env.PORT;

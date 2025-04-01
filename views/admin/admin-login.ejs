@@ -13,7 +13,7 @@
       document.getElementById("login-btn").classList.toggle('active', formType === 'login');
       document.getElementById("signup-btn").classList.toggle('active', formType === 'signup');
     }
-    
+
     function showSuccessMessage(message) {
       Swal.fire({
         title: 'موفقیت!',
@@ -21,6 +21,71 @@
         icon: 'success',
         confirmButtonText: 'باشه'
       });
+    }
+
+    function showErrorMessage(message) {
+      Swal.fire({
+        title: 'خطا!',
+        text: message,
+        icon: 'error',
+        confirmButtonText: 'باشه'
+      });
+    }
+
+    async function login(event) {
+      event.preventDefault();
+
+      const emailOrusername = document.getElementById('emailOrusername').value;
+      const password = document.getElementById('password').value;
+
+      const response = await fetch('/admin/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ emailOrusername, password })
+      });
+
+      const data = await response.json();
+        console.log(data);
+      if (response.ok) {
+        showSuccessMessage('با موفقیت وارد شدید!');
+      } else {
+        showErrorMessage(data.message || 'خطا در ورود');
+      }
+    }
+
+    async function signup(event) {
+      event.preventDefault();
+
+      const fullName = document.getElementById('full_name').value;
+      const mobile = document.getElementById('mobile').value;
+      const email = document.getElementById('email-signup').value;
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password-signup').value;
+      const confirmPassword = document.getElementById('confirm-password').value;
+
+
+      if (password !== confirmPassword) {
+        showErrorMessage('رمز عبور و تایید آن مطابقت ندارند');
+        return;
+      }
+
+      const response = await fetch('/admin/auth/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ fullName, mobile, email, username, password })
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        showSuccessMessage('ثبت‌نام با موفقیت انجام شد!');
+      } else {
+        showErrorMessage(data.message || 'خطا در ثبت‌نام');
+      }
     }
   </script>
 </head>
@@ -32,7 +97,7 @@
       <button id="signup-btn" onclick="switchForm('signup')" class="tab-button">ثبت‌نام</button>
     </div>
 
-    <form id="login-form" action="/admin/auth/login" method="POST" style="display: block;" onsubmit="showSuccessMessage('با موفقیت وارد شدید!'); return false;">
+    <form id="login-form" action="/admin/auth/login" method="POST" style="display: block;" onsubmit="login(event)">
       <div class="input-group">
         <label for="emailOrusername">ایمیل یا نام کاربری</label>
         <input type="text" id="emailOrusername" name="emailOrusername" placeholder="Enter email or username" required>
@@ -45,7 +110,7 @@
       <p class="forgot-password"><a href="/admin-fg-password">رمز عبور خود را فراموش کرده‌اید؟</a></p>
     </form>
 
-    <form id="signup-form" action="/admin/auth/signup" method="POST" style="display: none;" onsubmit="showSuccessMessage('ثبت‌نام با موفقیت انجام شد!'); return false;">
+    <form id="signup-form" action="/admin/auth/signup" method="POST" style="display: none;" onsubmit="signup(event)">
       <div class="input-group">
         <label for="full_name">نام کامل</label>
         <input type="text" id="full_name" name="full_name" required>

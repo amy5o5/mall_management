@@ -6,16 +6,17 @@ const crypto = require("crypto");
 const nodemailer = require('nodemailer');
 
 
+
 router.post('/signup', async (req, res) => {
     const { full_name, email, username,mobile , password } = req.body;
-    console.log(req.body);
-    // بررسی اینکه آیا اطلاعات لازم ارسال شده است
+    //console.log(req.body);
+   
     if (!full_name || !mobile || !email || !username || !password) {
         return res.status(400).json({ message: 'Please provide all required fields' });
     }
 
     try {
-        // بررسی اینکه آیا ایمیل، شماره موبایل یا نام کاربری قبلاً در سیستم ثبت شده است
+      
         const checkExistingUserQuery = 'SELECT email, mobile, username FROM Admins WHERE email = ? OR mobile = ? OR username = ?';
         const [existingUsers] = await connection.promise().query(checkExistingUserQuery, [email, mobile, username]);
 
@@ -39,10 +40,10 @@ router.post('/signup', async (req, res) => {
             }
         }
 
-        // هش کردن رمز عبور
+        
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        // ذخیره کاربر در پایگاه داده
+      
         const insertUserQuery = 'INSERT INTO Admins (full_name, email, username,mobile , password ) VALUES (?, ?, ?, ?,?)';
         await connection.promise().query(insertUserQuery, [full_name, email, username, mobile, hashedPassword]);
 
@@ -59,15 +60,15 @@ router.post('/login', (req, res) => {
     const { emailOrusername, password } = req.body;
     console.log(req.body);
 
-    // بررسی اینکه آیا ایمیل یا شماره تلفن و رمز عبور ارسال شده است
+    
     if (!emailOrusername || !password) {
         return res.status(400).json({ message: 'Please provide email/username and password' });
     }
 
-    // کوئری جستجو برای یافتن کاربر
+   
     const query = "SELECT * FROM Admins WHERE email = ? OR username = ?";
     
-    // بررسی اینکه آیا کاربر در سیستم موجود است
+   
     connection.query(query, [emailOrusername, emailOrusername], async (err, result) => {
         if (err) {
             return res.status(500).json({ message: 'Database error' });
@@ -79,21 +80,24 @@ router.post('/login', (req, res) => {
 
         const user = result[0];
 
-        // مقایسه رمز عبور ورودی با رمز عبور ذخیره‌شده
+   
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
             return res.status(400).json({ message: 'Invalid email/username or password' });
         }
 
-        // ذخیره اطلاعات کاربر در سشن
-        req.session.admin = {
+  
+        req.session.user = {
             id: user.user_id,
             full_name: user.full_name,
-            email: user.email
+            email: user.email,
+            role: user.role // مثلاً 'admin' یا 'user'
         };
+        
 
-        // ارسال پاسخ موفق
+    
         res.json({ message: 'Login successful' });
+        
     });
 });
 
@@ -105,10 +109,10 @@ router.get('/logout', (req, res) => {
             return res.status(500).json({ message: 'Logout failed' });
         }
 
-        // حذف کوکی سشن
+      
         res.clearCookie('connect.sid');
 
-        // هدایت به صفحه لاگین
+       
         res.redirect('/login');
     });
 });

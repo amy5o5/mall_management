@@ -29,77 +29,146 @@
         loginButton.classList.remove('active');
       }
     }
+
+    function showSuccessMessage(message) {
+      Swal.fire({
+        title: 'موفقیت!',
+        text: message,
+        icon: 'success',
+        confirmButtonText: 'باشه'
+      });
+    }
+
+    function showErrorMessage(message) {
+      Swal.fire({
+        title: 'خطا!',
+        text: message,
+        icon: 'error',
+        confirmButtonText: 'باشه'
+      });
+    }
+    async function login(event) {
+      event.preventDefault();
+
+      const emailOrPhone = document.getElementById('emailOrPhone').value;
+      const password = document.getElementById('password').value;
+
+      const response = await fetch('/sec/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ emailOrPhone, password })
+      });
+
+      const data = await response.json();
+      
+      if (response.ok) {
+        showSuccessMessage('You have successfully logged in!');
+        // Optionally, redirect after success
+        setTimeout(() => {
+          window.location.href = '/dashboard'; // Example redirect
+        }, 1500);
+      } else {
+        showErrorMessage(data.message || 'Error logging in');
+      }
+    }
+
+    async function signup(event) {
+      event.preventDefault();
+
+      const fullName = document.getElementById('full_name').value;
+      const email = document.getElementById('email-signup').value;
+      const username = document.getElementById('username').value;
+      const phone = document.getElementById('phone').value;
+      const password = document.getElementById('password-signup').value;
+      const confirmPassword = document.getElementById('confirm-password').value;
+
+      if (password !== confirmPassword) {
+        showErrorMessage('Password and Confirm Password do not match');
+        return;
+      }
+
+      const response = await fetch('/sec/auth/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ fullName, email, username, phone, password })
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        showSuccessMessage('Sign Up Successful!');
+        // Optionally, redirect after success
+        setTimeout(() => {
+          window.location.href = '/login'; // Example redirect to login
+        }, 1500);
+      } else {
+        showErrorMessage(data.message || 'Error signing up');
+      }
+    }
   </script>
 </head>
 <body>
   <div class="form-container">
-    <h2></h2>
-    <!-- Buttons to switch between forms -->
+    <h2>Login / Sign Up</h2>
     <div class="tabs">
-      <button id="login-btn" onclick="switchForm('login')" class="tab-button active">وورد</button>
-      <button id="signup-btn" onclick="switchForm('signup')" class="tab-button">ثبتنام</button>
+      <button id="login-btn" onclick="switchForm('login')" class="tab-button active">Login</button>
+      <button id="signup-btn" onclick="switchForm('signup')" class="tab-button">Sign Up</button>
     </div>
 
-<!-- Login Form -->
-<form id="login-form" action="/sec/auth/login" method="POST" style="display: block;">
-  <div class="input-group">
-    <label for="emailOrPhone">ایمیل یا شماره تلفن</label>
-    <input type="text" id="emailOrPhone" name="emailOrPhone" placeholder="Enter email or phone" required>
-  </div>
+    <!-- Login Form -->
+    <form id="login-form" action="/sec/auth/login" method="POST" style="display: block;" onsubmit="login(event)">
+      <div class="input-group">
+        <label for="emailOrPhone">Email or Phone</label>
+        <input type="text" id="emailOrPhone" name="emailOrPhone" placeholder="Enter email or phone" required>
+      </div>
+      <div class="input-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" required>
+      </div>
+      <p class="forgot-password">
+        <a href="/secGuy-forgot-password">Forgot your password?</a>
+      </p>
+      <button type="submit" class="btn">Login</button>
+    </form>
 
-  <div class="input-group">
-    <label for="password">رمز عبور</label>
-    <input type="password" id="password" name="password" required>
-  </div>
-  
-  <p class="forgot-password">
-    <a href="/secGuy-forgot-password">رمز عبور خود را فراموش کرده‌اید؟</a>
-</p>
-  
+    <!-- Sign Up Form -->
+    <form id="signup-form" action="/sec/auth/signup" method="POST" style="display: none;" onsubmit="signup(event)">
+      <div class="input-group">
+        <label for="full_name">Full Name</label>
+        <input type="text" id="full_name" name="full_name" required>
+      </div>
 
-  <button type="submit" class="btn">Login</button>
-</form>
+      <div class="input-group">
+        <label for="email">Email</label>
+        <input type="email" id="email-signup" name="email" required>
+      </div>
 
+      <div class="input-group">
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" required>
+      </div>
 
-<!-- Sign Up Form for Doctors -->
-<form id="signup-form" action="/sec/auth/signup" method="POST" style="display: none;">
-  
-  <div class="input-group">
-    <label for="full_name">Full Name</label>
-    <input type="text" id="full_name" name="full_name" required>
-  </div>
+      <div class="input-group">
+        <label for="phone">Phone</label>
+        <input type="number" id="phone" name="mobile" required>
+      </div>
 
+      <div class="input-group">
+        <label for="password">Password</label>
+        <input type="password" id="password-signup" name="password" required>
+      </div>
 
-  <div class="input-group">
-    <label for="email">Email</label>
-    <input type="email" id="email-signup" name="email" required>
-  </div>
+      <div class="input-group">
+        <label for="confirm-password">Confirm Password</label>
+        <input type="password" id="confirm-password" required>
+      </div>
 
-  <div class="input-group">
-    <label for="username">Username</label>
-    <input type="text" id="username" name="username" required>
-  </div>
-
-  <div class="input-group">
-    <label for="phone">phone</label>
-    <input type="number" id="phone" name="mobile" required>
-  </div>
-
-  <div class="input-group">
-    <label for="password">Password</label>
-    <input type="password" id="password-signup" name="password" required>
-  </div>
-
-  <div class="input-group">
-    <label for="confirm-password">Confirm Password</label>
-    <input type="password" id="confirm-password" required>
-  </div>
-
-  <button type="submit" class="btn">Sign Up</button>
-
-</form>
-
-
+      <button type="submit" class="btn">Sign Up</button>
+    </form>
   </div>
 </body>
 </html>

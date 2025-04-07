@@ -47,9 +47,12 @@
       });
 
       const data = await response.json();
-        console.log(data);
+      console.log(data);
       if (response.ok) {
         showSuccessMessage('با موفقیت وارد شدید!');
+        setTimeout(() => {
+          window.location.href = '/user/dashboard';  // ریدایرکت به صفحه پنل کاربری
+        }, 1500);  // 1.5 ثانیه تا ریدایرکت
       } else {
         showErrorMessage(data.message || 'خطا در ورود');
       }
@@ -107,6 +110,9 @@
         <input type="password" id="password" name="password" required>
       </div>
       <button type="submit" class="btn">ورود</button>
+      <p class="forgot-password">
+        <a href="/user-forgot-password">رمز عبور خود را فراموش کرده‌اید؟</a>
+      </p>
     </form>
 
     <form id="signup-form" style="display: none;" onsubmit="signup(event)">

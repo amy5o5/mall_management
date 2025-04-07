@@ -3,6 +3,7 @@ const app = express();
 const path = require("path");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
+const { checkRoles }= require('./middlewares/check-actor')
 app.use(express.json());
 
 
@@ -76,7 +77,7 @@ app.get("/sh-profile", (req, res) => {
 
 
 
-
+//admin section *
 const adminAuth = require('./routes/adminAuth');
 app.use('/admin/auth', adminAuth);
 
@@ -84,7 +85,12 @@ app.get('/admin-login', (req,res) => {
   res.render('admin/admin-login');
 });
 
-app.get('/admin-fg-password', (req, res) => {
+app.get('/admin-panel',checkRoles('admin'), (req, res) => {
+  res.render('admin/mainPanel-admin');
+});
+
+
+/*app.get('/admin-fg-password', (req, res) => {
   res.render('admin/admin-forgot-password');
 });
 
@@ -92,7 +98,8 @@ app.get("/admin-reset-password/:token", (req, res) => {
   const { token } = req.params;
   
   res.render("admin/admin-reset-password", { token, errorMessage: null });
-});
+});*/
+
 
 
 
@@ -135,14 +142,14 @@ app.get("/user-reset-password/:token", (req, res) => {
 
 
 
-console.log("🔍 تلاش برای اتصال به دیتابیس...");
+/*console.log("🔍 تلاش برای اتصال به دیتابیس...");
 connection.connect((err) => {
   if (err) {
       console.error("❌ خطا در اتصال به دیتابیس:", err);
   } else {
       console.log("✅ اتصال به دیتابیس برقرار شد!");
   }
-});
+});*/
 
 
 const IP = process.env.IP;

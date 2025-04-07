@@ -50,6 +50,9 @@
         console.log(data);
       if (response.ok) {
         showSuccessMessage('با موفقیت وارد شدید!');
+        setTimeout( ()=>{
+          window.location.href= '/admin-panel';
+        },1500)
       } else {
         showErrorMessage(data.message || 'خطا در ورود');
       }

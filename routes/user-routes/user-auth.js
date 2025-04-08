@@ -1,6 +1,6 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
-const connection = require('./../database/db_connect');
+const connection = require('./../../database/db_connect');
 const router = express.Router();
 const crypto = require("crypto");
 const nodemailer = require('nodemailer');
@@ -9,50 +9,56 @@ const nodemailer = require('nodemailer');
 router.post('/signup', async (req, res) => {
     const { full_name, mobile, email, username, password } = req.body;
     console.log(req.body);
-    // بررسی اینکه آیا اطلاعات لازم ارسال شده است
+    
     if (!full_name || !mobile || !email || !username || !password) {
-        return res.status(400).json({ message: 'Please provide all required fields' });
+        return res.status(400).json({ message: 'لطفاً تمامی فیلدها را پر کنید' });
     }
 
     try {
         // بررسی اینکه آیا ایمیل، شماره موبایل یا نام کاربری قبلاً در سیستم ثبت شده است
-        const checkExistingUserQuery = 'SELECT email, mobile, username FROM Users WHERE email = ? OR mobile = ? OR username = ?';
+        const checkExistingUserQuery = `
+            SELECT email, mobile, username
+            FROM Users
+            WHERE email = ? OR mobile = ? OR username = ?
+        `;
         const [existingUsers] = await connection.promise().query(checkExistingUserQuery, [email, mobile, username]);
 
         if (existingUsers.length > 0) {
             const existingUser = existingUsers[0];
 
-            if (existingUser.email === email && existingUser.mobile === mobile && existingUser.username === username) {
-                return res.status(400).json({ message: 'Email, mobile number, and username already exist' });
-            } else if (existingUser.email === email && existingUser.mobile === mobile) {
-                return res.status(400).json({ message: 'Email and mobile number already exist' });
-            } else if (existingUser.email === email && existingUser.username === username) {
-                return res.status(400).json({ message: 'Email and username already exist' });
-            } else if (existingUser.mobile === mobile && existingUser.username === username) {
-                return res.status(400).json({ message: 'Mobile number and username already exist' });
-            } else if (existingUser.email === email) {
-                return res.status(400).json({ message: 'Email already exists' });
-            } else if (existingUser.mobile === mobile) {
-                return res.status(400).json({ message: 'Mobile number already exists' });
-            } else {
-                return res.status(400).json({ message: 'Username already exists' });
+            // بررسی اینکه هر کدام از فیلدها قبلاً ثبت شده‌اند یا نه
+            if (existingUser.email === email) {
+                return res.status(400).json({ message: 'این ایمیل قبلاً ثبت شده است' });
+            } 
+            if (existingUser.mobile === mobile) {
+                return res.status(400).json({ message: 'این شماره موبایل قبلاً ثبت شده است' });
+            }
+            if (existingUser.username === username) {
+                return res.status(400).json({ message: 'این نام کاربری قبلاً ثبت شده است' });
             }
         }
 
         // هش کردن رمز عبور
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        // ذخیره کاربر در پایگاه داده
-        const insertUserQuery = 'INSERT INTO Users (full_name, mobile, email, username, password) VALUES (?, ?, ?, ?, ?)';
-        await connection.promise().query(insertUserQuery, [full_name, mobile, email, username, hashedPassword]);
+        // مقدار پیش‌فرض role را به 'user' تنظیم می‌کنیم
+        const role = 'user'; // مقدار پیش‌فرض
 
-        res.status(201).json({ message: 'User registered successfully' });
+        // ذخیره کاربر در پایگاه داده
+        const insertUserQuery = `
+            INSERT INTO Users (full_name, mobile, email, username, password, role)
+            VALUES (?, ?, ?, ?, ?, ?)
+        `;
+        await connection.promise().query(insertUserQuery, [full_name, mobile, email, username, hashedPassword, role]);
+
+        res.status(201).json({ message: 'ثبت‌نام با موفقیت انجام شد' });
 
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Internal server error' });
+        res.status(500).json({ message: 'خطای داخلی سرور' });
     }
 });
+
 
 
 
@@ -155,7 +161,7 @@ router.post("/user-forgot-password", (req, res) => {
                         return res.status(500).json({ message: "Database error", error: err.sqlMessage });
                     }
 
-                    const resetLink = `http://192.168.1.183:5000/user-reset-password/${resetToken}`;
+                    const resetLink = `http://192.168.1.183:5000/user/user-reset-password/${resetToken}`;
                     const mailOptions = {
                         from: process.env.EMAIL_USER,
                         to: userEmail,

@@ -40,16 +40,15 @@ app.get("/", (req, res) => {
   res.render("main");
 });
 
+//admin section *
+const adminRoutes= require('./routes/admin-routes/adminAuth');
+app.use('/admin', adminRoutes);
+
+
 
 // normal user
-app.get("/login", (req, res) => {
-  res.render("user/login");
-});
-
-app.get("/signup", (req, res) => {
-  res.render("user/login");
-});
-
+const userRoutes = require('./routes/user-routes/user-routes');
+app.use('/user', userRoutes);
 
 
 
@@ -80,17 +79,7 @@ app.get("/sh-profile", (req, res) => {
 
 
 
-//admin section *
-const adminAuth = require('./routes/adminAuth');
-app.use('/admin/auth', adminAuth);
 
-app.get('/admin-login', (req,res) => {
-  res.render('admin/admin-login');
-});
-
-app.get('/admin-panel',checkRoles('admin'), (req, res) => {
-  res.render('admin/mainPanel-admin');
-});
 
 
 /*app.get('/admin-fg-password', (req, res) => {
@@ -130,18 +119,6 @@ app.get("/securityGuy-reset-password/:token", (req, res) => {
 
 
 
-const userAuth = require('./routes/user-auth');
-app.use('/user/auth', userAuth);
-
-app.get('/user-forgot-password', (req, res) => {
-  res.render('user/user-forgot-password');
-});
-
-app.get("/user-reset-password/:token", (req, res) => {
-  const { token } = req.params;
-  
-  res.render("user/user-reset-password", { token, errorMessage: null });
-});
 
 
 

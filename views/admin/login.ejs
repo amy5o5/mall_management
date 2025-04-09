@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fa">
+<html lang="fa" dir="rtl">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,9 +9,9 @@
   <script>
     function switchForm(formType) {
       document.getElementById("login-form").style.display = formType === 'login' ? 'block' : 'none';
-      document.getElementById("signup-form").style.display = formType === 'signup' ? 'block' : 'none';
+      // document.getElementById("signup-form").style.display = formType === 'signup' ? 'block' : 'none';
       document.getElementById("login-btn").classList.toggle('active', formType === 'login');
-      document.getElementById("signup-btn").classList.toggle('active', formType === 'signup');
+      // document.getElementById("signup-btn").classList.toggle('active', formType === 'signup');
     }
 
     function showSuccessMessage(message) {
@@ -37,8 +37,7 @@
 
       const emailOrusername = document.getElementById('emailOrusername').value;
       const password = document.getElementById('password').value;
-
-      const response = await fetch('/admin/auth/login', {
+      const response = await fetch('/admin/adminAuth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -61,7 +60,7 @@
     async function signup(event) {
       event.preventDefault();
 
-      const fullName = document.getElementById('full_name').value;
+      const full_name = document.getElementById('full_name').value;
       const mobile = document.getElementById('mobile').value;
       const email = document.getElementById('email-signup').value;
       const username = document.getElementById('username').value;
@@ -74,12 +73,12 @@
         return;
       }
 
-      const response = await fetch('/admin/auth/signup', {
+      const response = await fetch('/admin/adminAuth/signup', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ fullName, mobile, email, username, password })
+        body: JSON.stringify({ full_name, mobile, email, username, password })
       });
 
       const data = await response.json();
@@ -94,15 +93,15 @@
 </head>
 <body>
   <div class="form-container">
-    <h2>ورود / ثبت‌نام</h2>
-    <div class="tabs">
+    <h2>ورود ادمین</h2>
+    <!-- <div class="tabs">
       <button id="login-btn" onclick="switchForm('login')" class="tab-button active">ورود</button>
       <button id="signup-btn" onclick="switchForm('signup')" class="tab-button">ثبت‌نام</button>
-    </div>
+    </div> -->
 
-    <form id="login-form" action="/admin/auth/login" method="POST" style="display: block;" onsubmit="login(event)">
+    <form id="login-form" style="display: block;" onsubmit="login(event)">
       <div class="input-group">
-        <label for="emailOrusername">ایمیل یا نام کاربری</label>
+        <label for="emailOrusername">نام کاربری</label>
         <input type="text" id="emailOrusername" name="emailOrusername" placeholder="Enter email or username" required>
       </div>
       <div class="input-group">
@@ -110,10 +109,10 @@
         <input type="password" id="password" name="password" required>
       </div>
       <button type="submit" class="btn">ورود</button>
-      <p class="forgot-password"><a href="/admin-fg-password">رمز عبور خود را فراموش کرده‌اید؟</a></p>
+      <!-- <p class="forgot-password"><a href="/admin-fg-password">رمز عبور خود را فراموش کرده‌اید؟</a></p> -->
     </form>
 
-    <form id="signup-form" action="/admin/auth/signup" method="POST" style="display: none;" onsubmit="signup(event)">
+    <!-- <form id="signup-form" action="/admin/auth/signup" method="POST" style="display: none;" onsubmit="signup(event)">
       <div class="input-group">
         <label for="full_name">نام کامل</label>
         <input type="text" id="full_name" name="full_name" required>
@@ -139,7 +138,7 @@
         <input type="password" id="confirm-password" name="confirm_password" required>
       </div>
       <button type="submit" class="btn">ثبت‌نام</button>
-    </form>
+    </form> -->
   </div>
 </body>
 </html>

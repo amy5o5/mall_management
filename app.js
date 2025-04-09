@@ -3,7 +3,7 @@ const app = express();
 const path = require("path");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
-const { checkRoles }= require('./middlewares/check-actor')
+const { checkRoles }= require('./middlewares/check-actor');
 app.use(express.json());
 
 
@@ -41,7 +41,7 @@ app.get("/", (req, res) => {
 });
 
 //admin section *
-const adminRoutes= require('./routes/admin-routes/adminAuth');
+const adminRoutes= require('./routes/admin-routes/admin-routes');
 app.use('/admin', adminRoutes);
 
 

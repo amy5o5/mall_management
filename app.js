@@ -19,7 +19,7 @@ app.use(bodyParser.json());
 
 
 const session = require('express-session');
-const MySQLStore = require('express-mysql-session')(session);  // اینجا مقداردهی اولیه کن
+const MySQLStore = require('express-mysql-session')(session); 
 
 const connection = require('./database/db_connect');
 
@@ -28,10 +28,10 @@ const sessionStore = new MySQLStore({}, connection);
 
 app.use(session({
     secret: 'your-secret-key', 
-    resave: false,   // جلوگیری از ذخیره سشن‌های بدون تغییر
-    saveUninitialized: false, // جلوگیری از ذخیره سشن‌های خالی
-    store: sessionStore,  // ذخیره در MySQL
-    cookie: { secure: false, maxAge: 1000 * 60 * 30 } // 1 روز
+    resave: false,  
+    saveUninitialized: false,
+    store: sessionStore,  
+    cookie: { secure: false, maxAge: 1000 * 60 * 30 }
 }));
 
 

@@ -65,19 +65,17 @@ router.post('/signup', async (req, res) => {
 router.post('/login', (req, res) => {
     const { emailOrPhone, password } = req.body;
 
-
     if (!emailOrPhone || !password) {
         return res.status(400).json({ message: 'Please provide email/phone and password' });
     }
-
 
     const query = emailOrPhone.includes('@') ? 
         'SELECT * FROM Users WHERE email = ?' : 
         'SELECT * FROM Users WHERE mobile = ?';
 
-
     connection.query(query, [emailOrPhone], async (err, result) => {
         if (err) {
+            console.error('Database error:', err);
             return res.status(500).json({ message: 'Database error' });
         }
 
@@ -87,22 +85,26 @@ router.post('/login', (req, res) => {
 
         const user = result[0];
 
-
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
             return res.status(400).json({ message: 'Invalid email/phone or password' });
         }
 
         req.session.user = {
-            id: user.user_id,
+            user_id: user.user_id,
             full_name: user.full_name,
+            mobile: user.mobile,
             email: user.email,
+            username: user.username,
             role: user.role
         };
+
+        //console.log('Session after login:', req.session); 
 
         res.json({ message: 'Login successful' });
     });
 });
+
 
 router.get('/logout', (req, res) => {
     req.session.destroy((err) => {

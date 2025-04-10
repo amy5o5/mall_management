@@ -1,11 +1,66 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fa">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <title>ویرایش پروفایل</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #f8f9fa;
+      direction: rtl;
+      text-align: right;
+      font-family: 'Tahoma', sans-serif;
+    }
+    .profile-box {
+      max-width: 600px;
+      margin: 50px auto;
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .form-label {
+      font-weight: bold;
+    }
+  </style>
 </head>
 <body>
-    <p> here is user profile</p>
+
+  <div class="container">
+    <div class="profile-box">
+      <h3 class="text-center mb-4">ویرایش پروفایل</h3>
+      <form action="/user/profile/update-profile" method="POST">
+        <div class="mb-3">
+          <label for="full_name" class="form-label">نام کامل</label>
+          <input type="text" class="form-control" id="full_name" name="full_name" placeholder="<%= user.full_name %>">
+        </div>
+
+        <div class="mb-3">
+          <label for="mobile" class="form-label">شماره موبایل</label>
+          <input type="text" class="form-control" id="mobile" name="mobile" placeholder="<%= user.mobile %>">
+        </div>
+
+        <div class="mb-3">
+          <label for="email" class="form-label">ایمیل</label>
+          <input type="email" class="form-control" id="email" name="email" placeholder="<%= user.email %>">
+        </div>
+
+        <div class="mb-3">
+          <label for="username" class="form-label">نام کاربری</label>
+          <input type="text" class="form-control" id="username" name="username" placeholder="<%= user.username %>">
+        </div>
+
+        <!-- <div class="mb-3">
+          <label for="role" class="form-label">نقش</label>
+          <input type="text" class="form-control" id="role" value="<%= user.role %>" readonly>
+        </div> -->
+
+        <button type="submit" class="btn btn-primary w-100">ذخیره تغییرات</button>
+      </form>
+    </div>
+  </div>
+
 </body>
 </html>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fa">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,9 +9,9 @@
   <script>
     function switchForm(formType) {
       const loginForm = document.getElementById("login-form");
-      const signupForm = document.getElementById("signup-form");
+      // const signupForm = document.getElementById("signup-form");
       const loginButton = document.getElementById("login-btn");
-      const signupButton = document.getElementById("signup-btn");
+      // const signupButton = document.getElementById("signup-btn");
       
       if (formType === 'login') {
         loginForm.style.display = 'block';
@@ -54,7 +54,7 @@
       const emailOrPhone = document.getElementById('emailOrPhone').value;
       const password = document.getElementById('password').value;
 
-      const response = await fetch('/shopkeeper/auth/login', {
+      const response = await fetch('/shk/shopkeeperAuth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -68,61 +68,61 @@
         showSuccessMessage('You have successfully logged in!');
         // Optionally, redirect after success
         setTimeout(() => {
-          window.location.href = '/dashboard'; // Example redirect
+          window.location.href = '/shk/shk-profile'; 
         }, 1500);
       } else {
         showErrorMessage(data.message || 'Error logging in');
       }
     }
 
-    async function signup(event) {
-      event.preventDefault();
+    // async function signup(event) {
+    //   event.preventDefault();
 
-      const fullName = document.getElementById('full_name').value;
-      const nationalId = document.getElementById('national_id').value;
-      const mobile = document.getElementById('mobile').value;
-      const email = document.getElementById('email-signup').value;
-      const username = document.getElementById('username').value;
-      const password = document.getElementById('password-signup').value;
-      const confirmPassword = document.getElementById('confirm-password').value;
+    //   const full_name = document.getElementById('full_name').value;
+    //   const national_id = document.getElementById('national_id').value;
+    //   const mobile = document.getElementById('mobile').value;
+    //   const email = document.getElementById('email-signup').value;
+    //   const username = document.getElementById('username').value;
+    //   const password = document.getElementById('password-signup').value;
+    //   const confirmPassword = document.getElementById('confirm-password').value;
 
-      if (password !== confirmPassword) {
-        showErrorMessage('Password and Confirm Password do not match');
-        return;
-      }
+    //   if (password !== confirmPassword) {
+    //     showErrorMessage('Password and Confirm Password do not match');
+    //     return;
+    //   }
 
-      const response = await fetch('/shopkeeper/auth/signup', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ fullName, nationalId, mobile, email, username, password })
-      });
+    //   const response = await fetch('/shk/shopkeeperAuth/signup', {
+    //     method: 'POST',
+    //     headers: {
+    //       'Content-Type': 'application/json'
+    //     },
+    //     body: JSON.stringify({ full_name, national_id, mobile, email, username, password })
+    //   });
 
-      const data = await response.json();
+    //   const data = await response.json();
 
-      if (response.ok) {
-        showSuccessMessage('Sign Up Successful!');
-        // Optionally, redirect after success
-        setTimeout(() => {
-          window.location.href = '/login'; // Example redirect to login
-        }, 1500);
-      } else {
-        showErrorMessage(data.message || 'Error signing up');
-      }
-    }
+    //   if (response.ok) {
+    //     showSuccessMessage('Sign Up Successful!');
+      
+    //     setTimeout(() => {
+    //       window.location.href = '/shk/shopkeeper-login'; 
+    //     }, 1500);
+    //   } else {
+    //     showErrorMessage(data.message || 'Error signing up');
+    //   }
+    // }
   </script>
 </head>
 <body>
   <div class="form-container">
-    <h2>Login / Sign Up</h2>
+    <h2>ورود مغازه دار</h2>
     <div class="tabs">
-      <button id="login-btn" onclick="switchForm('login')" class="tab-button active">Login</button>
-      <button id="signup-btn" onclick="switchForm('signup')" class="tab-button">Sign Up</button>
+      <!-- <button id="login-btn" onclick="switchForm('login')" class="tab-button active">Login</button>
+      <button id="signup-btn" onclick="switchForm('signup')" class="tab-button">Sign Up</button> -->
     </div>
 
     <!-- Login Form -->
-    <form id="login-form" action="/shopkeeper/auth/login" method="POST" style="display: block;" onsubmit="login(event)">
+    <form id="login-form" style="display: block;" onsubmit="login(event)">
       <div class="input-group">
         <label for="emailOrPhone">Email or Phone</label>
         <input type="text" id="emailOrPhone" name="emailOrPhone" placeholder="Enter email or phone" required>
@@ -133,15 +133,15 @@
       </div>
       <button type="submit" class="btn">Login</button>
       <p class="forgot-password">
-        <a href="/shkeeper-forgot-password">Forgot your password?</a>
+        <a href="/shk/shkeeper-forgot-password">بازیابی رمز عبور</a>
       </p>
       <p class="forgot-password">
-        <a href="javascript:void(0);" onclick="switchForm('signup')">Don't have an account? Sign Up</a>
+        <!-- <a href="javascript:void(0);" onclick="switchForm('signup')">Don't have an account? Sign Up</a> -->
       </p>
     </form>
 
     <!-- Sign Up Form -->
-    <form id="signup-form" action="/shopkeeper/auth/signup" method="POST" style="display: none;" onsubmit="signup(event)">
+    <!-- <form id="signup-form" style="display: none;" onsubmit="signup(event)">
       <div class="input-group">
         <label for="full_name">Full Name</label>
         <input type="text" id="full_name" name="full_name" required>
@@ -178,7 +178,7 @@
       </div>
 
       <button type="submit" class="btn">Sign Up</button>
-    </form>
+    </form> -->
   </div>
 </body>
 </html>

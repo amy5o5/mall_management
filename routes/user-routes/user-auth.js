@@ -3,12 +3,21 @@ const bcrypt = require('bcryptjs');
 const connection = require('./../../database/db_connect');
 const router = express.Router();
 const crypto = require("crypto");
-const nodemailer = require('nodemailer');
+
+const { sendEmail } = require('./../../utils/mailer');
+
 
 
 router.post('/signup', async (req, res) => {
-    const { full_name, mobile, email, username, password } = req.body;
+    let { full_name, mobile, email, username, password } = req.body;
+    let get_news = req.body.get_news === 'on' ? 1 : 0;
+    
+
+
+    
     console.log(req.body);
+    console.log(get_news);
+
     
     if (!full_name || !mobile || !email || !username || !password) {
         return res.status(400).json({ message: 'لطفاً تمامی فیلدها را پر کنید' });
@@ -46,10 +55,10 @@ router.post('/signup', async (req, res) => {
 
         // ذخیره کاربر در پایگاه داده
         const insertUserQuery = `
-            INSERT INTO Users (full_name, mobile, email, username, password, role)
-            VALUES (?, ?, ?, ?, ?, ?)
+            INSERT INTO Users (full_name, mobile, email, username, password, role, get_news)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
         `;
-        await connection.promise().query(insertUserQuery, [full_name, mobile, email, username, hashedPassword, role]);
+        await connection.promise().query(insertUserQuery, [full_name, mobile, email, username, hashedPassword, role, get_news]);
 
         res.status(201).json({ message: 'ثبت‌نام با موفقیت انجام شد' });
 
@@ -122,13 +131,8 @@ router.get('/logout', (req, res) => {
 });
 
 
-const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS 
-    }
-});
+
+
 
 
 router.post("/user-forgot-password", (req, res) => {
@@ -164,21 +168,17 @@ router.post("/user-forgot-password", (req, res) => {
                     }
 
                     const resetLink = `http://192.168.1.183:5000/user/user-reset-password/${resetToken}`;
-                    const mailOptions = {
-                        from: process.env.EMAIL_USER,
-                        to: userEmail,
-                        subject: "بازیابی رمز عبور",
-                        text: `برای تغییر رمز عبور روی لینک زیر کلیک کنید:\n${resetLink}`
-                    };
+                    const subject = "بازیابی رمز عبور";
+                    const text = `برای تغییر رمز عبور روی لینک زیر کلیک کنید:\n${resetLink}`;
 
-                    transporter.sendMail(mailOptions, (err, info) => {
-                        if (err) {
+                    sendEmail(userEmail, subject, text)
+                        .then(() => {
+                            res.json({ message: "Password reset link sent to your email" });
+                        })
+                        .catch((err) => {
                             console.error("Email Sending Error:", err);
-                            return res.status(500).json({ message: "Failed to send email", error: err.message });
-                        }
-
-                        res.json({ message: "Password reset link sent to your email" });
-                    });
+                            res.status(500).json({ message: "Failed to send email", error: err.message });
+                        });
                 }
             );
         }

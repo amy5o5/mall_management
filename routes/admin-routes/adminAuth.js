@@ -117,7 +117,7 @@ router.get('/logout', (req, res) => {
     });
 });
 
-
+/*
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -230,7 +230,7 @@ router.post("/set-admin-new-Password", async (req, res) => {
     } catch (error) {
         return res.status(500).json({ message: "Error hashing password", error });
     }
-});
+});*/
 
 
 module.exports = router;

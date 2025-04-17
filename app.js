@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+const router = express.Router();
 const path = require("path");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
@@ -23,7 +24,7 @@ const MySQLStore = require('express-mysql-session')(session);
 
 const connection = require('./database/db_connect');
 
-// تعریف استور برای ذخیره سشن در دیتابیس
+
 const sessionStore = new MySQLStore({}, connection);
 
 app.use(session({
@@ -44,40 +45,13 @@ app.get("/", (req, res) => {
 const adminRoutes= require('./routes/admin-routes/admin-routes');
 app.use('/admin', adminRoutes);
 
-
+//shopkeeper *
+const shopKeeperRoutes = require('./routes/shopkeeper-routes/shopkeeper-routes');
+app.use('/shk', shopKeeperRoutes);
 
 // normal user
 const userRoutes = require('./routes/user-routes/user-routes');
 app.use('/user', userRoutes);
-
-
-
-
-const shopkeeperAuth = require('./routes/shopkeeper-auth');
-app.use('/shopkeeper/auth', shopkeeperAuth);
-
-app.get("/shopkeeper-login", (req, res) => {
-  res.render("shop_keeper/shopkeeper-login");
-});
-
-
-app.get('/shkeeper-forgot-password', (req, res) => {
-  res.render('shop_keeper/shkeeper-forgot-password');
-});
-
-app.get("/set-shkeeper-new-Password/:token", (req, res) => {
-  const { token } = req.params;
-  
-  res.render("sshop_keeper/shkeeper-reset-password", { token, errorMessage: null });
-});
-
-app.get("/sh-profile", (req, res) => {
-  const { token } = req.params;
-  
-  res.render("shop_keeper/shop_owner_profile");
-});
-
-
 
 
 
@@ -94,7 +68,7 @@ app.get("/admin-reset-password/:token", (req, res) => {
 
 
 
-
+/*
 const SecurityGuyAuth = require('./routes/SecurityGuy-auth');
 app.use('/sec/auth', SecurityGuyAuth);
 
@@ -116,7 +90,7 @@ app.get("/securityGuy-reset-password/:token", (req, res) => {
   
   res.render("sec_guy/securityGuy-reset-password", { token, errorMessage: null });
 });
-
+*/
 
 
 

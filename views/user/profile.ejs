@@ -52,6 +52,12 @@
           <input type="text" class="form-control" id="username" name="username" placeholder="<%= user.username %>">
         </div>
 
+        <div class="mb-3 form-check">
+          <input type="checkbox" class="form-check-input" id="get_news" name="get_news" <%= user.get_news ? 'checked' : '' %>>
+          <label class="form-check-label" for="get_news">مایل به دریافت اخبار و اطلاعیه‌ها هستم</label>
+        </div>
+        
+
         <!-- <div class="mb-3">
           <label for="role" class="form-label">نقش</label>
           <input type="text" class="form-control" id="role" value="<%= user.role %>" readonly>

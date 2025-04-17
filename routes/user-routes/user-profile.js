@@ -15,8 +15,10 @@ router.get('/',checkRoles('user'), (req, res) => {
  
       res.redirect('/user/login');
   }
-});router.post('/update-profile', (req, res) => {
-  const { full_name, mobile, email, username } = req.body;
+});
+router.post('/update-profile', (req, res) => {
+  const { full_name, mobile, email, username, get_news } = req.body;
+  
   const userId = req.session.user.user_id;
 
   if (!userId) {
@@ -29,6 +31,8 @@ router.get('/',checkRoles('user'), (req, res) => {
   if (mobile) updatedFields.mobile = mobile;
   if (email) updatedFields.email = email;
   if (username) updatedFields.username = username;
+  updatedFields.get_news = get_news === 'on' ? 1 : 0;
+
 
   if (Object.keys(updatedFields).length === 0) {
     return res.status(400).json({ message: 'هیچ فیلدی برای بروزرسانی وارد نشده است.' });

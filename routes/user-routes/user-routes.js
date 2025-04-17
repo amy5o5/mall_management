@@ -4,6 +4,8 @@ const userAuth = require('./user-auth');
 const connection = require('./../../database/db_connect');
 const { checkRoles } = require('./../../middlewares/check-actor');
 
+
+
 router.use('/userAuth', userAuth);
 
 const userProfile = require('./user-profile');
@@ -33,8 +35,6 @@ router.get('/test', (req,res) => {
   console.log('Session after login:', req.session);
   res.send('test')
 })
-
-
 
 
 module.exports = router;

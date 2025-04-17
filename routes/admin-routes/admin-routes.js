@@ -14,4 +14,12 @@ router.get('/admin-panel', checkRoles('admin'), (req, res) => {
     res.render('admin/mainPanel-admin');
 });
 
+
+router.use('/sendBulkEmails', checkRoles('admin'), require('./sendBulkEmails'));
+
+router.get('/sendAnnouncement', checkRoles('admin'), (req, res) => {
+    res.render('admin/sendAnnouncement');
+});
+
+
 module.exports = router;

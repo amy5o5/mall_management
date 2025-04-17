@@ -1,14 +1,14 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
-const connection = require('./../database/db_connect');
+const connection = require('../../database/db_connect');
 const router = express.Router();
 const crypto = require("crypto");
 const nodemailer = require('nodemailer');
 
 
-router.post('/signup', async (req, res) => {
+/*router.post('/signup', async (req, res) => {
     const { full_name, national_id, mobile, email, username, password } = req.body;
-    //console.log(req.body);
+    console.log(req.body);
 
     if (!full_name || !mobile || !email || !username || !password) {
         return res.status(400).json({ message: 'Please provide all required fields' });
@@ -52,17 +52,17 @@ router.post('/signup', async (req, res) => {
         console.error(error);
         res.status(500).json({ message: 'Internal server error' });
     }
-});
+});*/
 
 router.post('/login', async (req, res) => {
     const { emailOrPhone, password } = req.body;
 
-    // بررسی اینکه آیا ایمیل یا شماره تلفن و رمز عبور ارسال شده است
+
     if (!emailOrPhone || !password) {
         return res.status(400).json({ message: 'Please provide email/phone and password' });
     }
 
-    console.log('Received emailOrPhone:', emailOrPhone); // چاپ ایمیل یا شماره تلفن وارد شده
+    console.log('Received emailOrPhone:', emailOrPhone); 
 
     const query = emailOrPhone.includes('@') ? 
         'SELECT * FROM Shop_Owners WHERE LOWER(email) = LOWER(?)' : 
@@ -82,7 +82,7 @@ router.post('/login', async (req, res) => {
 
         try {
             const isMatch = await bcrypt.compare(password, user.password);
-            console.log('Password match:', isMatch); // بررسی تطابق رمز عبور
+            console.log('Password match:', isMatch); 
             if (!isMatch) {
                 return res.status(400).json({ message: 'Invalid credentials' });
             }
@@ -114,10 +114,10 @@ router.get('/logout', (req, res) => {
             return res.status(500).json({ message: 'Logout failed' });
         }
 
-        // حذف کوکی سشن
+        
         res.clearCookie('connect.sid');
 
-        // هدایت به صفحه لاگین
+       
         res.redirect('/login');
     });
 });
@@ -134,6 +134,7 @@ const transporter = nodemailer.createTransport({
 
 router.post("/shkeeper-forgot-password", (req, res) => {
     const { emailOrPhone } = req.body;
+    console.log(emailOrPhone);
 
     if (!emailOrPhone) {
         return res.status(400).json({ message: "Please provide email or phone number" });
@@ -164,7 +165,7 @@ router.post("/shkeeper-forgot-password", (req, res) => {
                         return res.status(500).json({ message: "Database error", error: err.sqlMessage });
                     }
 
-                    const resetLink = `http://192.168.1.183:5000/set-shkeeper-new-Password/${resetToken}`;
+                    const resetLink = `http://192.168.1.183:5000/shk/set-shkeeper-new-Password/${resetToken}`;
                     const mailOptions = {
                         from: process.env.EMAIL_USER,
                         to: userEmail,
@@ -199,10 +200,10 @@ router.post("/set-shkeeper-new-Password", async (req, res) => {
     }
 
     try {
-        // هش کردن رمز عبور جدید
+       
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        // بررسی توکن و تنظیم رمز جدید
+      
         connection.query(
             "SELECT email FROM Shop_Owners WHERE reset_token = ? AND reset_token_expiry > NOW()",
             [token],

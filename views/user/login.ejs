@@ -67,6 +67,7 @@
       const username = document.getElementById('username').value;
       const password = document.getElementById('password-signup').value;
       const confirmPassword = document.getElementById('confirm-password').value;
+      const get_news = document.getElementById('get_news').value;
 
 
       if (password !== confirmPassword) {
@@ -79,7 +80,7 @@
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ full_name, mobile, email, username, password })
+        body: JSON.stringify({ full_name, mobile, email, username, password, get_news })
       });
 
       const data = await response.json();
@@ -140,6 +141,12 @@
         <label for="confirm-password">تایید رمز عبور</label>
         <input type="password" id="confirm-password" name="confirm_password" required>
       </div>
+
+  <div class="mb-3 form-check">
+    <input type="checkbox" class="form-check-input" id="get_news" name="get_news">
+    <label class="form-check-label" for="get_news">دریافت اخبار</label>
+  </div>
+      
       <button type="submit" class="btn">ثبت‌نام</button>
     </form>
   </div>

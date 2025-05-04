@@ -3,7 +3,7 @@ dotenv.config();
 
 const nodemailer = require('nodemailer');
 
-// تنظیمات nodemailer
+
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -13,11 +13,11 @@ const transporter = nodemailer.createTransport({
 });
 
 // تعریف تابع ارسال ایمیل
-const sendEmail = (to, subject, text) => {
+const sendEmail = (to, subject, text, title) => {
     const mailOptions = {
         from: process.env.EMAIL_USER,
         to,
-        subject,
+        subject: `${title} - ${subject}`, 
         text
     };
 
@@ -32,6 +32,5 @@ const sendEmail = (to, subject, text) => {
         });
     });
 };
-
 // اکسپورت تابع sendEmail
 module.exports = { sendEmail };

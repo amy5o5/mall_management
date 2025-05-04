@@ -16,7 +16,7 @@ router.get('/',checkRoles('user'), (req, res) => {
       res.redirect('/user/login');
   }
 });
-router.post('/update-profile', (req, res) => {
+router.post('/update-profile', checkAuth ,(req, res) => {
   const { full_name, mobile, email, username, get_news } = req.body;
   
   const userId = req.session.user.user_id;
@@ -53,11 +53,11 @@ router.post('/update-profile', (req, res) => {
         return res.status(500).json({ message: 'خطا در بروزرسانی اطلاعات' });
       }
 
-      // به‌روزرسانی سشن با اطلاعات جدید
+
       const updatedUser = { ...req.session.user, ...updatedFields };
       req.session.user = updatedUser;
 
-      // ریدایرکت به صفحه پروفایل برای جلوگیری از ارسال دوباره فرم
+
       return res.redirect('/user/profile');
     }
   );

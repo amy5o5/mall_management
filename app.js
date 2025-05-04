@@ -11,8 +11,11 @@ app.use(express.json());
 require("dotenv").config();
 app.set("view engine", "ejs");
 
-app.use(cookieParser()); // قرار دادن cookie-parser قبل از middleware‌های دیگر
+app.use(cookieParser());
+
 app.use(express.static("public"));
+app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));
+
 app.set("views", path.join(__dirname, "views"));
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -30,16 +33,20 @@ const sessionStore = new MySQLStore({}, connection);
 app.use(session({
     secret: 'your-secret-key', 
     resave: false,  
-    saveUninitialized: false,
+    saveUninitialized: true,
     store: sessionStore,  
-    cookie: { secure: false, maxAge: 1000 * 60 * 30 }
+    cookie: { secure: false ,httpOnly:true, maxAge: 1000 * 60 * 30 }
 }));
 
 
+const visit_recorder = require('./services/visit-recorder');
+//app.use(visit_recorder);
 
-app.get("/", (req, res) => {
+app.get("/",visit_recorder, (req, res) => {
   res.render("main");
 });
+
+
 
 //admin section *
 const adminRoutes= require('./routes/admin-routes/admin-routes');
@@ -104,6 +111,7 @@ connection.connect((err) => {
       console.log("✅ اتصال به دیتابیس برقرار شد!");
   }
 });*/
+
 
 
 const IP = process.env.IP;

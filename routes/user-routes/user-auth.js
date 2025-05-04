@@ -15,8 +15,8 @@ router.post('/signup', async (req, res) => {
 
 
     
-    console.log(req.body);
-    console.log(get_news);
+    //console.log(req.body);
+    //console.log(get_news);
 
     
     if (!full_name || !mobile || !email || !username || !password) {
@@ -93,7 +93,7 @@ router.post('/login', (req, res) => {
         }
 
         const user = result[0];
-
+        console.log(user);
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
             return res.status(400).json({ message: 'Invalid email/phone or password' });
@@ -107,7 +107,9 @@ router.post('/login', (req, res) => {
             username: user.username,
             role: user.role
         };
-
+        if (user.role === 'user') {
+            req.session.cookie.maxAge = 1000 * 30 * 60;
+        } 
         //console.log('Session after login:', req.session); 
 
         res.json({ message: 'Login successful' });
@@ -191,7 +193,7 @@ router.post("/user-forgot-password", (req, res) => {
 
 router.post("/set-user-new-Password", async (req, res) => {
     const { token, password, confirm_password } = req.body;
-    console.log(req.body);
+    //console.log(req.body);
 
     if (password !== confirm_password) {
         return res.status(400).json({ message: "Passwords do not match" });

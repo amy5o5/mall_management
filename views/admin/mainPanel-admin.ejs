@@ -1,11 +1,226 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fa" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <meta charset="UTF-8">
+  <title>نام پاساز</title>
+  <style>body {
+    font-family: Tahoma, sans-serif;
+    margin: 0;
+    padding: 0;
+    direction: rtl;
+    background-color: #f9f9f9;
+  }
+  
+  .header {
+    text-align: center;
+    padding: 20px;
+    background-color: #fff;
+    border-bottom: 1px solid #ccc;
+    position: relative;
+  }
+  
+  .datetime {
+    position: absolute;
+    top: 10px;
+    left: 18px; /* نمایش در سمت چپ */
+    font-size: 15;
+    color: #353535;
+  }
+  
+  .title {
+    font-size: 24px;
+    font-weight: bold;
+  }
+  
+  .buttons {
+    margin-top: 10px;
+  }
+  
+  .buttons button {
+    margin: 0 10px;
+    padding: 8px 16px;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  
+  .visits, .announcement {
+    background-color: #fff;
+    margin: 30px auto;
+    padding: 20px;
+    width: 80%;
+    border: 1px solid #ccc;
+    text-align: center;
+  }
+  
+  .visits h2, .announcement h2 {
+    text-decoration: underline;
+    margin-bottom: 15px;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+  }
+  
+  table, th, td {
+    border: 1px solid #ccc;
+  }
+  
+  th, td {
+    padding: 10px;
+    text-align: center;
+  }
+  
+  th {
+    background-color: #f0f0f0;
+  }
+  
+  .announcement input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  } 
+
+  .announcement textarea {
+    width: 100%;
+    height: 150px;
+    padding: 10px;
+    font-size: 14px;
+    resize: none;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .announcement button {
+    padding: 8px 16px;
+    font-size: 14px;
+    cursor: pointer;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+  }
+
+  .announcement button:hover {
+    background-color: #0056b3;
+  }
+  </style>
 </head>
 <body>
-    hi
+    <header class="header">
+        <div class="datetime">
+            <span> <%= time %></span>
+            &nbsp;
+          <span> <%= date %></span>
+          
+        </div>
+        <h1 class="title">مدیریت پاساژ</h1>
+        <div class="buttons">
+          <button onclick="location.href='/create-store'">ایجاد فروشگاه</button>
+          <button onclick="location.href='/send-announcement'">ارسال اطلاعیه</button>
+        </div>
+      </header>
+
+  <section class="visits">
+    <h3>بازدیدهای روزانه</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>تاریخ</th>
+          <th>تعداد بازدید</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (dailyVisits && dailyVisits.length > 0) { %>
+          <% dailyVisits.forEach(visit => { %>
+            <tr>
+              <td><%= new Date(visit.visit_date).toLocaleDateString('fa-IR') %></td>
+              <td><%= visit.total_visits %></td>
+            </tr>
+          <% }) %>
+        <% } else { %>
+          <tr>
+            <td colspan="2">هیچ بازدیدی ثبت نشده است.</td>
+          </tr>
+        <% } %>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="announcement container mt-5">
+    <h2 class="text-center mb-4">ارسال اطلاعیه</h2>
+    <form id="emailForm" action="/admin/sendBulkEmails" method="POST" class="needs-validation" novalidate>
+      <div class="mb-3">
+        <label for="title" class="form-label">عنوان اطلاعیه</label>
+        <input type="text" class="form-control" id="title" name="title" placeholder="عنوان اطلاعیه" required>
+        <div class="invalid-feedback">لطفاً عنوان اطلاعیه را وارد کنید.</div>
+      </div>
+      <div class="mb-3">
+        <label for="subject" class="form-label">موضوع اطلاعیه</label>
+        <input type="text" class="form-control" id="subject" name="subject" placeholder="موضوع اطلاعیه" required>
+        <div class="invalid-feedback">لطفاً موضوع اطلاعیه را وارد کنید.</div>
+      </div>
+      <div class="mb-3">
+        <label for="message" class="form-label">متن اطلاعیه</label>
+        <textarea class="form-control" id="message" name="message" rows="5" placeholder="متن اطلاعیه را وارد کنید..." required></textarea>
+        <div class="invalid-feedback">لطفاً متن اطلاعیه را وارد کنید.</div>
+      </div>
+      <button type="submit" class="btn btn-primary w-100">ارسال</button>
+      <div id="statusMessage" class="mt-3 text-center" style="display: none;"></div>
+    </form>
+  </section>
+
 </body>
+<script>
+    const emailForm = document.getElementById('emailForm');
+    const statusMessage = document.getElementById('statusMessage');
+  
+    emailForm.addEventListener('submit', async (event) => {
+      event.preventDefault(); // جلوگیری از ارسال پیش‌فرض فرم
+  
+      // نمایش پیام "در حال ارسال"
+      statusMessage.style.display = 'block';
+      statusMessage.className = 'text-primary';
+      statusMessage.textContent = 'در حال ارسال...';
+  
+      // جمع‌آوری داده‌های فرم
+      const formData = new FormData(emailForm);
+      const data = Object.fromEntries(formData.entries());
+  
+      try {
+        // ارسال درخواست به سرور
+        const response = await fetch(emailForm.action, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
+        });
+  
+        if (response.ok) {
+          // نمایش پیام موفقیت
+          statusMessage.className = 'text-success';
+          statusMessage.textContent = 'ایمیل‌ها با موفقیت ارسال شدند!';
+          emailForm.reset(); // پاک کردن فرم
+        } else {
+          // نمایش پیام خطا
+          const errorData = await response.json();
+          statusMessage.className = 'text-danger';
+          statusMessage.textContent = errorData.message || 'خطا در ارسال ایمیل‌ها.';
+        }
+      } catch (error) {
+        // نمایش پیام خطای شبکه
+        statusMessage.className = 'text-danger';
+        statusMessage.textContent = 'خطا در ارتباط با سرور.';
+      }
+    });
+  </script>
+  
 </html>

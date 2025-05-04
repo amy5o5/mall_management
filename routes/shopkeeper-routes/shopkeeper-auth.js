@@ -65,8 +65,8 @@ router.post('/login', async (req, res) => {
     console.log('Received emailOrPhone:', emailOrPhone); 
 
     const query = emailOrPhone.includes('@') ? 
-        'SELECT * FROM Shop_Owners WHERE LOWER(email) = LOWER(?)' : 
-        'SELECT * FROM Shop_Owners WHERE mobile = ?';
+        'SELECT * FROM shpk WHERE LOWER(email) = LOWER(?)' : 
+        'SELECT * FROM shpk WHERE mobile = ?';
 
     connection.query(query, [emailOrPhone], async (err, result) => {
         if (err) {
@@ -79,6 +79,7 @@ router.post('/login', async (req, res) => {
         }
 
         const user = result[0];
+        console.log(user);
 
         try {
             const isMatch = await bcrypt.compare(password, user.password);
@@ -141,7 +142,7 @@ router.post("/shkeeper-forgot-password", (req, res) => {
     }
 
     connection.query(
-        "SELECT email FROM Shop_Owners WHERE email = ? OR mobile = ?",
+        "SELECT email FROM shpk WHERE email = ? OR mobile = ?",
         [emailOrPhone, emailOrPhone],
         (err, result) => {
             if (err) {
@@ -205,7 +206,7 @@ router.post("/set-shkeeper-new-Password", async (req, res) => {
 
       
         connection.query(
-            "SELECT email FROM Shop_Owners WHERE reset_token = ? AND reset_token_expiry > NOW()",
+            "SELECT email FROM shpk WHERE reset_token = ? AND reset_token_expiry > NOW()",
             [token],
             (err, result) => {
                 if (err) {
@@ -219,7 +220,7 @@ router.post("/set-shkeeper-new-Password", async (req, res) => {
                 const userEmail = result[0].email;
 
                 connection.query(
-                    "UPDATE Shop_Owners SET password = ?, reset_token = NULL, reset_token_expiry = NULL WHERE email = ?",
+                    "UPDATE shpk SET password = ?, reset_token = NULL, reset_token_expiry = NULL WHERE email = ?",
                     [hashedPassword, userEmail],
                     (err) => {
                         if (err) {

@@ -16,10 +16,10 @@ const executeQuery = (query, params = []) => {
 };
 
 router.post('/', async (req, res) => {
-    const { subject, text } = req.body;
-
+    const { subject, message}= req.body;
+    // onsole.log(req.body);
     // Validate input
-    if (!subject || !text) {
+    if (!subject || !message){
         return res.status(400).json({ message: 'موضوع و متن ایمیل الزامی است.' });
     }
 
@@ -34,11 +34,12 @@ router.post('/', async (req, res) => {
 
         // Send emails to all users
         const emailPromises = results.map(user => 
-            sendEmail(user.email, subject, text)
-                .then(() => console.log(`Email sent to: ${user.email}`))
-                .catch(err => console.error(`Failed to send email to: ${user.email}`, err))
+            sendEmail(user.email, subject, message)
+                .then(() => console.log(`ایمیل ارسال شد به: ${user.email}`))
+                .catch(err => console.error(`خطا در ارسال ایمیل به: ${user.email}`, err))
         );
 
+        // Wait for all emails to be sent
         await Promise.all(emailPromises);
 
         res.json({ message: 'ایمیل‌ها با موفقیت ارسال شدند!' });

@@ -31,10 +31,5 @@ router.get("/user-reset-password/:token", (req, res) => {
 });
 
 
-router.get('/test', (req,res) => {
-  console.log('Session after login:', req.session);
-  res.send('test')
-})
-
 
 module.exports = router;

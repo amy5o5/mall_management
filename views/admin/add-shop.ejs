@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>افزودن فروشنده</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body class="p-5">
+  <div class="container">
+    <h2 class="mb-4">افزودن فروشنده جدید</h2>
+    <div id="responseMsg"></div>
+    <form id="addShopForm" enctype="multipart/form-data">
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label class="form-label">نام کامل</label>
+          <input type="text" name="full_name" class="form-control" required>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label">ایمیل</label>
+          <input type="email" name="email" class="form-control" required>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label">رمز عبور</label>
+          <input type="password" name="password" class="form-control" required>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label">شماره موبایل</label>
+          <input type="text" name="mobile" class="form-control" required>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label">کد ملی</label>
+          <input type="text" name="national_id" class="form-control" required>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label">نام کاربری</label>
+          <input type="text" name="username" class="form-control" required>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label">نام مغازه</label>
+          <input type="text" name="shop_name" class="form-control" required>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label">وب‌سایت</label>
+          <input type="text" name="website" class="form-control">
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label">ساعات کاری</label>
+          <input type="text" name="working_hours" class="form-control">
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label">شماره واحد</label>
+          <input type="text" name="unit_number" class="form-control">
+        </div>
+        <div class="col-md-12 mb-3">
+          <label class="form-label">توضیحات</label>
+          <textarea name="description" class="form-control"></textarea>
+        </div>
+        <div class="col-md-12 mb-3">
+          <label class="form-label">تصویر بنر</label>
+          <input type="file" name="shop_images" class="form-control" accept="image/*" multiple>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary">ذخیره</button>
+    </form>
+  </div>
+  <script>
+    const form = document.getElementById('addShopForm');
+    form.addEventListener('submit', async function (e) {
+      e.preventDefault();
+
+      const formData = new FormData(form);
+      const msg = document.getElementById('responseMsg');
+
+      // نمایش پیام در حال ارسال
+      msg.innerHTML = `<div class="alert alert-info">در حال ارسال اطلاعات...</div>`;
+
+      try {
+        const res = await fetch('/admin/management/shpk-add', {
+          method: 'POST',
+          body: formData,
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+          msg.innerHTML = `<div class="alert alert-success">${data.message}</div>`;
+          form.reset();
+        } else {
+          msg.innerHTML = `<div class="alert alert-danger">${data.message}</div>`;
+        }
+      } catch (error) {
+        msg.innerHTML = `<div class="alert alert-danger">خطا در ارسال درخواست. لطفاً دوباره تلاش کنید.</div>`;
+        console.error('Error:', error);
+      }
+    });
+  </script>
+</body>
+</html>

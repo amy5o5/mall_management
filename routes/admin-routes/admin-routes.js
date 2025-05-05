@@ -14,7 +14,7 @@ router.get('/login', (req, res) => {
 });
 
 
-router.get('/admin-panel', async (req, res) => {
+router.get('/admin-panel',checkRoles('admin') ,async (req, res) => {
     try {
         const dailyVisits = await getDailyVisits();
 
@@ -39,16 +39,14 @@ router.get('/admin-panel', async (req, res) => {
 });
 
 router.get('/add-shop', checkRoles('admin'), (req, res) => {
-    res.render('admin/add-shop');
+    res.render('admin/add-shop', {
+        date: new Intl.DateTimeFormat('fa-IR').format(new Date()),
+        time: new Date().toLocaleTimeString('fa-IR')
+    });
 });
 
 router.use('/sendBulkEmails', checkRoles('admin'), require('./sendBulkEmails'));
 
-// router.get('/sendAnnouncement', checkRoles('admin'), (req, res) => {
-//     res.render('admin/sendAnnouncement');
-// });
-
-
-router.use('/manageStuff', checkRoles('admin'));
+router.use('/manageStuff', checkRoles('admin'), require('./manageStuff'));
 
 module.exports = router;

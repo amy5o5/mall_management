@@ -32,14 +32,13 @@ async function getDailyVisits() {
 
 
 
-
 router.post('/shpk-add', async (req, res) => {
   try {
-   
     const multer = require('multer');
     const path = require('path');
     const fs = require('fs');
 
+    // تنظیمات Multer برای آپلود فایل‌ها
     const storage = multer.diskStorage({
       destination: (req, file, cb) => {
         const safeUsername = req.body.username.replace(/[^a-zA-Z0-9_-]/g, '');
@@ -55,33 +54,33 @@ router.post('/shpk-add', async (req, res) => {
 
     const upload = multer({
       storage,
-      limits: { fileSize: 2 * 1024 * 1024, files: 5 } 
+      limits: { fileSize: 2 * 1024 * 1024, files: 5 } // محدودیت حجم و تعداد فایل‌ها
     }).array('shop_images', 5);
 
-   
     upload(req, res, async (err) => {
       if (err) {
         console.error('Error uploading files:', err);
         return res.status(400).json({ message: 'خطا در آپلود فایل‌ها.' });
       }
 
+      // دریافت داده‌ها از درخواست
       const {
         full_name, email, password, mobile, national_id, username,
-        shop_name, website, working_hours, unit_number, description
+        shop_name, website, working_hours, unit_number, description, storeType
       } = req.body;
 
-     
-      if (!full_name || !email || !password || !mobile || !username) {
+      // اعتبارسنجی فیلدهای ضروری
+      if (!full_name || !email || !password || !mobile || !username || !storeType) {
         return res.status(400).json({ message: 'لطفاً تمام فیلدهای ضروری را پر کنید.' });
       }
 
-     
+      // اعتبارسنجی ایمیل
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(email)) {
         return res.status(400).json({ message: 'ایمیل وارد شده معتبر نیست.' });
       }
 
-     
+      // اعتبارسنجی رمز عبور
       if (password.length < 8) {
         return res.status(400).json({ message: 'رمز عبور باید حداقل ۸ کاراکتر باشد.' });
       }
@@ -96,19 +95,20 @@ router.post('/shpk-add', async (req, res) => {
         folder_path = `/uploads/${safeUsername}`;
       }
 
-     
+      // کوئری SQL برای ذخیره اطلاعات
       const query = `
         INSERT INTO shpk (
           full_name, email, password, mobile, national_id, username,
-          shop_name, website, working_hours, unit_number, images_path, description
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+          shop_name, website, working_hours, unit_number, images_path, description, storeType
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       `;
 
       const values = [
         full_name, email, hashedPassword, mobile, national_id, username,
-        shop_name, website, working_hours, unit_number, folder_path, description
+        shop_name, website, working_hours, unit_number, folder_path, description, storeType
       ];
 
+      // اجرای کوئری
       connection.query(query, values, (err, results) => {
         if (err) {
           console.error('Database error:', err);
@@ -129,9 +129,9 @@ router.post('/shpk-add', async (req, res) => {
 
 
 
-
-
 module.exports = {
   router,
   getDailyVisits
 };
+
+module.exports = router;

@@ -17,8 +17,7 @@ const executeQuery = (query, params = []) => {
 
 router.post('/', async (req, res) => {
     const { subject, message}= req.body;
-    // onsole.log(req.body);
-    // Validate input
+
     if (!subject || !message){
         return res.status(400).json({ message: 'موضوع و متن ایمیل الزامی است.' });
     }

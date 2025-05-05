@@ -1,0 +1,25 @@
+<header class="header">
+  <div class="datetime">
+    <span id="liveTime"></span>
+    &nbsp;
+    <span><%= date %></span>
+  </div>
+  <h1 class="title">مدیریت پاساژ</h1>
+  <div class="buttons">
+    <button onclick="location.href='/admin/add-shop'" class="btn btn-primary">ایجاد فروشگاه</button>
+    <button onclick="location.href='/send-announcement'" class="btn btn-secondary">ارسال اطلاعیه</button>
+  </div>
+</header>
+
+<script>
+  function updateLiveTime() {
+    const liveTimeElement = document.getElementById('liveTime');
+    const now = new Date();
+    const timeString = now.toLocaleTimeString('fa-IR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    liveTimeElement.textContent = timeString;
+  }
+
+  setInterval(updateLiveTime, 1000);
+
+  updateLiveTime();
+</script>

@@ -5,6 +5,7 @@ const path = require("path");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const { checkRoles }= require('./middlewares/check-actor');
+const { checkAuth } = require("./middlewares/checkAuth");
 app.use(express.json());
 
 
@@ -50,7 +51,7 @@ app.get("/",visit_recorder, (req, res) => {
 
 //admin section *
 const adminRoutes= require('./routes/admin-routes/admin-routes');
-app.use('/admin', adminRoutes);
+app.use('/admin' ,adminRoutes);
 
 //shopkeeper *
 const shopKeeperRoutes = require('./routes/shopkeeper-routes/shopkeeper-routes');
@@ -58,6 +59,7 @@ app.use('/shk', shopKeeperRoutes);
 
 // normal user
 const userRoutes = require('./routes/user-routes/user-routes');
+
 app.use('/user', userRoutes);
 
 

@@ -114,19 +114,7 @@
   </style>
 </head>
 <body>
-    <header class="header">
-        <div class="datetime">
-            <span> <%= time %></span>
-            &nbsp;
-          <span> <%= date %></span>
-          
-        </div>
-        <h1 class="title">مدیریت پاساژ</h1>
-        <div class="buttons">
-          <button onclick="location.href='/create-store'">ایجاد فروشگاه</button>
-          <button onclick="location.href='/send-announcement'">ارسال اطلاعیه</button>
-        </div>
-      </header>
+<%- include('partials/header', { time: time, date: date }) %>
 
   <section class="visits">
     <h3>بازدیدهای روزانه</h3>

@@ -2,67 +2,111 @@
 <html lang="fa" dir="rtl">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>افزودن فروشنده</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <style>  .header {
+    text-align: center;
+    padding: 20px;
+    background-color: #fff;
+    border-bottom: 1px solid #ccc;
+    position: relative;
+  }
+  .datetime {
+    position: absolute;
+    top: 10px;
+    left: 18px; /* نمایش در سمت چپ */
+    font-size: 15;
+    color: #353535;
+  }
+  
+  </style>
 </head>
-<body class="p-5">
-  <div class="container">
-    <h2 class="mb-4">افزودن فروشنده جدید</h2>
+<body>
+  <%- include('partials/header', { time: time, date: date }) %>
+
+  <div class="container mt-5">
+    <h2 class="mb-4 text-center">افزودن فروشنده جدید</h2>
     <div id="responseMsg"></div>
-    <form id="addShopForm" enctype="multipart/form-data">
-      <div class="row">
-        <div class="col-md-6 mb-3">
+    <form id="addShopForm" enctype="multipart/form-data" class="needs-validation" novalidate>
+      <div class="row g-3">
+        <div class="col-md-6">
           <label class="form-label">نام کامل</label>
           <input type="text" name="full_name" class="form-control" required>
+          <div class="invalid-feedback">لطفاً نام کامل را وارد کنید.</div>
         </div>
-        <div class="col-md-6 mb-3">
+        <div class="col-md-6">
           <label class="form-label">ایمیل</label>
           <input type="email" name="email" class="form-control" required>
+          <div class="invalid-feedback">لطفاً ایمیل معتبر وارد کنید.</div>
         </div>
-        <div class="col-md-6 mb-3">
+        <div class="col-md-6">
           <label class="form-label">رمز عبور</label>
           <input type="password" name="password" class="form-control" required>
+          <div class="invalid-feedback">لطفاً رمز عبور را وارد کنید.</div>
         </div>
-        <div class="col-md-6 mb-3">
+        <div class="col-md-6">
           <label class="form-label">شماره موبایل</label>
           <input type="text" name="mobile" class="form-control" required>
+          <div class="invalid-feedback">لطفاً شماره موبایل را وارد کنید.</div>
         </div>
-        <div class="col-md-6 mb-3">
+        <div class="col-md-6">
           <label class="form-label">کد ملی</label>
           <input type="text" name="national_id" class="form-control" required>
+          <div class="invalid-feedback">لطفاً کد ملی را وارد کنید.</div>
         </div>
-        <div class="col-md-6 mb-3">
+        <div class="col-md-6">
           <label class="form-label">نام کاربری</label>
           <input type="text" name="username" class="form-control" required>
+          <div class="invalid-feedback">لطفاً نام کاربری را وارد کنید.</div>
         </div>
-        <div class="col-md-6 mb-3">
+        <div class="col-md-6">
           <label class="form-label">نام مغازه</label>
           <input type="text" name="shop_name" class="form-control" required>
+          <div class="invalid-feedback">لطفاً نام مغازه را وارد کنید.</div>
         </div>
-        <div class="col-md-6 mb-3">
+        <div class="col-md-6">
+          <label class="form-label">دسته‌بندی فروشگاه</label>
+          <select name="storeType" class="form-select" required>
+            <option value="" disabled selected>انتخاب دسته‌بندی</option>
+            <option value="خدماتی">خدماتی</option>
+            <option value="لوازم خانگی">لوازم خانگی</option>
+            <option value="پوشاک">پوشاک</option>
+            <option value="مواد غذایی">مواد غذایی</option>
+            <option value="زیبایی و آرایشی">زیبایی و آرایشی</option>
+            <option value="کتاب و لوازم‌التحریر">کتاب و لوازم‌التحریر</option>
+            <option value="الکترونیک و دیجیتال">الکترونیک و دیجیتال</option>
+            <option value="ورزشی">ورزشی</option>
+            <option value="کودک و اسباب‌بازی">کودک و اسباب‌بازی</option>
+            <option value="زیورآلات و اکسسوری">زیورآلات و اکسسوری</option>
+          </select>
+          <div class="invalid-feedback">لطفاً دسته‌بندی فروشگاه را انتخاب کنید.</div>
+        </div>
+        <div class="col-md-6">
           <label class="form-label">وب‌سایت</label>
           <input type="text" name="website" class="form-control">
         </div>
-        <div class="col-md-6 mb-3">
+        <div class="col-md-6">
           <label class="form-label">ساعات کاری</label>
           <input type="text" name="working_hours" class="form-control">
         </div>
-        <div class="col-md-6 mb-3">
+        <div class="col-md-6">
           <label class="form-label">شماره واحد</label>
           <input type="text" name="unit_number" class="form-control">
         </div>
-        <div class="col-md-12 mb-3">
+        <div class="col-md-12">
           <label class="form-label">توضیحات</label>
           <textarea name="description" class="form-control"></textarea>
         </div>
-        <div class="col-md-12 mb-3">
+        <div class="col-md-12">
           <label class="form-label">تصویر بنر</label>
           <input type="file" name="shop_images" class="form-control" accept="image/*" multiple>
         </div>
       </div>
-      <button type="submit" class="btn btn-primary">ذخیره</button>
+      <button type="submit" class="btn btn-primary mt-4 w-100">ذخیره</button>
     </form>
   </div>
+
   <script>
     const form = document.getElementById('addShopForm');
     form.addEventListener('submit', async function (e) {
@@ -75,7 +119,7 @@
       msg.innerHTML = `<div class="alert alert-info">در حال ارسال اطلاعات...</div>`;
 
       try {
-        const res = await fetch('/admin/management/shpk-add', {
+        const res = await fetch('/admin/manageStuff/shpk-add', {
           method: 'POST',
           body: formData,
         });

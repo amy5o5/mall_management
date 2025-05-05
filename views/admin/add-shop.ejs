@@ -119,7 +119,7 @@
       msg.innerHTML = `<div class="alert alert-info">در حال ارسال اطلاعات...</div>`;
 
       try {
-        const res = await fetch('/admin/manageStuff/shpk-add', {
+        const res = await fetch('/admin/manageShpks/shpk-add', {
           method: 'POST',
           body: formData,
         });

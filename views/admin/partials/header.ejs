@@ -4,12 +4,35 @@
     &nbsp;
     <span><%= date %></span>
   </div>
-  <h1 class="title">مدیریت پاساژ</h1>
+  <h1 class="title">پنل مدیریت</h1>
   <div class="buttons">
-    <button onclick="location.href='/admin/add-shop'" class="btn btn-primary">ایجاد فروشگاه</button>
-    <button onclick="location.href='/send-announcement'" class="btn btn-secondary">ارسال اطلاعیه</button>
+    <button id="addShopBtn" onclick="location.href='/admin/manageShpks/add-shop'" class="btn">ایجاد فروشگاه</button>
+    <button id="manageShopsBtn" onclick="location.href='/send-announcement'" class="btn">مدیریت فروشگاه ها</button>
+    <button id="adminPanelBtn" onclick="location.href='/admin/admin-panel'" class="btn">پنل اصلی</button>
   </div>
 </header>
+
+<style>
+
+  .btn {
+    background-color: #007bff;
+    color: #fff;
+    font-weight: bold;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    margin: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease; 
+  }
+
+  /* رنگ متفاوت برای دکمه فعال */
+  .btn-active {
+    background-color: #28a745 !important;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5); 
+    transform: scale(1.05); 
+  }
+</style>
 
 <script>
   function updateLiveTime() {
@@ -20,6 +43,25 @@
   }
 
   setInterval(updateLiveTime, 1000);
-
   updateLiveTime();
+
+  function highlightActiveButton() {
+    const path = window.location.pathname;
+
+    
+    const routes = {
+      '/admin/manageShpks/add-shop': 'addShopBtn',
+      '/send-announcement': 'manageShopsBtn',
+      '/admin/admin-panel': 'adminPanelBtn'
+    };
+
+    
+    const activeButtonId = routes[path];
+    if (activeButtonId) {
+      document.getElementById(activeButtonId).classList.add('btn-active');
+    }
+  }
+
+ 
+  highlightActiveButton();
 </script>

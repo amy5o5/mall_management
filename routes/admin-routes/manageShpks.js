@@ -7,30 +7,12 @@ const path = require('path');
 const fs = require('fs');
 const { checkRoles } = require('../../middlewares/check-actor');
 
-
-
-
-async function getDailyVisits() {
-  try {
-    const query = `
-      SELECT visit_date, SUM(visit_count) AS total_visits
-      FROM Requests_Log
-      GROUP BY visit_date
-      ORDER BY visit_date DESC
-    `;
-    const [dailyVisits] = await connection.promise().query(query);
-   
-    return dailyVisits;
-  } catch (error) {
-    console.error('Error fetching daily visits:', error);
-    throw new Error('خطا در دریافت اطلاعات بازدیدها.');
-  }
-}
-
-
-
-
-
+router.get('/add-shop', checkRoles('admin'), (req, res) => {
+    res.render('admin/add-shop', {
+        date: new Intl.DateTimeFormat('fa-IR').format(new Date()),
+        time: new Date().toLocaleTimeString('fa-IR')
+    });
+});
 
 router.post('/shpk-add', async (req, res) => {
   try {
@@ -129,9 +111,4 @@ router.post('/shpk-add', async (req, res) => {
 
 
 
-module.exports = {
-  router,
-  getDailyVisits
-};
-
-module.exports = router;
+module.exports = router ;

@@ -1,12 +1,22 @@
 function checkRoles(...roles) {
     return function (req, res, next) {
         if (!req.session.user) {
-            return res.status(401).json({message: ' ابتدا وارد شوید'});
+            // اگر کاربر وارد نشده باشد
+            return res.status(401).render('error', {
+                message: 'ابتدا وارد شوید',
+                redirectUrl: '/admin/login' // مسیر هدایت به صفحه ورود
+            });
         }
+
         if (!roles.includes(req.session.user.role)) {
-            return res.status(403).json({message: 'دسترسی ندارید'});
+            // اگر نقش کاربر مجاز نباشد
+            return res.status(403).render('error', {
+                message: 'شما دسترسی لازم را ندارید',
+                //redirectUrl: '/admin/admin-panel' // مسیر هدایت به صفحه پنل ادمین
+            });
         }
-        next();
+
+        next(); // ادامه به مسیر بعدی
     };
 }
 

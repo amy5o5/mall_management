@@ -51,7 +51,7 @@
       if (response.ok) {
         showSuccessMessage('با موفقیت وارد شدید!');
         setTimeout(() => {
-          window.location.href = '/user/profile';  // ریدایرکت به صفحه پنل کاربری
+          w.location.href = '/user/profile';  // ریدایرکت به صفحه پنل کاربری
         }, 1500);  // 1.5 ثانیه تا ریدایرکت
       } else {
         showErrorMessage(data.message || 'خطا در ورود');

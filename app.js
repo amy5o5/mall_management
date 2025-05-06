@@ -6,7 +6,9 @@ const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const { checkRoles }= require('./middlewares/check-actor');
 const { checkAuth } = require("./middlewares/checkAuth");
-app.use(express.json());
+
+app.use(bodyParser.urlencoded({ extended: true }));
+
 
 
 require("dotenv").config();
@@ -15,7 +17,7 @@ app.set("view engine", "ejs");
 app.use(cookieParser());
 
 app.use(express.static("public"));
-app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.set("views", path.join(__dirname, "views"));
 

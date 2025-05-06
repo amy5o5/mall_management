@@ -1,0 +1,67 @@
+<div class="col-md-12">
+  <label class="form-label">تصاویر فروشگاه</label>
+  <div class="row">
+    <% if (shop.images && shop.images.length > 0) { %>
+      <% shop.images.forEach(image => { %>
+        <div class="col-md-3 mb-3 position-relative">
+         
+          <img src="<%= image %>" alt="Shop Image" class="img-fluid rounded shop-image" data-bs-toggle="modal" data-bs-target="#imageModal" onclick="setModalImage('<%= image %>')">
+          
+         
+          <button class="btn btn-danger btn-sm position-absolute top-0 end-0 m-1" onclick="deleteImage('<%= image %>')">
+            <i class="bi bi-trash"></i> 
+          </button>
+        </div>
+      <% }) %>
+    <% } else { %>
+      <p class="text-muted">هیچ تصویری برای این فروشگاه وجود ندارد.</p>
+    <% } %>
+  </div>
+</div>
+
+<!-- Modal برای نمایش تصویر -->
+<div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="imageModalLabel"></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="بستن"></button>
+      </div>
+      <div class="modal-body text-center">
+        <img id="modalImage" src="" alt="Shop Image" class="img-fluid rounded">
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function setModalImage(imageSrc) {
+    const modalImage = document.getElementById('modalImage');
+    modalImage.src = imageSrc;
+  }
+
+  async function deleteImage(imagePath) {
+    if (confirm('آیا مطمئن هستید که می‌خواهید این تصویر را حذف کنید؟')) {
+      try {
+        const response = await fetch('/admin/manageShpks/delete-image', {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ imagePath }),
+        });
+
+        const result = await response.json();
+        if (response.ok) {
+          alert(result.message);
+          location.reload(); // بارگذاری مجدد صفحه برای به‌روزرسانی تصاویر
+        } else {
+          alert(result.message || 'خطایی رخ داده است.');
+        }
+      } catch (error) {
+        console.error('Error deleting image:', error);
+        alert('خطایی در حذف تصویر رخ داده است.');
+      }
+    }
+  }
+</script>

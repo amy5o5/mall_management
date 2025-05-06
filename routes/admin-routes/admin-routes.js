@@ -44,7 +44,6 @@ router.get('/admin-panel',checkRoles('admin') ,async (req, res) => {
 });
 
 
-
 router.use('/sendBulkEmails', checkRoles('admin'), require('./sendBulkEmails'));
 
 router.use('/manageShpks', checkRoles('admin'), require('./manageShpks'));

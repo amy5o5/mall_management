@@ -7,7 +7,7 @@
   <h1 class="title">پنل مدیریت</h1>
   <div class="buttons">
     <button id="addShopBtn" onclick="location.href='/admin/manageShpks/add-shop'" class="btn">ایجاد فروشگاه</button>
-    <button id="manageShopsBtn" onclick="location.href='/send-announcement'" class="btn">مدیریت فروشگاه ها</button>
+    <button id="manageShopsBtn" onclick="location.href='/admin/manageShpks/shopsManagement'" class="btn">مدیریت فروشگاه ها</button>
     <button id="adminPanelBtn" onclick="location.href='/admin/admin-panel'" class="btn">پنل اصلی</button>
   </div>
 </header>
@@ -51,7 +51,7 @@
     
     const routes = {
       '/admin/manageShpks/add-shop': 'addShopBtn',
-      '/send-announcement': 'manageShopsBtn',
+      '/admin/manageShpks/shopsManagement': 'manageShopsBtn',
       '/admin/admin-panel': 'adminPanelBtn'
     };
 

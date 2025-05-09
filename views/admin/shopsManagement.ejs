@@ -10,65 +10,8 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <body>
   <%- include('partials/header', { time: time, date: date }) %>
-  <h1>مدیریت فروشگاه‌ها</h1>
 
-  <input type="text" placeholder="جست‌وجوی فروشگاه..." class="form-control mb-4">
-
-  <div class="shops-container">
-    <% shops.forEach(shop => { %>
-      <div class="shop-card border p-3 mb-3">
-        <div class="shop-name">
-          <h3>
-            <a href="/admin/manageShpks/edit-shop/<%= shop.shop_id %>">
-              نام فروشگاه: <%= shop.shop_name %>
-            </a>
-          </h3>
-        </div>
-        <div class="shop-images">
-          <h5>تصاویر فروشگاه:</h5>
-          <div id="carousel<%= shop.shop_id %>" class="carousel slide" data-bs-ride="carousel">
-            <div class="carousel-inner">
-              <% shop.images.forEach((image, index) => { %>
-                <div class="carousel-item <%= index === 0 ? 'active' : '' %>">
-                  <img src="<%= image %>" class="d-block w-100" alt="تصویر فروشگاه">
-                </div>
-              <% }) %>
-            </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#carousel<%= shop.shop_id %>" data-bs-slide="prev">
-              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-              <span class="visually-hidden">قبلی</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#carousel<%= shop.shop_id %>" data-bs-slide="next">
-              <span class="carousel-control-next-icon" aria-hidden="true"></span>
-              <span class="visually-hidden">بعدی</span>
-            </button>
-          </div>
-        </div>
-        <div class="store-type">
-          <span>دسته‌بندی: <%= shop.storeType %></span>
-        </div>
-
-        <div class="website">
-          <span>وب‌سایت: <a href="<%= shop.website %>" target="_blank"><%= shop.website %></a></span>
-        </div>
-
-        <div class="working-hours">
-          <span>ساعات کاری: <%= shop.working_hours %></span>
-        </div>
-
-        <div class="unit-number">
-          <span>شماره واحد: <%= shop.unit_number %></span>
-        </div>
-
-        <div class="description">
-          <label>توضیحات:</label>
-          <textarea class="form-control" disabled><%= shop.description %></textarea>
-        </div>
-
-
-      </div>
-    <% }) %>
-  </div>
+  <%- include('../partials/showShops', { shops: shops, linkBase: '/admin/manageShpks/edit-shop' }) %>
 </body>
 </body>
 </html>

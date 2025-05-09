@@ -111,6 +111,7 @@ router.post('/login', (req, res) => {
             req.session.cookie.maxAge = 1000 * 30 * 60;
         } 
         //console.log('Session after login:', req.session); 
+        // console.log(user.role);
 
         res.json({ message: 'Login successful' });
     });
@@ -128,7 +129,7 @@ router.get('/logout', (req, res) => {
         res.clearCookie('connect.sid');
 
         // هدایت به صفحه لاگین
-        res.redirect('/login');
+        res.redirect('/');
     });
 });
 

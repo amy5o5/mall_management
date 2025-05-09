@@ -1,0 +1,92 @@
+<div class="filters-container">
+  <h3>جستجو و فیلتر فروشگاه‌ها</h3>
+
+  <!-- نوار جستجو -->
+  <div class="search-bar">
+    <input type="text" id="searchInput" placeholder="جستجوی فروشگاه..." class="form-control mb-4">
+  </div>
+
+
+
+<!-- نمایش فروشگاه‌ها -->
+<div class="shops-container">
+  <% shops.forEach(shop => { %>
+    <div class="shop-card border p-3 mb-3">
+      <div class="shop-name">
+        <h3>
+          <a href="<%= linkBase %>/<%= shop.shop_id %>">
+            نام فروشگاه: <%= shop.shop_name %>
+          </a>
+        </h3>
+      </div>
+      <div class="shop-images">
+        <h5>تصاویر فروشگاه:</h5>
+        <div id="carousel<%= shop.shop_id %>" class="carousel slide" data-bs-ride="carousel">
+          <div class="carousel-inner">
+            <% shop.images.forEach((image, index) => { %>
+              <div class="carousel-item <%= index === 0 ? 'active' : '' %>">
+                <img src="<%= image %>" class="d-block w-100" alt="تصویر فروشگاه">
+              </div>
+            <% }) %>
+          </div>
+          <button class="carousel-control-prev" type="button" data-bs-target="#carousel<%= shop.shop_id %>" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">قبلی</span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#carousel<%= shop.shop_id %>" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">بعدی</span>
+          </button>
+        </div>
+      </div>
+      <div class="store-type">
+        <span>دسته‌بندی: <%= shop.storeType %></span>
+      </div>
+      <div class="website">
+        <span>وب‌سایت: <a href="<%= shop.website %>" target="_blank"><%= shop.website %></a></span>
+      </div>
+      <div class="working-hours">
+        <span>ساعات کاری: <%= shop.working_hours %></span>
+      </div>
+      <div class="unit-number">
+        <span>شماره واحد: <%= shop.unit_number %></span>
+      </div>
+      <div class="description">
+        <label>توضیحات:</label>
+        <textarea class="form-control" disabled><%= shop.description %></textarea>
+      </div>
+    </div>
+  <% }) %>
+</div>
+
+<script>
+  // جستجو در فروشگاه‌ها
+  const searchInput = document.getElementById('searchInput');
+  searchInput.addEventListener('input', function () {
+    const searchTerm = searchInput.value.toLowerCase();
+    const shopCards = document.querySelectorAll('.shop-card');
+
+    shopCards.forEach(card => {
+      const shopName = card.querySelector('.shop-name a').textContent.toLowerCase();
+      if (shopName.includes(searchTerm)) {
+        card.style.display = 'block';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  });
+
+  // فیلتر فروشگاه‌ها بر اساس دسته‌بندی
+  function filterShops(category) {
+    const shopCards = document.querySelectorAll('.shop-card');
+
+    shopCards.forEach(card => {
+      const storeType = card.querySelector('.store-type span').textContent;
+      if (storeType.includes(category)) {
+        card.style.display = 'block';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  }
+</script>

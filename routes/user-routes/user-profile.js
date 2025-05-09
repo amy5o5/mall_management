@@ -8,17 +8,23 @@ router.get('/',checkRoles('user'), (req, res) => {
 
   if (req.session && req.session.user) {
       const user = req.session.user;
-    //console.log(user);
+     //console.log(user);
  
-      res.render('user/profile', { user });
+      res.render('user/profile', { 
+        user,
+        date: new Intl.DateTimeFormat("fa-IR").format(new Date()),
+        time: new Date().toLocaleTimeString("fa-IR"),
+        user: req.session.user || null
+      });
   } else {
  
       res.redirect('/user/login');
   }
 });
+
 router.post('/update-profile', checkAuth ,(req, res) => {
   const { full_name, mobile, email, username, get_news } = req.body;
-  
+  console.log(req.body);
   const userId = req.session.user.user_id;
 
   if (!userId) {

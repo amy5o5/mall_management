@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>پروفایل فروشگاه</title>
+    <link rel="stylesheet" href="/CSS/management.css">
+</head>
+<body>
+  <%- include('partials/header') %>
+  <h1><%= shop.shop_name %></h1>
+
+  <div class="info-box">
+    <div class="left">
+      <label>نام مغازه</label>
+      <div class="value"><%= shop.shop_name %></div>
+    </div>
+
+    <div class="right">
+      <label>دسته‌بندی فروشگاه</label>
+      <div class="value"><%= shop.storeType || 'نامشخص' %></div>
+
+      <label>وب‌سایت</label>
+      <div class="value">
+        <a href="<%= shop.website || '#' %>" target="_blank">
+          <%= shop.website || 'ندارد' %>
+        </a>
+      </div>
+
+      <label>ساعات کاری</label>
+      <div class="value"><%= shop.working_hours || 'نامشخص' %></div>
+
+      <label>شماره واحد</label>
+      <div class="value"><%= shop.unit_number || 'نامشخص' %></div>
+
+      <label>توضیحات</label>
+      <div class="value"><%= shop.description || 'ندارد' %></div>
+    </div>
+  </div>
+
+  <!-- گالری تصاویر -->
+  <div class="gallery">
+    <% if (shop.images && shop.images.length > 0) { %>
+      <% shop.images.forEach(image => { %>
+        <img src="<%= image %>" alt="تصویر فروشگاه" onclick="openModal(this.src)">
+      <% }) %>
+    <% } else { %>
+      <p>تصویری برای این فروشگاه موجود نیست.</p>
+    <% } %>
+  </div>
+
+  <!-- مودال نمایش تصویر -->
+  <div id="imageModal" class="modal" onclick="closeModal()">
+    <span class="close">&times;</span>
+    <div class="modal-content">
+      <img id="modalImage" src="" alt="تصویر بزرگ">
+    </div>
+  </div>
+
+  <script>
+    function openModal(src) {
+      const modal = document.getElementById("imageModal");
+      const img = document.getElementById("modalImage");
+      img.src = src;
+      modal.style.display = "flex";
+    }
+
+    function closeModal() {
+      document.getElementById("imageModal").style.display = "none";
+    }
+  </script>
+
+</body>
+</html>

@@ -43,12 +43,26 @@ app.use(session({
 
 
 const visit_recorder = require('./services/visit-recorder');
-//app.use(visit_recorder);
 
-app.get("/",visit_recorder, (req, res) => {
-  res.render("main");
+const { getShops } = require('./utils/getShops');
+
+app.get("/", visit_recorder, async (req, res) => {
+  try {
+    const shopsWithImages = await getShops(); // دریافت اطلاعات فروشگاه‌ها
+
+    res.render("main", {
+      title: "مدیریت فروشگاه‌ها",
+      shops: shopsWithImages,
+      linkBase: "/admin/manageShpks/edit-shop",
+      date: new Intl.DateTimeFormat("fa-IR").format(new Date()),
+      time: new Date().toLocaleTimeString("fa-IR"),
+      user: req.session.user || null
+    });
+  } catch (error) {
+    console.error("Error fetching shops:", error);
+    res.status(500).send("خطا در دریافت اطلاعات فروشگاه‌ها");
+  }
 });
-
 
 
 //admin section *
@@ -115,7 +129,6 @@ connection.connect((err) => {
       console.log("✅ اتصال به دیتابیس برقرار شد!");
   }
 });*/
-
 
 
 const IP = process.env.IP;

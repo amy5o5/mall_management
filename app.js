@@ -56,7 +56,8 @@ app.get("/", visit_recorder, async (req, res) => {
       linkBase: "/admin/manageShpks/edit-shop",
       date: new Intl.DateTimeFormat("fa-IR").format(new Date()),
       time: new Date().toLocaleTimeString("fa-IR"),
-      user: req.session.user || null
+      user: req.session.user || null,
+      currentUrl: req.originalUrl
     });
   } catch (error) {
     console.error("Error fetching shops:", error);

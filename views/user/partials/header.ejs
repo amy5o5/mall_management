@@ -39,31 +39,36 @@
       <p>اینجا می‌توانید تبلیغات خود را قرار دهید.</p>
     </div>
 
- <div class="nav-buttons d-flex justify-content-around mb-4">
-  <button class="btn btn-primary">واحدهای تجاری</button>
-  <button class="btn btn-success">نقشه پاساژ</button>
-  <button class="btn btn-secondary">غرفه‌های پاساژ</button>
-  <form action="/user/userAuth/logout" method="GET">
-    <button type="submit" class="btn btn-danger" >خروج</button>
-</form>
+    <div class="nav-buttons d-flex justify-content-around mb-4">
+      <button class="btn btn-primary">واحدهای تجاری</button>
+      <button class="btn btn-success">نقشه پاساژ</button>
+      <button class="btn btn-secondary">غرفه‌های پاساژ</button>
+    
+      <div class="nav-buttons d-flex justify-content-around mb-4">
+        <div class="nav-buttons d-flex justify-content-around mb-4">
+          <% if (user) { %>
 
-
-
-
-  <% if (user) { 
-    %>
-    <!-- اگر کاربر لاگین کرده باشد -->
-    <a href="/user/profile">
-      <button class="btn btn-danger">مشخصات کاربری</button>
-    </a>
-  <% } else { %>
-    <!-- اگر کاربر لاگین نکرده باشد -->
-    <a href="/user/login">
-      <button class="btn btn-primary">ورود/ثبت‌نام</button>
-    </a>
-  <% } %>
-  
-</div>
+        
+            <form action="/user/userAuth/logout" method="GET">
+              <button type="submit" class="btn-custom">خروج</button>
+            </form>
+        
+            <% if (currentUrl !== '/user/profile') { %>
+              <a href="/user/profile">
+                <button class="btn-custom">مشخصات کاربری</button>
+              </a>
+            <% } %>
+          <% } else { %>
+            <a href="/user/login">
+              <button class="btn-custom">ورود/ثبت‌نام</button>
+            </a>
+          <% } %>
+        </div>
+        
+      </div>
+      
+    </div>
+    
 
 </body>
 </html>

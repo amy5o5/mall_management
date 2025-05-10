@@ -270,7 +270,7 @@ router.get('/edit-shop/:shop_id', async (req, res) => {
 
 router.delete('/delete-image', (req, res) => {
   const { imagePath } = req.body;
-  c//onsole.log(imagePath);
+  //console.log(imagePath);
 
   if (!imagePath) {
     return res.status(400).json({ message: 'مسیر تصویر ارسال نشده است.' });

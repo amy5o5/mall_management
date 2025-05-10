@@ -91,11 +91,7 @@
 
       <%- include('../partials/showImages', { shop: shop }) %>
     </form>
-    <form action="/admin/manageShpks/deleteShop/<%= shop.shop_id %> " method="POST" onsubmit="return confirmDelete()">
-      <button type="submit" class="btn btn-danger mt-3">
-        <i class="bi bi-trash"></i> حذف فروشگاه
-      </button>
-    </form>
+    <%- include('partials/deleteShop', { shop: shop }) %>
   </main>
 
   <script>
@@ -133,9 +129,7 @@
     modalImage.src = imageSrc;
   }
 
-  function confirmDelete() {
-    return confirm('آیا مطمئن هستید که می‌خواهید این فروشگاه را حذف کنید؟ این عملیات قابل بازگشت نیست!');
-  }
+
   </script>
 </body>
 </html>

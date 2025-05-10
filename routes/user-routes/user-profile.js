@@ -25,7 +25,9 @@ router.get('/', checkRoles('user'), (req, res) => {
         // آپدیت سشن برای اطمینان از هماهنگی
         req.session.user = user;
 
-        res.render('user/profile', { user });
+        res.render('user/profile', { 
+          user,
+          currentUrl: req.originalUrl });
       }
     );
   } else {

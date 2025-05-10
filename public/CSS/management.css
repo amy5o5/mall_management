@@ -1,20 +1,33 @@
-/* Variables for consistent styling */
+/* ===== 1. VARIABLES ===== */
 :root {
-  --primary-color: #007bff;
-  --primary-hover-color: #0056b3;
+  /* Primary theme colors */
+  --primary-color: #6f42c1;        /* بنفش آبی */
+  --primary-hover-color: #5a32a3;
   --secondary-color: #f0f0f0;
+
+  /* Text & border */
   --text-color: #353535;
-  --border-color: #ccc;
+  --border-color: #5f5ddf;
+
+  /* Background */
   --background-color: #f9f9f9;
+
+  /* Typography */
   --font-family: Tahoma, sans-serif;
 }
 
+/* ===== 2. GLOBAL RESET & BASE ===== */
+* {
+  box-sizing: border-box;
+}
+
 body {
-  font-family: var(--font-family);
   margin: 0;
   padding: 20px;
   direction: rtl;
+  font-family: var(--font-family);
   background-color: var(--background-color);
+  color: var(--text-color);
 }
 
 h1 {
@@ -22,24 +35,24 @@ h1 {
   margin-bottom: 30px;
 }
 
+/* ===== 3. LAYOUT CONTAINERS ===== */
 .header {
+  position: relative;
   text-align: center;
   padding: 20px;
   background-color: #fff;
   border-bottom: 1px solid var(--border-color);
-  position: relative;
 }
 
 .datetime {
   position: absolute;
   top: 10px;
   left: 18px;
-  font-size: 15px;
-  color: var(--text-color);
+  font-size: 0.875rem;
 }
 
 .title {
-  font-size: 24px;
+  font-size: 1.5rem;
   font-weight: bold;
 }
 
@@ -47,30 +60,24 @@ h1 {
   margin-top: 10px;
 }
 
-.buttons button {
-  margin: 0 10px;
-  padding: 8px 16px;
-  font-size: 14px;
-  cursor: pointer;
-}
-
 .visits,
 .announcement {
-  background-color: #fff;
   margin: 30px auto;
   padding: 20px;
   width: 80%;
+  background-color: #fff;
   border: 1px solid var(--border-color);
   text-align: center;
 }
 
+/* ===== 4. TYPOGRAPHY ===== */
 .visits h2,
 .announcement h2 {
   text-decoration: underline;
   margin-bottom: 15px;
 }
 
-/* Table Styling */
+/* ===== 5. TABLES ===== */
 table {
   width: 100%;
   border-collapse: collapse;
@@ -93,33 +100,49 @@ th {
   background-color: var(--secondary-color);
 }
 
-/* Form Styling */
-.announcement input[type="text"],
+/* ===== 6. FORMS & INPUTS ===== */
 input[type="text"],
+.announcement input[type="text"],
 .announcement textarea {
   width: 100%;
   padding: 10px;
-  font-size: 14px;
+  font-size: 0.875rem;
   margin-bottom: 10px;
   border: 1px solid var(--border-color);
   border-radius: 5px;
 }
 
-.announcement button {
+/* ===== 7. BUTTONS ===== */
+.buttons button,
+.announcement button,
+.delete-btn,
+.btn-custom {
+  margin: 0 10px;
   padding: 8px 16px;
-  font-size: 14px;
+  font-size: 0.875rem;
   cursor: pointer;
   background-color: var(--primary-color);
   color: #fff;
   border: none;
   border-radius: 4px;
+  transition: background-color 0.3s, transform 0.2s;
 }
 
-.announcement button:hover {
+.buttons button:hover,
+.announcement button:hover,
+.delete-btn:hover,
+.btn-custom:hover {
   background-color: var(--primary-hover-color);
 }
 
-/* Shops Section */
+.buttons button:active,
+.announcement button:active,
+.delete-btn:active,
+.btn-custom:active {
+  transform: scale(0.96);
+}
+
+/* ===== 8. SHOPS GRID & CARDS ===== */
 .shops-container {
   display: flex;
   flex-wrap: wrap;
@@ -129,22 +152,41 @@ input[type="text"],
 
 .shop-card {
   width: 300px;
-  border: 1px solid #999;
   padding: 15px;
-  border-radius: 8px;
   background-color: #fff;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
 }
 
-/* Image Slider */
-.image-slider {
+.shop-name {
+  margin: 10px 0 5px;
+  text-align: center;
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.product-type {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.desc-box {
   width: 100%;
-  height: 180px;
-  border: 1px dashed #aaa;
+  height: 80px;
+  margin-bottom: 10px;
+}
+
+/* ===== 9. IMAGE GALLERY & SLIDER ===== */
+.image-slider {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  position: relative;
+  width: 100%;
+  height: 180px;
   margin-bottom: 10px;
+  border: 1px dashed #aaa;
 }
 
 .slider-arrows {
@@ -155,7 +197,7 @@ input[type="text"],
   justify-content: space-between;
   padding: 0 10px;
   transform: translateY(-50%);
-  font-size: 18px;
+  font-size: 1.125rem;
   cursor: pointer;
 }
 
@@ -164,54 +206,69 @@ input[type="text"],
   margin-top: 5px;
 }
 
-/* اطلاعات فروشگاه */
-.shop-name {
-  font-weight: bold;
-  margin: 10px 0 5px;
-  text-align: center;
-  text-decoration: underline;
-}
-
-.product-type {
-  margin-bottom: 10px;
-  display: flex;
-  justify-content: space-between;
-}
-
-.desc-box {
-  width: 100%;
-  height: 80px;
-  margin-bottom: 10px;
-}
-
-/* دکمه حذف */
-.delete-btn {
-  background-color: #eee;
-  border: 1px solid #999;
-  padding: 8px 12px;
-  width: 100%;
-  cursor: pointer;
-}
-
-.shop-images {
-  margin-top: 15px;
-}
-
-.images-container {
+.images-container,
+.gallery {
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
+  justify-content: center;
+}
+
+.shop-image,
+.gallery img {
+  border: 1px solid var(--border-color);
+  border-radius: 5px;
+  object-fit: cover;
+  cursor: pointer;
+  transition: transform 0.3s;
 }
 
 .shop-image {
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  padding: 5px;
   max-width: 100px;
   max-height: 100px;
-  object-fit: cover;
+  padding: 5px;
 }
 
+.gallery img:hover,
+.shop-image:hover {
+  transform: scale(1.02);
+}
+
+/* ===== 10. MODALS ===== */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.7);
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  max-width: 100%;
+  max-height: 80%;
+  border-radius: 10px;
+}
+
+.modal img {
+  width: auto;
+  height: auto;
+  border-radius: 10px;
+}
+
+.close {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  font-size: 1.875rem;
+  color: #fff;
+  cursor: pointer;
+}
+
+/* ===== 11. INFO BOX ===== */
 .info-box {
   display: flex;
   flex-wrap: wrap;
@@ -241,157 +298,35 @@ input[type="text"],
   border-radius: 5px;
 }
 
-.gallery {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 10px;
-  margin-top: 40px;
-}
-
-.gallery img {
-  width: 40%;
-  height: 40%;
-  object-fit: cover;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: transform 0.3s;
-}
-
-.gallery img:hover {
-  transform: scale(1.02);
-}
-
-/* Modal */
-.modal {
-  display: none;
-  position: fixed;
-  z-index: 100;
-  left: 0;
-  top: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.7);
-  justify-content: center;
-  align-items: center;
-}
-
-.modal-content {
-  max-width: 100%;
-  max-height: 80%;
-  border-radius: 10px;
-}
-
-.modal img {
-  width: auto;
-  height: auto;
-  border-radius: 10px;
-}
-
-.close {
-  position: absolute;
-  top: 20px;
-  right: 30px;
-  font-size: 30px;
-  color: white;
-  cursor: pointer;
-}
-
-/* Responsive Design */
+/* ===== 12. RESPONSIVE ===== */
 @media (max-width: 768px) {
-  body {
-    padding: 10px;
-  }
-
-  .header {
-    padding: 15px;
-  }
-
-  .datetime {
-    font-size: 13px;
-  }
-
-  .title {
-    font-size: 20px;
-  }
-
-  .buttons button {
-    padding: 6px 12px;
-    font-size: 12px;
-  }
-
-  .visits,
-  .announcement {
-    width: 100%;
-    padding: 15px;
-  }
-
-  .shops-container {
-    flex-direction: column;
-    gap: 15px;
-  }
-
-  .shop-card {
-    width: 100%;
-  }
-
-  .info-box {
-    flex-direction: column;
-    gap: 15px;
-    padding: 15px;
-  }
-
-  .info-box .left,
-  .info-box .right {
-    flex: 1 1 100%;
-  }
-
-  .gallery {
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  }
-
-  .gallery img {
-    width: 100%;
-    height: auto;
-  }
+  body { padding: 10px; }
+  .header { padding: 15px; }
+  .datetime { font-size: 0.8125rem; }
+  .title { font-size: 1.25rem; }
+  .buttons button { padding: 6px 12px; font-size: 0.75rem; }
+  .visits, .announcement { width: 100%; padding: 15px; }
+  .shops-container { flex-direction: column; gap: 15px; }
+  .shop-card { width: 100%; padding: 10px; }
+  .info-box { flex-direction: column; gap: 15px; padding: 15px; }
+  .info-box .left, .info-box .right { flex: 1 1 100%; }
+  .gallery { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+  .gallery img { width: 100%; height: auto; }
 }
 
 @media (max-width: 480px) {
-  h1 {
-    font-size: 20px;
-  }
-
-  .buttons button {
-    margin: 5px 0;
-    width: 100%;
-  }
-
-  .shop-card {
-    padding: 10px;
-  }
-
-  .image-slider {
-    height: 150px;
-  }
-
-  .slider-arrows {
-    font-size: 16px;
-  }
-
-  .info-box {
-    padding: 10px;
-  }
-
-  .gallery img {
-    border-radius: 5px;
-  }
-  
+  h1 { font-size: 1.25rem; }
+  .buttons button { margin: 5px 0; width: 100%; }
+  .image-slider { height: 150px; }
+  .slider-arrows { font-size: 1rem; }
+  .info-box { padding: 10px; }
+  .gallery img { border-radius: 5px; }
 }
 
-
-
+/* ===== 13. BANNER CAROUSEL OVERRIDES ===== */
 .banner-carousel img {
-  max-height: 350px; /* ارتفاع دلخواه توی دسکتاپ */
-  object-fit: cover;
   width: 100%;
-  border-radius: 8px; /* اختیاری برای زیبایی */
+  max-height: 350px;
+  object-fit: cover;
+  border-radius: 8px;
 }

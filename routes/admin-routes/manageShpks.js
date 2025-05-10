@@ -294,4 +294,22 @@ router.delete('/delete-image', (req, res) => {
   });
 });
 
+
+router.post('/deleteShop/:shop_id', (req, res) => {
+  const shopId = req.params.shop_id;
+
+  const deleteQuery = 'DELETE FROM shpk WHERE shop_id = ?';
+
+  connection.query(deleteQuery, [shopId], (err, result) => {
+    if (err) {
+      console.error('خطا در حذف فروشگاه:', err);
+      return res.status(500).send('حذف با خطا مواجه شد.');
+    }
+
+    res.redirect('/admin/manageShpks/shopsManagement'); // بازگشت به لیست فروشگاه‌ها
+  });
+});
+
+
+
 module.exports = router ;

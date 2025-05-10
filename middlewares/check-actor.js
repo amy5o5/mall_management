@@ -4,7 +4,7 @@ function checkRoles(...roles) {
             // اگر کاربر وارد نشده باشد
             return res.status(401).render('error', {
                 message: 'ابتدا وارد شوید',
-                redirectUrl: '/admin/login' // مسیر هدایت به صفحه ورود
+                redirectUrl: '/' // مسیر هدایت به صفحه ورود
             });
         }
 
@@ -12,7 +12,7 @@ function checkRoles(...roles) {
             // اگر نقش کاربر مجاز نباشد
             return res.status(403).render('error', {
                 message: 'شما دسترسی لازم را ندارید',
-                //redirectUrl: '/admin/admin-panel' // مسیر هدایت به صفحه پنل ادمین
+                redirectUrl: '/'
             });
         }
 

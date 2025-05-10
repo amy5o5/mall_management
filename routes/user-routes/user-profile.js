@@ -4,27 +4,37 @@ const connection = require('../../database/db_connect');
 const { checkRoles } = require('./../../middlewares/check-actor');
 const { checkAuth } = require('../../middlewares/checkAuth');
 
-router.get('/',checkRoles('user'), (req, res) => {
-
+router.get('/', checkRoles('user'), (req, res) => {
   if (req.session && req.session.user) {
-      const user = req.session.user;
-     //console.log(user);
- 
-      res.render('user/profile', { 
-        user,
-        date: new Intl.DateTimeFormat("fa-IR").format(new Date()),
-        time: new Date().toLocaleTimeString("fa-IR"),
-        user: req.session.user || null
-      });
+    const userId = req.session.user.user_id;
+
+    connection.query(
+      'SELECT user_id, full_name, mobile, email, username, get_news, role FROM Users WHERE user_id = ?',
+      [userId],
+      (err, results) => {
+        if (err || results.length === 0) {
+          console.error('Error fetching user data:', err);
+          return res.status(500).render('error', {
+            message: 'خطا در دریافت اطلاعات کاربر',
+            redirectUrl: '/'
+          });
+        }
+
+        const user = results[0];
+        console.log(user);
+        // آپدیت سشن برای اطمینان از هماهنگی
+        req.session.user = user;
+
+        res.render('user/profile', { user });
+      }
+    );
   } else {
- 
-      res.redirect('/user/login');
+    res.redirect('/user/login');
   }
 });
-
 router.post('/update-profile', checkAuth ,(req, res) => {
   const { full_name, mobile, email, username, get_news } = req.body;
-  console.log(req.body);
+  
   const userId = req.session.user.user_id;
 
   if (!userId) {

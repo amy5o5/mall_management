@@ -62,7 +62,7 @@ router.post('/login', async (req, res) => {
         return res.status(400).json({ message: 'Please provide email/phone and password' });
     }
 
-    console.log('Received emailOrPhone:', emailOrPhone); 
+    //console.log('Received emailOrPhone:', emailOrPhone); 
 
     const query = emailOrPhone.includes('@') ? 
         'SELECT * FROM shpk WHERE LOWER(email) = LOWER(?)' : 
@@ -70,7 +70,7 @@ router.post('/login', async (req, res) => {
 
     connection.query(query, [emailOrPhone], async (err, result) => {
         if (err) {
-            console.log('Database error:', err);
+            //console.log('Database error:', err);
             return res.status(500).json({ message: 'Database error' });
         }
 
@@ -79,16 +79,16 @@ router.post('/login', async (req, res) => {
         }
 
         const user = result[0];
-        console.log(user);
+        //console.log(user);
 
         try {
             const isMatch = await bcrypt.compare(password, user.password);
-            console.log('Password match:', isMatch); 
+            //console.log('Password match:', isMatch); 
             if (!isMatch) {
                 return res.status(400).json({ message: 'Invalid credentials' });
             }
         } catch (error) {
-            console.log('Error comparing passwords:', error);
+            //console.log('Error comparing passwords:', error);
             return res.status(500).json({ message: 'Error comparing passwords' });
         }
 
@@ -135,7 +135,7 @@ const transporter = nodemailer.createTransport({
 
 router.post("/shkeeper-forgot-password", (req, res) => {
     const { emailOrPhone } = req.body;
-    console.log(emailOrPhone);
+    //console.log(emailOrPhone);
 
     if (!emailOrPhone) {
         return res.status(400).json({ message: "Please provide email or phone number" });

@@ -10,35 +10,43 @@
 </head>
 <body>
   <%- include('partials/header') %>
-  <div class="container">
-    <div class="profile-box">
+
+  <div class="container mt-4">
+    <div class="profile-box p-4 border rounded shadow-sm bg-light">
       <h3 class="text-center mb-4">ویرایش پروفایل</h3>
+
+      <% if (typeof success !== 'undefined') { %>
+        <div class="alert alert-success text-center"><%= success %></div>
+      <% } %>
+      <% if (typeof error !== 'undefined') { %>
+        <div class="alert alert-danger text-center"><%= error %></div>
+      <% } %>
+
       <form action="/user/profile/update-profile" method="POST">
         <div class="mb-3">
           <label for="full_name" class="form-label">نام کامل</label>
-          <input type="text" class="form-control" id="full_name" name="full_name" placeholder="<%= user.full_name %>">
+          <input type="text" class="form-control" id="full_name" name="full_name" value="<%= user.full_name || '' %>">
         </div>
 
         <div class="mb-3">
           <label for="mobile" class="form-label">شماره موبایل</label>
-          <input type="text" class="form-control" id="mobile" name="mobile" placeholder="<%= user.mobile %>">
+          <input type="text" class="form-control" id="mobile" name="mobile" value="<%= user.mobile || '' %>">
         </div>
 
         <div class="mb-3">
           <label for="email" class="form-label">ایمیل</label>
-          <input type="email" class="form-control" id="email" name="email" placeholder="<%= user.email %>">
+          <input type="email" class="form-control" id="email" name="email" value="<%= user.email || '' %>">
         </div>
 
         <div class="mb-3">
           <label for="username" class="form-label">نام کاربری</label>
-          <input type="text" class="form-control" id="username" name="username" placeholder="<%= user.username %>">
+          <input type="text" class="form-control" id="username" name="username" value="<%= user.username || '' %>">
         </div>
 
         <div class="mb-3 form-check">
           <input type="checkbox" class="form-check-input" id="get_news" name="get_news" <%= user.get_news ? 'checked' : '' %>>
           <label class="form-check-label" for="get_news">مایل به دریافت اخبار و اطلاعیه‌ها هستم</label>
         </div>
-        
 
         <button type="submit" class="btn btn-primary w-100">ذخیره تغییرات</button>
       </form>

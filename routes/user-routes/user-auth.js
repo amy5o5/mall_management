@@ -93,7 +93,7 @@ router.post('/login', (req, res) => {
         }
 
         const user = result[0];
-        console.log(user);
+        //console.log(user);
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
             return res.status(400).json({ message: 'Invalid email/phone or password' });

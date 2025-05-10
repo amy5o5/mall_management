@@ -189,7 +189,7 @@ router.post("/admin-forgot-password", (req, res) => {
 
 router.post("/set-admin-new-Password", async (req, res) => {
     const { token, password, confirm_password } = req.body;
-    console.log(req.body);
+    //console.log(req.body);
 
     if (password !== confirm_password) {
         return res.status(400).json({ message: "Passwords do not match" });

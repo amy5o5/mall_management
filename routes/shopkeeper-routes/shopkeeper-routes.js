@@ -20,13 +20,10 @@ router.get('/shkeeper-forgot-password', (req, res) => {
 
 router.get("/set-shkeeper-new-Password/:token", (req, res) => {
   const { token } = req.params;
-  
   res.render("shop_keeper/shkeeper-reset-password", { token, errorMessage: null });
 });
 
 router.get("/shk-profile", (req, res) => {
-
-  
   res.render("shop_keeper/shop_owner_profile");
 });
 

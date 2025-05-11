@@ -2,9 +2,26 @@
   <h3>جستجو و فیلتر فروشگاه‌ها</h3>
 
   <!-- نوار جستجو -->
-  <div class="search-bar">
-    <input type="text" id="searchInput" placeholder="جستجوی فروشگاه..." class="form-control mb-4">
+  <div class="search-bar mb-3">
+    <input type="text" id="searchInput" placeholder="جستجوی فروشگاه..." class="form-control">
   </div>
+
+  <!-- دکمه‌های فیلتر دسته‌بندی -->
+  <div class="category-buttons mb-4">
+    <button class="btn btn-outline-primary filter-btn" data-category="">همه</button>
+    <button class="btn btn-outline-primary filter-btn" data-category="خدماتی">خدماتی</button>
+    <button class="btn btn-outline-primary filter-btn" data-category="لوازم خانگی">لوازم خانگی</button>
+    <button class="btn btn-outline-primary filter-btn" data-category="پوشاک">پوشاک</button>
+    <button class="btn btn-outline-primary filter-btn" data-category="مواد غذایی">مواد غذایی</button>
+    <button class="btn btn-outline-primary filter-btn" data-category="زیبایی و آرایشی">زیبایی و آرایشی</button>
+    <button class="btn btn-outline-primary filter-btn" data-category="کتاب و لوازم‌التحریر">کتاب و لوازم‌التحریر</button>
+    <button class="btn btn-outline-primary filter-btn" data-category="الکترونیک و دیجیتال">الکترونیک و دیجیتال</button>
+    <button class="btn btn-outline-primary filter-btn" data-category="ورزشی">ورزشی</button>
+    <button class="btn btn-outline-primary filter-btn" data-category="کودک و اسباب‌بازی">کودک و اسباب‌بازی</button>
+    <button class="btn btn-outline-primary filter-btn" data-category="زیورآلات و اکسسوری">زیورآلات و اکسسوری</button>
+  </div>
+</div>
+
 
 
 
@@ -58,40 +75,43 @@
       <a href="<%= linkBase %>/<%= shop.shop_id %>" class="btn border">
         مشاهده
       </a>
-      
     </div>
     
   <% }) %>
 </div>
 
 <script>
-  // جستجو در فروشگاه‌ها
   const searchInput = document.getElementById('searchInput');
-  searchInput.addEventListener('input', function () {
+  const filterButtons = document.querySelectorAll('.filter-btn');
+  const shopCards = document.querySelectorAll('.shop-card');
+
+  let selectedCategory = '';
+
+  function applyFilters() {
     const searchTerm = searchInput.value.toLowerCase();
-    const shopCards = document.querySelectorAll('.shop-card');
 
     shopCards.forEach(card => {
       const shopName = card.querySelector('.shop-name a').textContent.toLowerCase();
-      if (shopName.includes(searchTerm)) {
-        card.style.display = 'block';
-      } else {
-        card.style.display = 'none';
-      }
-    });
-  });
-
-  // فیلتر فروشگاه‌ها بر اساس دسته‌بندی
-  function filterShops(category) {
-    const shopCards = document.querySelectorAll('.shop-card');
-
-    shopCards.forEach(card => {
       const storeType = card.querySelector('.store-type span').textContent;
-      if (storeType.includes(category)) {
-        card.style.display = 'block';
-      } else {
-        card.style.display = 'none';
-      }
+
+      const matchesSearch = shopName.includes(searchTerm);
+      const matchesCategory = !selectedCategory || storeType.includes(selectedCategory);
+
+      card.style.display = (matchesSearch && matchesCategory) ? 'block' : 'none';
     });
   }
+
+  searchInput.addEventListener('input', applyFilters);
+
+  filterButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      selectedCategory = btn.dataset.category;
+      
+      // هایلایت کردن دکمه فعال
+      filterButtons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      applyFilters();
+    });
+  });
 </script>

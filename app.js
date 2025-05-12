@@ -49,8 +49,14 @@ const { getShops } = require('./utils/getShops');
 app.get("/", visit_recorder, async (req, res) => {
   try {
     const shopsWithImages = await getShops(); // دریافت اطلاعات فروشگاه‌ها
+    let seller = null;
+    if (req.session.user && req.session.user.role === 'shpk') {
+        seller = req.session.user;
+    }
+
 
     res.render("main", {
+      seller: seller,
       title: "مدیریت فروشگاه‌ها",
       shops: shopsWithImages,
       linkBase: "/admin/manageShpks/edit-shop",
@@ -79,8 +85,9 @@ const userRoutes = require('./routes/user-routes/user-routes');
 
 app.use('/user', userRoutes);
 
-
-
+app.get('/logins', (req, res) => {
+  res.render('logins');
+});
 
 /*app.get('/admin-fg-password', (req, res) => {
   res.render('admin/admin-forgot-password');

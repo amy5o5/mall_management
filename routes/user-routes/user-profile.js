@@ -8,6 +8,11 @@ router.get('/', checkRoles('user'), (req, res) => {
   if (req.session && req.session.user) {
     const userId = req.session.user.user_id;
 
+    let seller = null;
+    if (req.session.user && req.session.user.role === 'shpk') {
+        seller = req.session.user;
+    }
+
     connection.query(
       'SELECT user_id, full_name, mobile, email, username, get_news, role FROM Users WHERE user_id = ?',
       [userId],
@@ -27,6 +32,7 @@ router.get('/', checkRoles('user'), (req, res) => {
 
         res.render('user/profile', { 
           user,
+          seller,
           currentUrl: req.originalUrl });
       }
     );

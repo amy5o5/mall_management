@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ویرایش فروشگاه</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+<!-- Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <link rel="stylesheet" href="/CSS/management.css">
+</head>
+<body>
+  <header>
+    <%- include('../user/partials/header', { time: time, date: date }) %>
+  </header>
+
+  <main class="container mt-5">
+    <h2 class="mb-4 text-center">ویرایش اطلاعات فروشگاه</h2>
+    <div id="responseMsg"></div>
+    <form id="editShopForm" action="/admin/manageShpks/update-shop/<%= shop.shop_id %>" method="POST" enctype="application/x-www-form-urlencoded">
+      <div class="row g-3">
+        <div class="col-md-6">
+          <label class="form-label">نام کامل</label>
+          <input type="text" name="full_name" class="form-control" value="<%= shop.full_name %>" required>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">ایمیل</label>
+          <input type="email" name="email" class="form-control" value="<%= shop.email %>" required>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">شماره موبایل</label>
+          <input type="text" name="mobile" class="form-control" value="<%= shop.mobile %>" required>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">کد ملی</label>
+          <input type="text" name="national_id" class="form-control" value="<%= shop.national_id %>" required>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">نام کاربری</label>
+          <input type="text" name="username" class="form-control" value="<%= shop.username %>" required>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">نام مغازه</label>
+          <input type="text" name="shop_name" class="form-control" value="<%= shop.shop_name %>" required>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">دسته‌بندی فروشگاه</label>
+          <select name="storeType" class="form-select" required>
+            <option value="" disabled>انتخاب دسته‌بندی</option>
+            <option value="خدماتی" <%= shop.storeType === 'خدماتی' ? 'selected' : '' %>>خدماتی</option>
+            <option value="لوازم خانگی" <%= shop.storeType === 'لوازم خانگی' ? 'selected' : '' %>>لوازم خانگی</option>
+            <option value="پوشاک" <%= shop.storeType === 'پوشاک' ? 'selected' : '' %>>پوشاک</option>
+            <option value="مواد غذایی" <%= shop.storeType === 'مواد غذایی' ? 'selected' : '' %>>مواد غذایی</option>
+            <option value="زیبایی و آرایشی" <%= shop.storeType === 'زیبایی و آرایشی' ? 'selected' : '' %>>زیبایی و آرایشی</option>
+            <option value="کتاب و لوازم‌التحریر" <%= shop.storeType === 'کتاب و لوازم‌التحریر' ? 'selected' : '' %>>کتاب و لوازم‌التحریر</option>
+            <option value="الکترونیک و دیجیتال" <%= shop.storeType === 'الکترونیک و دیجیتال' ? 'selected' : '' %>>الکترونیک و دیجیتال</option>
+            <option value="ورزشی" <%= shop.storeType === 'ورزشی' ? 'selected' : '' %>>ورزشی</option>
+            <option value="کودک و اسباب‌بازی" <%= shop.storeType === 'کودک و اسباب‌بازی' ? 'selected' : '' %>>کودک و اسباب‌بازی</option>
+            <option value="زیورآلات و اکسسوری" <%= shop.storeType === 'زیورآلات و اکسسوری' ? 'selected' : '' %>>زیورآلات و اکسسوری</option>
+          </select>
+          <div class="invalid-feedback">لطفاً دسته‌بندی فروشگاه را انتخاب کنید.</div>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">وب‌سایت</label>
+          <input type="text" name="website" class="form-control" value="<%= shop.website %>">
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">ساعات کاری</label>
+          <input type="text" name="working_hours" class="form-control" value="<%= shop.working_hours %>">
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">شماره واحد</label>
+          <input type="text" name="unit_number" class="form-control" value="<%= shop.unit_number %>">
+        </div>
+        <div class="col-md-12">
+          <label class="form-label">توضیحات</label>
+          <textarea name="description" class="form-control"><%= shop.description %></textarea>
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary mt-4 w-100">ذخیره تغییرات</button>
+      <div class="d-flex justify-content-between mt-4">
+
+      
+
+        
+      </div>
+
+      <%- include('../partials/showImages', { shop: shop }) %>
+    </form>
+    <%- include('../admin/partials/deleteShop', { shop: shop }) %>
+  </main>
+
+  <script>
+    const form = document.getElementById('editShopForm');
+    const msg = document.getElementById('responseMsg');
+    
+    form.addEventListener('submit', async function (e) {
+      e.preventDefault(); // جلوگیری از ارسال پیش‌فرض فرم
+    
+      // ایجاد یک FormData از فرم
+      const formData = new FormData(form);
+  
+      // نمایش پیام در حال ارسال
+      msg.innerHTML = `<div class="alert alert-info">در حال ارسال اطلاعات...</div>`;
+    
+      // ارسال درخواست به سرور
+      const res = await fetch(form.action, {
+        method: 'POST',
+        body: formData,
+      });
+    
+      // بررسی وضعیت پاسخ
+      if (res.ok) {
+        const data = await res.json();
+        msg.innerHTML = `<div class="alert alert-success">${data.message}</div>`;
+      } else {
+        const errorData = await res.json();
+        msg.innerHTML = `<div class="alert alert-danger">${errorData.message || 'خطا در ارسال درخواست.'}</div>`;
+      }
+    });
+
+
+    function setModalImage(imageSrc) {
+    const modalImage = document.getElementById('modalImage');
+    modalImage.src = imageSrc;
+  }
+
+
+  </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8">
+  <title>ویرایش اطلاعات مغازه</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/CSS/management.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+  <%- include('../user/partials/header') %>
+
+  <div class="container mt-4">
+    <div class="profile-box p-4 border rounded shadow-sm bg-light">
+      <h3 class="text-center mb-4">ویرایش اطلاعات مغازه</h3>
+
+      <% if (typeof success !== 'undefined') { %>
+        <div class="alert alert-success text-center"><%= success %></div>
+      <% } %>
+      <% if (typeof error !== 'undefined') { %>
+        <div class="alert alert-danger text-center"><%= error %></div>
+      <% } %>
+
+      <form action="/update-shop" method="POST">
+        <h5 class="mb-3">اطلاعات مغازه</h5>
+
+        <div class="mb-3">
+          <label for="shop_name" class="form-label">نام مغازه</label>
+          <input type="text" class="form-control" id="shop_name" name="shop_name" value="<%= shop.shop_name || '' %>" required>
+        </div>
+
+        <div class="mb-3">
+          <label for="website" class="form-label">وبسایت</label>
+          <input type="url" class="form-control" id="website" name="website" value="<%= shop.website || '' %>">
+        </div>
+
+        <div class="mb-3">
+          <label for="working_hours" class="form-label">ساعات کاری</label>
+          <input type="text" class="form-control" id="working_hours" name="working_hours" value="<%= shop.working_hours || '' %>">
+        </div>
+
+        <div class="mb-3">
+          <label for="unit_number" class="form-label">کد مغازه</label>
+          <input type="text" class="form-control" id="unit_number" name="unit_number" value="<%= shop.unit_number || '' %>" required>
+        </div>
+
+        <div class="mb-3">
+          <label for="banner_images" class="form-label">تصویر بنر فروشگاه (URL)</label>
+          <input type="text" class="form-control" id="banner_images" name="banner_images" value="<%= shop.banner_images || '' %>">
+        </div>
+
+        <div class="mb-3">
+          <label for="description" class="form-label">توضیحات</label>
+          <textarea class="form-control" id="description" name="description" rows="3"><%= shop.description || '' %></textarea>
+        </div>
+
+        <hr>
+
+        <h5 class="mb-3">اطلاعات صاحب مغازه</h5>
+
+        <div class="mb-3">
+          <label for="full_name" class="form-label">نام کامل</label>
+          <input type="text" class="form-control" id="full_name" name="full_name" value="<%= shop.full_name || '' %>" required>
+        </div>
+
+        <div class="mb-3">
+          <label for="mobile" class="form-label">شماره موبایل</label>
+          <input type="text" class="form-control" id="mobile" name="mobile" value="<%= shop.mobile || '' %>" required>
+        </div>
+
+        <div class="mb-3">
+          <label for="email" class="form-label">ایمیل</label>
+          <input type="email" class="form-control" id="email" name="email" value="<%= shop.email || '' %>" required>
+        </div>
+
+        <div class="mb-3">
+          <label for="national_id" class="form-label">کد ملی</label>
+          <input type="text" class="form-control" id="national_id" name="national_id" value="<%= shop.national_id || '' %>" required>
+        </div>
+
+        <div class="mb-3">
+          <label for="username" class="form-label">نام کاربری</label>
+          <input type="text" class="form-control" id="username" name="username" value="<%= shop.username || '' %>" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100">ذخیره تغییرات</button>
+      </form>
+    </div>
+  </div>
+
+</body>
+</html>

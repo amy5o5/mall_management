@@ -33,7 +33,10 @@ router.get("/user-reset-password/:token", (req, res) => {
 router.get("/shopPage/:shop_id", async (req, res) => {
   const { shop_id } = req.params;
   
-  
+  let seller = null;
+  if (req.session.user && req.session.user.role === 'shpk') {
+      seller = req.session.user;
+  }
 
   try {
     
@@ -44,7 +47,10 @@ router.get("/shopPage/:shop_id", async (req, res) => {
       return res.status(404).send("مغازه مورد نظر یافت نشد.");
     }
 
-    res.render("user/shopPage", { shop
+    res.render("user/shopPage", { 
+      currentUrl: req.originalUrl ||null,
+      seller: seller,
+      shop
       ,user: req.session.user || null
      }); // ارسال اطلاعات مغازه به صفحه
   } catch (error) {

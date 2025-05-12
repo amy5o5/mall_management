@@ -46,23 +46,47 @@
     
       <div class="nav-buttons d-flex justify-content-around mb-4">
         <div class="nav-buttons d-flex justify-content-around mb-4">
-          <% if (user) { %>
+         
+          <% if (!user && !seller && currentUrl!=="/shk/edit-shop" && "/user/profile") { %>
+            <form action="/logins" method="GET">
+              <button type="submit" class="btn-custom">ورود/ثبت‌نام</button>
 
-        
-            <form action="/user/userAuth/logout" method="GET">
-              <button type="submit" class="btn-custom">خروج</button>
-            </form>
-        
-            <% if (currentUrl !== '/user/profile') { %>
-              <a href="/user/profile">
-                <button class="btn-custom">مشخصات کاربری</button>
-              </a>
             <% } %>
-          <% } else { %>
-            <a href="/user/login">
-              <button class="btn-custom">ورود/ثبت‌نام</button>
-            </a>
-          <% } %>
+
+            <% if (user && currentUrl=="/user/profile") { %>
+              <form action="/user/userAuth/logout" method="GET">
+                <button type="submit" class="btn-custom">خروج</button>
+              </form>
+            <% } %>
+
+            <% if (user && currentUrl!=="/user/profile" && "/shk/edit-shop") { %>
+              <form action="/user/profile/" method="GET">
+                <button type="submit" class="btn-custom">پروفایل</button>
+              </form>
+
+              <form action="/user/userAuth/logout" method="GET">
+                <button type="submit" class="btn-custom">خروج</button>
+              </form>
+            <% } %>
+
+
+  
+              <% if (seller && currentUrl=="/shk/edit-shop") { %>
+                <form action="/shk/shopkeeperAuth/logout" method="GET">
+                  <button type="submit" class="btn-custom">خروج</button>
+                </form>
+              <% } %>
+  
+              <% if (seller && currentUrl!=="/shk/edit-shop") { %>
+                <form action="/user/profile/" method="GET">
+                  <button type="submit" class="btn-custom">پروفایل</button>
+                </form>
+  
+                <form action="/user/userAuth/logout" method="GET">
+                  <button type="submit" class="btn-custom">خروج</button>
+                </form>
+              <% } %>
+          
         </div>
         
       </div>
@@ -72,3 +96,7 @@
 
 </body>
 </html>
+
+
+
+

@@ -93,11 +93,12 @@ router.post('/login', async (req, res) => {
         }
 
         req.session.user = {
-            id: user.owner_id,
+            id: user.shop_id,
             full_name: user.full_name,
             email: user.email,
             role: user.role
         };
+        console.log(req.session.user.id);
 
         req.session.cookie.httpOnly = true;
         req.session.cookie.secure = process.env.NODE_ENV === 'production';

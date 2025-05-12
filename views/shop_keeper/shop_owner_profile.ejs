@@ -1,122 +1,113 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fa" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ویرایش اطلاعات مغازه</title>
-    <style>
-        body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f9;
-    padding: 20px;
-}
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ویرایش اطلاعات فروشگاه</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+<!-- Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
-h1 {
-    text-align: center;
-    color: #333;
-}
-
-form {
-    max-width: 600px;
-    margin: 0 auto;
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-fieldset {
-    border: 1px solid #ccc;
-    padding: 15px;
-    margin-bottom: 20px;
-}
-
-legend {
-    font-weight: bold;
-    color: #333;
-}
-
-label {
-    display: block;
-    margin: 10px 0 5px;
-}
-
-input, textarea {
-    width: 100%;
-    padding: 8px;
-    margin-bottom: 15px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-}
-
-button {
-    width: 100%;
-    padding: 10px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-button:hover {
-    background-color: #45a049;
-}
-
-    </style>
-</head>
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <link rel="stylesheet" href="/CSS/management.css"></head>
 <body>
+    
 
-    <h1>ویرایش اطلاعات مغازه</h1>
+    <%- include('./../user/partials/header') %>
+  <main class="container mt-5">
+    
 
-    <form action="/update-shop" method="POST">
-        <!-- بخش مغازه -->
-        <fieldset>
-            <legend>اطلاعات مغازه</legend>
-            <label for="shop_name">نام مغازه:</label>
-            <input type="text" id="shop_name" name="shop_name" value="<%= shop.shop_name %>" required><br>
+    <h2 class="mb-4 text-center">ویرایش اطلاعات فروشگاه</h2>
+    <div id="responseMsg"></div>
+    <form id="editShopForm" action="/shk/update-shop/<%= shop.shop_id %>" method="POST">
 
-            <label for="website">وبسایت:</label>
-            <input type="url" id="website" name="website" value="<%= shop.website %>"><br>
 
-            <label for="working_hours">ساعات کاری:</label>
-            <input type="text" id="working_hours" name="working_hours" value="<%= shop.working_hours %>"><br>
+      <div class="row g-3">
+        <!-- اطلاعات صاحب مغازه -->
+        <div class="col-md-6">
+          <label class="form-label">نام کامل</label>
+          <input type="text" name="full_name" class="form-control" value="<%= shop.full_name %>" required />
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">ایمیل</label>
+          <input type="email" name="email" class="form-control" value="<%= shop.email %>" required />
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">شماره موبایل</label>
+          <input type="text" name="mobile" class="form-control" value="<%= shop.mobile %>" required />
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">کد ملی</label>
+          <input type="text" name="national_id" class="form-control" value="<%= shop.national_id %>" required />
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">نام کاربری</label>
+          <input type="text" name="username" class="form-control" value="<%= shop.username %>" required />
+        </div>
 
-            <label for="unit_number">کد مغازه:</label>
-            <input type="text" id="unit_number" name="unit_number" value="<%= shop.unit_number %>" required><br>
+        <!-- اطلاعات فروشگاه -->
+        <div class="col-md-6">
+          <label class="form-label">نام فروشگاه</label>
+          <input type="text" name="shop_name" class="form-control" value="<%= shop.shop_name %>" required />
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">دسته‌بندی فروشگاه</label>
+          <select name="storeType" class="form-select" required>
+            <option value="" disabled>انتخاب دسته‌بندی</option>
+            <option value="پوشاک" <%= shop.storeType === 'پوشاک' ? 'selected' : '' %>>پوشاک</option>
+            <option value="خدماتی" <%= shop.storeType === 'خدماتی' ? 'selected' : '' %>>خدماتی</option>
+            <option value="زیبایی و آرایشی" <%= shop.storeType === 'زیبایی و آرایشی' ? 'selected' : '' %>>زیبایی و آرایشی</option>
+            <!-- بقیه دسته‌بندی‌ها... -->
+          </select>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">وب‌سایت</label>
+          <input type="text" name="website" class="form-control" value="<%= shop.website %>" />
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">ساعات کاری</label>
+          <input type="text" name="working_hours" class="form-control" value="<%= shop.working_hours %>" />
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">شماره واحد</label>
+          <input type="text" name="unit_number" class="form-control" value="<%= shop.unit_number %>" />
+        </div>
+        <div class="col-md-12">
+          <label class="form-label">توضیحات</label>
+          <textarea name="description" class="form-control"><%= shop.description %></textarea>
+        </div>
+      </div>
 
-            <label for="owner_phone">تلفن صاحب مغازه:</label>
-            <input type="text" id="owner_phone" name="owner_phone" value="<%= shop.owner_phone %>" required><br>
-
-            <label for="banner_image">تصویر بنر فروشگاه:</label>
-            <input type="text" id="banner_image" name="banner_image" value="<%= shop.banner_image %>"><br>
-
-            <label for="description">توضیحات:</label>
-            <textarea id="description" name="description"><%= shop.description %></textarea><br>
-        </fieldset>
-
-        <!-- بخش صاحب مغازه -->
-        <fieldset>
-            <legend>اطلاعات صاحب مغازه</legend>
-            <label for="full_name">نام کامل:</label>
-            <input type="text" id="full_name" name="full_name" value="<%= owner.full_name %>" required><br>
-
-            <label for="email">ایمیل:</label>
-            <input type="email" id="email" name="email" value="<%= owner.email %>" required><br>
-
-            <label for="mobile">شماره موبایل:</label>
-            <input type="text" id="mobile" name="mobile" value="<%= owner.mobile %>" required><br>
-
-            <label for="national_id">کد ملی:</label>
-            <input type="text" id="national_id" name="national_id" value="<%= owner.national_id %>" required><br>
-
-            <label for="username">نام کاربری:</label>
-            <input type="text" id="username" name="username" value="<%= owner.username %>" required><br>
-        </fieldset>
-
-        <button type="submit">ویرایش اطلاعات</button>
+      <button type="submit" class="btn btn-success mt-4 w-100">ذخیره تغییرات</button>
     </form>
+    <script>
+const form = document.getElementById('editShopForm');
+const msg = document.getElementById('responseMsg');
 
+form.addEventListener('submit', async function (e) {
+  e.preventDefault(); // جلوگیری از ارسال پیش‌فرض فرم
+  
+  // ایجاد یک FormData از فرم
+  const formData = new FormData(form);
+
+  // ارسال درخواست به سرور
+  const res = await fetch(form.action, {
+    method: 'POST',
+    body: formData,
+  });
+
+  // بررسی وضعیت پاسخ
+  const data = await res.json();
+  if (res.ok) {
+    msg.innerHTML = `<div class="alert alert-success">${data.message}</div>`;
+  } else {
+    msg.innerHTML = `<div class="alert alert-danger">${data.message || 'خطا در ارسال درخواست.'}</div>`;
+  }
+});
+
+      </script>
+  </main>
 </body>
-</html>
 
+</html>

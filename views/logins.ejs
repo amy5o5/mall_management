@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8">
+  <title>ورود / ثبت‌نام</title>
+  <link rel="stylesheet" href="/CSS/login.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <style>
+    .tab-button { padding: 10px; cursor: pointer; }
+    .active-tab { background-color: #444; color: white; }
+    .input-group { margin-bottom: 10px; }
+    .form-container { max-width: 400px; margin: auto; }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <h2>ورود / ثبت‌نام</h2>
+    <div class="tabs">
+      <button class="tab-button active-tab" onclick="switchForm('user-login')">ورود کاربر</button>
+      <button class="tab-button" onclick="switchForm('shop-login')">ورود فروشنده</button>
+      <button class="tab-button" onclick="switchForm('user-signup')">ثبت‌نام کاربر</button>
+    </div>
+
+    <!-- فرم ورود کاربر -->
+    <form id="user-login" onsubmit="loginUser(event)">
+      <div class="input-group">
+        <label>ایمیل / موبایل</label>
+        <input type="text" id="userEmailOrPhone" required>
+      </div>
+      <div class="input-group">
+        <label>رمز عبور</label>
+        <input type="password" id="userPassword" required>
+      </div>
+      <button type="submit" class="btn">ورود کاربر</button>
+    </form>
+
+    <!-- فرم ورود فروشنده -->
+    <form id="shop-login" style="display:none;" onsubmit="loginShop(event)">
+      <div class="input-group">
+        <label>ایمیل / موبایل</label>
+        <input type="text" id="shopEmailOrPhone" required>
+      </div>
+      <div class="input-group">
+        <label>رمز عبور</label>
+        <input type="password" id="shopPassword" required>
+      </div>
+      <button type="submit" class="btn">ورود فروشنده</button>
+    </form>
+
+    <!-- فرم ثبت‌نام کاربر -->
+    <form id="user-signup" style="display:none;" onsubmit="signupUser(event)">
+      <div class="input-group"><input placeholder="نام کامل" id="full_name" required></div>
+      <div class="input-group"><input placeholder="موبایل" id="mobile" required></div>
+      <div class="input-group"><input placeholder="ایمیل" id="email" type="email" required></div>
+      <div class="input-group"><input placeholder="نام کاربری" id="username" required></div>
+      <div class="input-group"><input placeholder="رمز عبور" type="password" id="password-signup" required></div>
+      <div class="input-group"><input placeholder="تکرار رمز" type="password" id="confirm-password" required></div>
+      <div class="input-group">
+        <label><input type="checkbox" id="get_news"> دریافت اخبار</label>
+      </div>
+      <button type="submit" class="btn">ثبت‌نام</button>
+    </form>
+  </div>
+
+  <script>
+    function switchForm(id) {
+      ['user-login', 'shop-login', 'user-signup'].forEach(formId => {
+        document.getElementById(formId).style.display = formId === id ? 'block' : 'none';
+      });
+      document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active-tab'));
+      event.target.classList.add('active-tab');
+    }
+
+    async function loginUser(event) {
+      event.preventDefault();
+      const res = await fetch('/user/userAuth/login', {
+        method: 'POST', headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ emailOrPhone: userEmailOrPhone.value, password: userPassword.value })
+      });
+      const data = await res.json();
+      res.ok ? Swal.fire('ورود موفق') && setTimeout(() => location.href = '/user/profile', 1000) :
+               Swal.fire('خطا', data.message || 'ورود ناموفق', 'error');
+    }
+
+    async function loginShop(event) {
+      event.preventDefault();
+      const res = await fetch('/shk/shopkeeperAuth/login', {
+        method: 'POST', headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ emailOrPhone: shopEmailOrPhone.value, password: shopPassword.value })
+      });
+      const data = await res.json();
+      res.ok ? Swal.fire('ورود موفق') && setTimeout(() => location.href = '/shk/edit-shop', 1000) :
+               Swal.fire('خطا', data.message || 'ورود ناموفق', 'error');
+    }
+
+    async function signupUser(event) {
+      event.preventDefault();
+      if (password-signup.value !== confirm-password.value) {
+        return Swal.fire('خطا', 'رمزها مطابقت ندارند', 'error');
+      }
+      const res = await fetch('/user/userAuth/signup', {
+        method: 'POST', headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          full_name: full_name.value, mobile: mobile.value, email: email.value,
+          username: username.value, password: password-signup.value,
+          get_news: get_news.checked
+        })
+      });
+      const data = await res.json();
+      res.ok ? Swal.fire('ثبت‌نام موفق') : Swal.fire('خطا', data.message || 'ثبت‌نام ناموفق', 'error');
+    }
+  </script>
+</body>
+</html>

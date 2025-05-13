@@ -14,6 +14,7 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
+
   <%- include('partials/header') %>
   <h1><%= shop.shop_name %></h1>
 
@@ -75,7 +76,12 @@
     function closeModal() {
       document.getElementById("imageModal").style.display = "none";
     }
+
+    
   </script>
+  <% if (user) { %>
+    <%- include('./../shop_keeper/partials/sendComment') %>
+  <% } %>
 
 </body>
 </html>

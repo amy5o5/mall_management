@@ -1,0 +1,25 @@
+<div class="comment-box border rounded p-3 mb-4" style="border: 2px solid blue;">
+    <div class="d-flex justify-content-between">
+        <strong><%= commenterName %> گفت:</strong>
+        <small><%= commentDate %> در <%= commentTime %></small>
+    </div>
+    <p class="mt-2"><%= commentText %></p>
+
+    <!-- فرم پاسخ فروشنده -->
+    <form action="/reply" method="POST" class="mt-3">
+        <input type="hidden" name="commentId" value="<%= commentId %>">
+        <div class="form-group">
+            <textarea class="form-control" name="replyText" rows="2" placeholder="پاسخ خود را بنویسید..."></textarea>
+        </div>
+        <button type="submit" class="btn btn-outline-primary btn-sm mt-2">پاسخ</button>
+    </form>
+
+    <!-- نمایش پاسخ فروشنده (اگر وجود داشته باشد) -->
+    <% if (replyText) { %>
+        <%- include('partials/sellerReply', {
+            replyText: replyText,
+            replyDate: replyDate,
+            replyTime: replyTime
+        }) %>
+    <% } %>
+</div>

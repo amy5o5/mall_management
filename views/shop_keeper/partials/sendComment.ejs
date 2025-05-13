@@ -1,0 +1,72 @@
+<form id="commentForm" class="mb-4 p-4 border rounded">
+    <input type="hidden" name="shopId" value="<%= shop.id %>">
+  
+    <div class="form-group mb-3">
+      <label for="fullName">نام کامل:</label>
+      <input type="text" class="form-control" name="fullName" id="fullName" required>
+    </div>
+  
+    <div class="form-group mb-3">
+      <label for="userName">نام کاربری (اختیاری):</label>
+      <input type="text" class="form-control" name="userName" id="userName">
+    </div>
+  
+    <div class="form-group mb-3">
+      <label for="commentText">متن نظر:</label>
+      <textarea class="form-control" name="commentText" id="commentText" rows="3" required></textarea>
+    </div>
+  
+    <div class="form-group mb-3">
+      <label for="rating">امتیاز (از 1 تا 5):</label>
+      <input type="number" class="form-control" name="rating" id="rating" min="1" max="5">
+    </div>
+    <input type="hidden" name="shopId" value="<%= shop.shop_id %>">
+    <button type="submit" class="btn btn-primary">ارسال نظر</button>
+  </form>
+  
+  <div id="responseMessage" class="mt-2"></div>
+  
+
+
+
+
+
+  <script>
+    document.getElementById('commentForm').addEventListener('submit', async function (e) {
+      e.preventDefault(); // جلوگیری از رفرش صفحه
+  
+      const form = e.target;
+      const formData = new FormData(form);
+  
+      // ساختن یک شیء معمولی از FormData
+      const data = Object.fromEntries(formData.entries());
+  
+      try {
+        const response = await fetch('/shk/hndlComment', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        });
+  
+        const result = await response.json();
+  
+        // پیام موفقیت یا خطا
+        const msgBox = document.getElementById('responseMessage');
+        if (response.ok) {
+          msgBox.innerHTML = `<div class="alert alert-success">${result.message}</div>`;
+          form.reset(); // پاک کردن فرم
+        } else {
+          msgBox.innerHTML = `<div class="alert alert-danger">${result.error}</div>`;
+        }
+      } catch (err) {
+        console.error('خطا:', err);
+        document.getElementById('responseMessage').innerHTML = `<div class="alert alert-danger">ارسال با خطا مواجه شد</div>`;
+      }
+    });
+
+  </script>
+  
+
+  

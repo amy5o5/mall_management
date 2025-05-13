@@ -8,8 +8,11 @@ const path = require('path');
 const fs = require('fs');
 const multer = require('multer');
 const upload = multer().none(); 
+const comment = require('./../shopkeeper-routes/comment')
 
 router.use('/shopkeeperAuth', shopkeeperAuth);
+
+router.use('/hndlComment', comment);
 
 router.get("/login", (req, res) => {
   res.render("shop_keeper/shopkeeper-login");

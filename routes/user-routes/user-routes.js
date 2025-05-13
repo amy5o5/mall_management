@@ -46,13 +46,15 @@ router.get("/shopPage/:shop_id", async (req, res) => {
     if (!shop) {
       return res.status(404).send("مغازه مورد نظر یافت نشد.");
     }
-
+    
     res.render("user/shopPage", { 
       currentUrl: req.originalUrl ||null,
       seller: seller,
-      shop
-      ,user: req.session.user || null
+      shop,
+      user: req.session.user || null
      }); // ارسال اطلاعات مغازه به صفحه
+
+     //console.log('shopId:', shopId);
   } catch (error) {
     console.error("Error fetching shop details:", error);
     res.status(500).send("خطا در دریافت اطلاعات مغازه.");

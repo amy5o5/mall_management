@@ -38,4 +38,23 @@ router.post('/', (req, res) => {
     });
   });
   
+
+
+router.get('/comments', (req, res) => {
+    const sql = 'SELECT * FROM comments';
+  
+    connection.query(sql, (err, results) => {
+      if (err) {
+        console.error('خطا در دریافت نظرات:', err);
+        return res.status(500).json({ error: 'مشکلی در دریافت نظرات رخ داده است' });
+      }
+  
+      // ارسال نتایج به صفحه commentBox
+      res.render('/shop_keeper/partials/commentBox', {
+        comments: results // ارسال داده‌ها به صفحه
+      });
+    });
+    console.log(comments);
+  });
+
 module.exports = router;

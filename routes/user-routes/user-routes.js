@@ -28,39 +28,61 @@ router.get('/user-forgot-password', (req, res) => {
 router.get("/user-reset-password/:token", (req, res) => {
   const { token } = req.params;
   res.render("user/user-reset-password", { token, errorMessage: null });
-});
+});const moment = require('moment-jalaali'); // وارد کردن moment-jalaali
+
+// تابع برای تبدیل اعداد انگلیسی به فارسی
+function toPersianNumber(number) {
+  const persianNumbers = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+  return number.toString().replace(/\d/g, (digit) => persianNumbers[digit]);
+}
 
 router.get("/shopPage/:shop_id", async (req, res) => {
   const { shop_id } = req.params;
-  
+
   let seller = null;
   if (req.session.user && req.session.user.role === 'shpk') {
       seller = req.session.user;
   }
 
   try {
-    
-    const shops = await getShops(); // دریافت لیست مغازه‌ها
+    // دریافت لیست مغازه‌ها
+    const shops = await getShops(); 
     const shop = shops.find(s => s.shop_id == shop_id); // پیدا کردن مغازه با شماره مربوطه
 
     if (!shop) {
       return res.status(404).send("مغازه مورد نظر یافت نشد.");
     }
-    
-    res.render("user/shopPage", { 
-      currentUrl: req.originalUrl ||null,
-      seller: seller,
-      shop,
-      user: req.session.user || null
-     }); // ارسال اطلاعات مغازه به صفحه
 
-     //console.log('shopId:', shopId);
+    // دریافت نظرات برای shopId خاص
+    const sql = 'SELECT * FROM comments WHERE shop_id = ?';
+    
+    connection.query(sql, [shop_id], (err, comments) => {
+      if (err) {
+        console.error('خطا در دریافت نظرات:', err);
+        return res.status(500).send("مشکلی در دریافت نظرات رخ داده است");
+      }
+
+      // فرمت کردن تاریخ و ساعت به تاریخ هجری شمسی و تبدیل اعداد به فارسی
+      comments.forEach(comment => {
+        const date = moment(comment.created_at).format('jYYYY-jMM-jDD HH:mm:ss'); // تبدیل به تاریخ شمسی
+        comment.created_at = toPersianNumber(date); // تبدیل اعداد به فارسی
+      });
+
+      // ارسال اطلاعات مغازه و نظرات به صفحه
+      res.render("user/shopPage", { 
+        currentUrl: req.originalUrl || null,
+        seller: seller,
+        shop,
+        comments: comments, // ارسال نظرات به صفحه
+        user: req.session.user || null
+      });
+    });
+
   } catch (error) {
     console.error("Error fetching shop details:", error);
     res.status(500).send("خطا در دریافت اطلاعات مغازه.");
   }
 });
-
 
 
 

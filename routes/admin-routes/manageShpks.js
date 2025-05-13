@@ -101,7 +101,7 @@ router.post('/shpk-add', async (req, res) => {
         }
 
         res.status(201).json({
-          message: 'فروشنده با مغازه‌اش ذخیره شد.',
+          message: 'فروشنده و مغازه ایجاد شد',
           owner_id: results.insertId
         });
       });
@@ -268,7 +268,7 @@ router.get('/edit-shop/:shop_id', async (req, res) => {
 
 
 
-router.delete('/delete-image', (req, res) => {
+router.delete('/delete-image',checkRoles('admin') ,(req, res) => {
   const { imagePath } = req.body;
   //console.log(imagePath);
 

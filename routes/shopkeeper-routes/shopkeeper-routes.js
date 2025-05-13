@@ -50,17 +50,20 @@ router.get("/edit-shop", async (req, res) => {
     console.log(shop);
     const images = [];
 
-    if (shop.images_path) {
-      const imagesDir = path.join(__dirname, '../../uploads', shop.images_path.replace(/^\/uploads\//, ''));
-      try {
-        const files = fs.readdirSync(imagesDir);
-        files.forEach(file => {
-          images.push(`/uploads/${shop.images_path.replace(/^\/uploads\//, '')}/${file}`);
-        });
-      } catch (error) {
-        console.error('Error reading images:', error);
+      if (shop.images_path) {
+        const imagesDir = path.join(__dirname, '../../uploads', shop.images_path.replace(/^\/uploads\//, ''));
+        try {
+          const files = fs.readdirSync(imagesDir);
+          files.forEach(file => {
+            images.push(`/uploads/${shop.images_path.replace(/^\/uploads\//, '')}/${file}`);
+          });
+        } catch (error) {
+          console.error('Error reading images:', error);
+        }
       }
-    }
+    
+    
+    
 
     shop.images = images;
     let seller = null;
@@ -75,12 +78,16 @@ router.get("/edit-shop", async (req, res) => {
       date: new Intl.DateTimeFormat('fa-IR').format(new Date()),
       time: new Date().toLocaleTimeString('fa-IR'),
       shop,
+      images,
       title: 'ویرایش مغازه'
     });
+    console.log(images);
   });
+  
 });
 router.post('/update-shop/:id', (req, res) => {
   const shopId = req.params.id;
+  
   const {
     full_name,
     email,
@@ -126,6 +133,39 @@ router.post('/update-shop/:id', (req, res) => {
     res.json({ message: 'اطلاعات فروشگاه با موفقیت به‌روزرسانی شد.' });
   });
 });
+
+
+
+router.delete('/delete-image', checkRoles('shpk'), (req, res) => {
+  const { images_path } = req.body;
+
+  if (!images_path) {
+    return res.status(400).json({ message: 'مسیر تصویر ارسال نشده است.' });
+  }
+
+  // مسیر مطلق به دایرکتوری uploads
+  const uploadsDir = path.resolve(__dirname, '../../uploads');
+
+  // حذف /uploads از مسیر و ساخت مسیر کامل
+  const relativeImagePath = images_path.replace(/^\/uploads\//, '');
+  const absolutePath = path.resolve(uploadsDir, relativeImagePath);
+
+  // جلوگیری از حذف خارج از پوشه uploads
+  if (!absolutePath.startsWith(uploadsDir)) {
+    return res.status(403).json({ message: 'دسترسی غیرمجاز به فایل.' });
+  }
+
+  // حذف فایل
+  fs.unlink(absolutePath, (err) => {
+    if (err) {
+      console.error('Error deleting image:', err);
+      return res.status(500).json({ message: 'خطا در حذف تصویر.' });
+    }
+
+    res.status(200).json({ message: 'تصویر با موفقیت حذف شد.' });
+  });
+});
+
 
 
 

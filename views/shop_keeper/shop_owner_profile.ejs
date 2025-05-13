@@ -120,7 +120,11 @@
 
       
     </form>
-
+    <div class="col-md-12">
+      <label class="form-label">افزودن عکس</label>
+      <input type="file" id="shopImagesInput" class="form-control" accept="image/*" multiple>
+      <button class="btn btn-primary mt-2" onclick="uploadImages()">آپلود تصاویر</button>
+    </div>
     
     <script>
 const form = document.getElementById('editShopForm');
@@ -146,8 +150,6 @@ form.addEventListener('submit', async function (e) {
     msg.innerHTML = `<div class="alert alert-danger">${data.message || 'خطا در ارسال درخواست.'}</div>`;
   }
 });
-
-
 
 
 
@@ -181,6 +183,44 @@ form.addEventListener('submit', async function (e) {
   }
 }
 
+async function uploadImages() {
+    const input = document.getElementById('shopImagesInput');
+    const files = input.files;
+    
+    if (files.length === 0) {
+      alert('لطفاً حداقل یک تصویر انتخاب کنید.');
+      return;
+    }
+
+    const formData = new FormData();
+
+    // اضافه کردن فایل‌ها به FormData
+    for (let i = 0; i < files.length; i++) {
+      formData.append('shop_images', files[i]);
+    }
+
+    // اگر از username برای مسیر پوشه استفاده می‌کنی، اینجا تنظیمش کن
+    const username = '<%= shop.username %>'; // یا مقدار دلخواه در قالب EJS یا JS
+
+    try {
+      const res = await fetch(`/shk/upload-shop-images/${username}`, {
+        method: 'POST',
+        body: formData,
+      });
+
+      const result = await res.json();
+
+      if (res.ok) {
+        alert(result.message);
+        location.reload(); // صفحه دوباره بارگذاری شود تا تصاویر نمایش داده شوند
+      } else {
+        alert(result.message || 'خطا در آپلود تصاویر.');
+      }
+    } catch (err) {
+      console.error('Upload error:', err);
+      alert('خطا در ارسال تصاویر.');
+    }
+  }
       
       </script>
   </main>

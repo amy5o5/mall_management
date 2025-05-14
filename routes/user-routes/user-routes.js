@@ -28,7 +28,8 @@ router.get('/user-forgot-password', (req, res) => {
 router.get("/user-reset-password/:token", (req, res) => {
   const { token } = req.params;
   res.render("user/user-reset-password", { token, errorMessage: null });
-});const moment = require('moment-jalaali'); // وارد کردن moment-jalaali
+});
+const moment = require('moment-jalaali'); // وارد کردن moment-jalaali
 
 // تابع برای تبدیل اعداد انگلیسی به فارسی
 function toPersianNumber(number) {
@@ -38,12 +39,13 @@ function toPersianNumber(number) {
 
 router.get("/shopPage/:shop_id", async (req, res) => {
   const { shop_id } = req.params;
-
+const user = req.session.user;
   let seller = null;
   if (req.session.user && req.session.user.role === 'shpk') {
       seller = req.session.user;
   }
 
+  console.log(user);
   try {
     // دریافت لیست مغازه‌ها
     const shops = await getShops(); 
@@ -74,7 +76,8 @@ router.get("/shopPage/:shop_id", async (req, res) => {
         seller: seller,
         shop,
         comments: comments, // ارسال نظرات به صفحه
-        user: req.session.user || null
+        iSuser: req.session.user || null,
+        user
       });
     });
 

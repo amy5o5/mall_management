@@ -6,8 +6,12 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 const { checkRoles } = require('../../middlewares/check-actor');
+const moment = require('moment-jalaali');
 
-
+function toPersianNumber(number) {
+  const persianNumbers = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+  return number.toString().replace(/\d/g, (digit) => persianNumbers[digit]);
+}
 
 
 
@@ -215,56 +219,73 @@ router.get('/shopsManagement', async (req, res) => {
   }
 });
 
-router.get('/edit-shop/:shop_id', async (req, res) => {
+router.get('/edit-shop/:shop_id', (req, res) => {
   const shopId = req.params.shop_id;
 
-  try {
-    const query = `
-      SELECT shop_id, full_name, email, mobile, national_id, username, shop_name, storeType, website, working_hours, unit_number, description, images_path
-      FROM shpk
-      WHERE shop_id = ?
-    `;
+  // دریافت اطلاعات مغازه
+  const shopQuery = `
+    SELECT shop_id, full_name, email, mobile, national_id, username, shop_name, storeType,
+           website, working_hours, unit_number, description, images_path
+    FROM shpk
+    WHERE shop_id = ?
+  `;
 
-    connection.query(query, [shopId], (err, results) => {
+  connection.query(shopQuery, [shopId], (err, shopResults) => {
+    if (err) {
+      console.error('Database error:', err);
+      return res.status(500).send('خطا در دریافت اطلاعات مغازه');
+    }
+
+    if (shopResults.length === 0) {
+      return res.status(404).send('مغازه‌ای با این شناسه یافت نشد');
+    }
+
+    const shop = shopResults[0];
+
+    // آماده‌سازی تصاویر
+    const images = [];
+    if (shop.images_path) {
+      const imagesDir = path.join(__dirname, '../../uploads', shop.images_path.replace(/^\/uploads\//, ''));
+      try {
+        const files = fs.readdirSync(imagesDir);
+        files.forEach(file => {
+          images.push(`/uploads/${shop.images_path.replace(/^\/uploads\//, '')}/${file}`);
+        });
+      } catch (error) {
+        console.error('Error reading images:', error);
+      }
+    }
+    shop.images = images;
+
+    // دریافت کامنت‌ها
+    const commentQuery = 'SELECT * FROM comments WHERE shop_id = ?';
+    connection.query(commentQuery, [shopId], (err, commentResults) => {
       if (err) {
-        console.error('Database error:', err);
-        return res.status(500).send('خطا در دریافت اطلاعات مغازه');
+        console.error('خطا در دریافت نظرات:', err);
+        return res.status(500).send("مشکلی در دریافت نظرات رخ داده است");
       }
+      console.log(commentResults);
+      // تبدیل تاریخ‌ها
+      commentResults.forEach(comment => {
+        const date = moment(comment.created_at).format('jYYYY-jMM-jDD HH:mm:ss');
+        comment.created_at = toPersianNumber(date);
+      });
 
-      if (results.length === 0) {
-        return res.status(404).send('مغازه‌ای با این شناسه یافت نشد');
-      }
-
-      const shop = results[0];
-
-      // خواندن تصاویر از مسیر ذخیره‌شده
-      const images = [];
-      if (shop.images_path) {
-        const imagesDir = path.join(__dirname, '../../uploads', shop.images_path.replace(/^\/uploads\//, ''));
-        try {
-          const files = fs.readdirSync(imagesDir);
-          files.forEach(file => {
-            images.push(`/uploads/${shop.images_path.replace(/^\/uploads\//, '')}/${file}`);
-          });
-        } catch (error) {
-          console.error('Error reading images:', error);
-        }
-      }
-
-      shop.images = images;
-      
+      // رندر نهایی
       res.render('admin/editShop', {
         date: new Intl.DateTimeFormat('fa-IR').format(new Date()),
         time: new Date().toLocaleTimeString('fa-IR'),
         shop,
+        comments: commentResults,
         title: 'ویرایش مغازه'
       });
+     
     });
-  } catch (error) {
-    console.error('Error fetching shop:', error);
-    res.status(500).send('خطا در دریافت اطلاعات مغازه');
-  }
+    
+  });
+  
 });
+
 
 
 

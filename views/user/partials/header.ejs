@@ -46,19 +46,19 @@
 
     <!-- دکمه‌های ورود/خروج -->
     <div class="nav-buttons d-flex justify-content-around mb-4">
-      <% if (!user && !seller && currentUrl !== "/shk/edit-shop" && currentUrl !== "/user/profile") { %>
+      <% if (!iSuser && !seller && currentUrl !== "/shk/edit-shop" && currentUrl !== "/user/profile") { %>
         <form action="/logins" method="GET">
           <button type="submit" class="btn-custom">ورود/ثبت‌نام</button>
         </form>
       <% } %>
 
-      <% if (user && currentUrl == "/user/profile") { %>
+      <% if (iSuser && currentUrl == "/user/profile") { %>
         <form action="/user/userAuth/logout" method="GET">
           <button type="submit" class="btn-custom">خروج</button>
         </form>
       <% } %>
 
-      <% if (user && currentUrl !== "/user/profile" && currentUrl !== "/shk/edit-shop") { %>
+      <% if (iSuser && currentUrl !== "/user/profile" && currentUrl !== "/shk/edit-shop") { %>
         <form action="/user/profile/" method="GET">
           <button type="submit" class="btn-custom">پروفایل</button>
         </form>
@@ -83,5 +83,13 @@
       <% } %>
     </div>
   </div>
+  <script>
+      document.querySelectorAll('.category-btn').forEach(btn => {
+    btn.addEventListener('click', function () {
+      document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('selected'));
+      this.classList.add('selected');
+    });
+  });
+  </script>
 </body>
 </html>

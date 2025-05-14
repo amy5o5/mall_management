@@ -1,28 +1,22 @@
 <form id="commentForm" class="mb-4 p-4 border rounded">
-    <input type="hidden" name="shopId" value="<%= shop.id %>">
-  
-    <div class="form-group mb-3">
-      <label for="fullName">نام کامل:</label>
-      <input type="text" class="form-control" name="fullName" id="fullName" required>
-    </div>
-  
-    <div class="form-group mb-3">
-      <label for="userName">نام کاربری (اختیاری):</label>
-      <input type="text" class="form-control" name="userName" id="userName">
-    </div>
-  
-    <div class="form-group mb-3">
-      <label for="commentText">متن نظر:</label>
-      <textarea class="form-control" name="commentText" id="commentText" rows="3" required></textarea>
-    </div>
-  
-    <div class="form-group mb-3">
-      <label for="rating">امتیاز (از 1 تا 5):</label>
-      <input type="number" class="form-control" name="rating" id="rating" min="1" max="5">
-    </div>
-    <input type="hidden" name="shopId" value="<%= shop.shop_id %>">
-    <button type="submit" class="btn btn-primary">ارسال نظر</button>
-  </form>
+  <input type="hidden" name="shopId" value="<%= shop.shop_id %>">
+
+
+
+
+  <div class="form-group mb-3">
+    <label for="commentText">متن نظر:</label>
+    <textarea class="form-control" name="commentText" id="commentText" rows="3" required></textarea>
+  </div>
+
+  <div class="form-group mb-3">
+    <label for="rating">امتیاز (از 1 تا 5):</label>
+    <input type="number" class="form-control" name="rating" id="rating" min="1" max="5">
+  </div>
+
+  <button type="submit" class="btn btn-primary">ارسال نظر</button>
+</form>
+
   
   <div id="responseMessage" class="mt-2"></div>
   

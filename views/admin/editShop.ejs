@@ -81,7 +81,8 @@
           <textarea name="description" class="form-control"><%= shop.description %></textarea>
         </div>
       </div>
-      <button type="submit" class="btn btn-primary mt-4 w-100">ذخیره تغییرات</button>
+      <button type="submit" class="btn btn-purple mt-4 w-100">ذخیره تغییرات</button>
+
       <div class="d-flex justify-content-between mt-4">
 
       
@@ -92,6 +93,7 @@
       <%- include('../partials/showImages', { shop: shop }) %>
     </form>
     <%- include('partials/deleteShop', { shop: shop }) %>
+    <%- include('./../shop_keeper/partials/deleteComment') %>
   </main>
 
   <script>

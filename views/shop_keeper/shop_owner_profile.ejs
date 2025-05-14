@@ -54,13 +54,20 @@
         <div class="col-md-6">
           <label class="form-label">دسته‌بندی فروشگاه</label>
           <select name="storeType" class="form-select" required>
-            <option value="" disabled>انتخاب دسته‌بندی</option>
+            <option value="" disabled <%= !shop.storeType ? 'selected' : '' %>>انتخاب دسته‌بندی</option>
             <option value="پوشاک" <%= shop.storeType === 'پوشاک' ? 'selected' : '' %>>پوشاک</option>
             <option value="خدماتی" <%= shop.storeType === 'خدماتی' ? 'selected' : '' %>>خدماتی</option>
+            <option value="لوازم خانگی" <%= shop.storeType === 'لوازم خانگی' ? 'selected' : '' %>>لوازم خانگی</option>
+            <option value="مواد غذایی" <%= shop.storeType === 'مواد غذایی' ? 'selected' : '' %>>مواد غذایی</option>
             <option value="زیبایی و آرایشی" <%= shop.storeType === 'زیبایی و آرایشی' ? 'selected' : '' %>>زیبایی و آرایشی</option>
-            <!-- بقیه دسته‌بندی‌ها... -->
+            <option value="کتاب و لوازم‌التحریر" <%= shop.storeType === 'کتاب و لوازم‌التحریر' ? 'selected' : '' %>>کتاب و لوازم‌التحریر</option>
+            <option value="الکترونیک و دیجیتال" <%= shop.storeType === 'الکترونیک و دیجیتال' ? 'selected' : '' %>>الکترونیک و دیجیتال</option>
+            <option value="ورزشی" <%= shop.storeType === 'ورزشی' ? 'selected' : '' %>>ورزشی</option>
+            <option value="کودک و اسباب‌بازی" <%= shop.storeType === 'کودک و اسباب‌بازی' ? 'selected' : '' %>>کودک و اسباب‌بازی</option>
+            <option value="زیورآلات و اکسسوری" <%= shop.storeType === 'زیورآلات و اکسسوری' ? 'selected' : '' %>>زیورآلات و اکسسوری</option>
           </select>
         </div>
+        
         <div class="col-md-6">
           <label class="form-label">وب‌سایت</label>
           <input type="text" name="website" class="form-control" value="<%= shop.website %>" />
@@ -125,6 +132,8 @@
       <input type="file" id="shopImagesInput" class="form-control" accept="image/*" multiple>
       <button class="btn btn-primary mt-2" onclick="uploadImages()">آپلود تصاویر</button>
     </div>
+
+    <%- include('./../shop_keeper/partials/deleteComment')  %>
     
     <script>
 const form = document.getElementById('editShopForm');

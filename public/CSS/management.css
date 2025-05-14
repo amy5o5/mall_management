@@ -330,3 +330,14 @@ input[type="text"],
   object-fit: cover;
   border-radius: 8px;
 }
+
+.btn-primary {
+  background-color: #6f42c1;
+  border-color: #6f42c1;
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background-color: #5a32a3;
+  border-color: #5a32a3;
+}

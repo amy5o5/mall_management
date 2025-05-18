@@ -120,7 +120,7 @@ router.get('/logout', (req, res) => {
         res.clearCookie('connect.sid');
 
        
-        res.redirect('/login');
+        res.redirect('/');
     });
 });
 

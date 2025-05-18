@@ -73,10 +73,11 @@ const user = req.session.user;
       // ارسال اطلاعات مغازه و نظرات به صفحه
       res.render("user/shopPage", { 
         currentUrl: req.originalUrl || null,
-        seller: seller,
+        seller: req.session.user?.role === 'shpk' ? req.session.user : null,
+        isUser: req.session.user?.role === 'user',
         shop,
         comments: comments, // ارسال نظرات به صفحه
-        iSuser: req.session.user || null,
+
         user
       });
     });

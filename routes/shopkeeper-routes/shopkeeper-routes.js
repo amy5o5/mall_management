@@ -93,9 +93,9 @@ router.get("/edit-shop", async (req, res) => {
       }
 
       res.render('shop_keeper/shop_owner_profile', {
-        seller: seller,
         currentUrl: req.originalUrl,
-        iSuser: req.session.user || null,
+        seller: req.session.user?.role === 'shpk' ? req.session.user : null,
+        isUser: req.session.user?.role === 'user',
         date: new Intl.DateTimeFormat('fa-IR').format(new Date()),
         time: new Date().toLocaleTimeString('fa-IR'),
         shop,

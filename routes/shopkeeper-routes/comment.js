@@ -78,7 +78,8 @@ router.get('/comments', (req, res) => {
       }
   
       // پس از حذف، ریدایرکت به صفحه ویرایش مغازه با shop_id
-      res.redirect(`/admin/manageShpks/edit-shop/${shop_id}`);
+      res.redirect('back');  // یا یک مسیر خاص: res.redirect('/some-route');
+
     });
   });
   

@@ -40,49 +40,25 @@
 
     <div class="nav-buttons d-flex justify-content-around mb-4">
       <button class="btn btn-primary">واحدهای تجاری</button>
-      <button class="btn btn-success">نقشه پاساژ</button>
+
       <button class="btn btn-secondary">غرفه‌های پاساژ</button>
     </div>
+    <% if (!isUser && !seller) { %>
+      <a href="/logins" class="btn btn-custom">ورود/ثبت‌نام</a>
+    <% } %>
 
-    <!-- دکمه‌های ورود/خروج -->
-    <div class="nav-buttons d-flex justify-content-around mb-4">
-      <% if (!iSuser && !seller && currentUrl !== "/shk/edit-shop" && currentUrl !== "/user/profile") { %>
-        <form action="/logins" method="GET">
-          <button type="submit" class="btn-custom">ورود/ثبت‌نام</button>
-        </form>
-      <% } %>
+    <% if (isUser) { %>
+      <%- include('userNavBar') %>
+      <% console.log("is user:",isUser); %>
+    <% } %>
 
-      <% if (iSuser && currentUrl == "/user/profile") { %>
-        <form action="/user/userAuth/logout" method="GET">
-          <button type="submit" class="btn-custom">خروج</button>
-        </form>
-      <% } %>
+    <% if (seller) { %>
+      <%   console.log('hi')%>
 
-      <% if (iSuser && currentUrl !== "/user/profile" && currentUrl !== "/shk/edit-shop") { %>
-        <form action="/user/profile/" method="GET">
-          <button type="submit" class="btn-custom">پروفایل</button>
-        </form>
-        <form action="/user/userAuth/logout" method="GET">
-          <button type="submit" class="btn-custom">خروج</button>
-        </form>
-      <% } %>
-
-      <% if (seller && currentUrl == "/shk/edit-shop") { %>
-        <form action="/shk/shopkeeperAuth/logout" method="GET">
-          <button type="submit" class="btn-custom">خروج</button>
-        </form>
-      <% } %>
-
-      <% if (seller && currentUrl !== "/shk/edit-shop") { %>
-        <form action="/shk/edit-shop" method="GET">
-          <button type="submit" class="btn-custom">پروفایل</button>
-        </form>
-        <form action="/shk/shopkeeperAuth/logout" method="GET">
-          <button type="submit" class="btn-custom">خروج</button>
-        </form>
-      <% } %>
-    </div>
-  </div>
+      <%- include('./../../shop_keeper/partials/navBar') %>
+    <% } %>
+  
+    
   <script>
       document.querySelectorAll('.category-btn').forEach(btn => {
     btn.addEventListener('click', function () {

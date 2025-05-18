@@ -1,18 +1,11 @@
 /* ===== 1. VARIABLES ===== */
 :root {
-  /* Primary theme colors */
   --primary-color: #6f42c1;        /* بنفش آبی */
   --primary-hover-color: #5a32a3;
   --secondary-color: #f0f0f0;
-
-  /* Text & border */
   --text-color: #353535;
   --border-color: #5f5ddf;
-
-  /* Background */
   --background-color: #f9f9f9;
-
-  /* Typography */
   --font-family: Tahoma, sans-serif;
 }
 
@@ -113,33 +106,29 @@ input[type="text"],
 }
 
 /* ===== 7. BUTTONS ===== */
-.buttons button,
-.announcement button,
-.delete-btn,
-.btn-custom {
-  margin: 0 10px;
+.button {
   padding: 8px 16px;
   font-size: 0.875rem;
   cursor: pointer;
+  border-radius: 8px;
+  border: 2px solid var(--primary-color);
+  background-color: transparent;
+  color: var(--primary-color);
+  transition: background-color 0.3s, color 0.3s, transform 0.2s;
+}
+
+.button:hover {
   background-color: var(--primary-color);
   color: #fff;
-  border: none;
-  border-radius: 4px;
-  transition: background-color 0.3s, transform 0.2s;
 }
 
-.buttons button:hover,
-.announcement button:hover,
-.delete-btn:hover,
-.btn-custom:hover {
-  background-color: var(--primary-hover-color);
-}
-
-.buttons button:active,
-.announcement button:active,
-.delete-btn:active,
-.btn-custom:active {
+.button:active {
   transform: scale(0.96);
+}
+
+.button.active {
+  background-color: var(--primary-color);
+  color: #fff;
 }
 
 /* ===== 8. SHOPS GRID & CARDS ===== */
@@ -304,7 +293,7 @@ input[type="text"],
   .header { padding: 15px; }
   .datetime { font-size: 0.8125rem; }
   .title { font-size: 1.25rem; }
-  .buttons button { padding: 6px 12px; font-size: 0.75rem; }
+  .button { padding: 6px 12px; font-size: 0.75rem; }
   .visits, .announcement { width: 100%; padding: 15px; }
   .shops-container { flex-direction: column; gap: 15px; }
   .shop-card { width: 100%; padding: 10px; }
@@ -316,7 +305,7 @@ input[type="text"],
 
 @media (max-width: 480px) {
   h1 { font-size: 1.25rem; }
-  .buttons button { margin: 5px 0; width: 100%; }
+  .button { margin: 5px 0; width: 100%; }
   .image-slider { height: 150px; }
   .slider-arrows { font-size: 1rem; }
   .info-box { padding: 10px; }
@@ -331,13 +320,14 @@ input[type="text"],
   border-radius: 8px;
 }
 
-.btn-primary {
-  background-color: #6f42c1;
-  border-color: #6f42c1;
-  color: #fff;
+.btn-custom {
+  background-color: #eee;
+  color: #333;
 }
 
-.btn-primary:hover {
-  background-color: #5a32a3;
-  border-color: #5a32a3;
+.btn-custom.active-btn {
+  background-color: #0d6efd;
+  color: white;
+  font-weight: bold;
+  border: 2px solid #0a58ca;
 }

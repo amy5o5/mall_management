@@ -56,15 +56,17 @@ app.get("/", visit_recorder, async (req, res) => {
 
 
     res.render("main", {
-      seller: seller,
+      seller: req.session.user?.role === 'shpk' ? req.session.user : null,
+      isUser: req.session.user?.role === 'user',
       title: "مدیریت فروشگاه‌ها",
       shops: shopsWithImages,
       linkBase: "/admin/manageShpks/edit-shop",
       date: new Intl.DateTimeFormat("fa-IR").format(new Date()),
       time: new Date().toLocaleTimeString("fa-IR"),
-      iSuser: req.session.user || null,
+
       currentUrl: req.originalUrl
     });
+    
   } catch (error) {
     console.error("Error fetching shops:", error);
     res.status(500).send("خطا در دریافت اطلاعات فروشگاه‌ها");

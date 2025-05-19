@@ -31,7 +31,7 @@ router.get('/', checkRoles('user'), (req, res) => {
         req.session.user = user;
 
         res.render('user/profile', { 
-          iSuser: req.session.user || null,
+          isUser: req.session.user || null,
           user,
           seller,
           currentUrl: req.originalUrl });

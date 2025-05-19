@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <title>ورود / ثبت‌نام</title>
   <link rel="stylesheet" href="/CSS/login.css">
+
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <style>
     .tab-button { padding: 10px; cursor: pointer; }
@@ -13,13 +14,17 @@
   </style>
 </head>
 <body>
+  
   <div class="form-container">
     <h2>ورود / ثبت‌نام</h2>
-    <div class="tabs">
-      <button class="tab-button active-tab" onclick="switchForm('user-login')">ورود کاربر</button>
-      <button class="tab-button" onclick="switchForm('shop-login')">ورود فروشنده</button>
-      <button class="tab-button" onclick="switchForm('user-signup')">ثبت‌نام کاربر</button>
+    <div class="nav-button-wrapper mb-4">
+      <div class="nav-buttons">
+        <button class="btn-outline-primary-custom active-tab" onclick="switchForm('user-login', event)">ورود کاربر</button>
+        <button class="btn-outline-primary-custom" onclick="switchForm('shop-login', event)">ورود فروشنده</button>
+        <button class="btn-outline-primary-custom" onclick="switchForm('user-signup', event)">ثبت‌نام کاربر</button>
+      </div>
     </div>
+    
 
     <!-- فرم ورود کاربر -->
     <form id="user-login" onsubmit="loginUser(event)">
@@ -31,7 +36,7 @@
         <label>رمز عبور</label>
         <input type="password" id="userPassword" required>
       </div>
-      <button type="submit" class="btn">ورود کاربر</button>
+      <button type="submit" class="btn-outline-primary-custom">ورود کاربر</button>
     </form>
 
     <!-- فرم ورود فروشنده -->
@@ -44,7 +49,7 @@
         <label>رمز عبور</label>
         <input type="password" id="shopPassword" required>
       </div>
-      <button type="submit" class="btn">ورود فروشنده</button>
+      <button type="submit" class="btn-outline-primary-custom">ورود فروشنده</button>
     </form>
 
     <!-- فرم ثبت‌نام کاربر -->
@@ -58,18 +63,19 @@
       <div class="input-group">
         <label><input type="checkbox" id="get_news"> دریافت اخبار</label>
       </div>
-      <button type="submit" class="btn">ثبت‌نام</button>
+      <button type="submit" class="btn-outline-primary-custom">ثبت‌نام</button>
     </form>
   </div>
 
   <script>
-    function switchForm(id) {
-      ['user-login', 'shop-login', 'user-signup'].forEach(formId => {
-        document.getElementById(formId).style.display = formId === id ? 'block' : 'none';
-      });
-      document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active-tab'));
-      event.target.classList.add('active-tab');
-    }
+function switchForm(id, event) {
+  ['user-login', 'shop-login', 'user-signup'].forEach(formId => {
+    document.getElementById(formId).style.display = formId === id ? 'block' : 'none';
+  });
+  document.querySelectorAll('.btn-outline-primary-custom').forEach(btn => btn.classList.remove('active-tab'));
+  event.target.classList.add('active-tab');
+}
+
 
     async function loginUser(event) {
       event.preventDefault();
@@ -94,21 +100,42 @@
     }
 
     async function signupUser(event) {
-      event.preventDefault();
-      if (password-signup.value !== confirm-password.value) {
-        return Swal.fire('خطا', 'رمزها مطابقت ندارند', 'error');
-      }
-      const res = await fetch('/user/userAuth/signup', {
-        method: 'POST', headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({
-          full_name: full_name.value, mobile: mobile.value, email: email.value,
-          username: username.value, password: password-signup.value,
-          get_news: get_news.checked
-        })
-      });
-      const data = await res.json();
-      res.ok ? Swal.fire('ثبت‌نام موفق') : Swal.fire('خطا', data.message || 'ثبت‌نام ناموفق', 'error');
-    }
+  event.preventDefault();
+
+  const fullName = document.getElementById("full_name").value;
+  const mobile = document.getElementById("mobile").value;
+  const email = document.getElementById("email").value;
+  const username = document.getElementById("username").value;
+  const password = document.getElementById("password-signup").value;
+  const confirmPassword = document.getElementById("confirm-password").value;
+  const getNews = document.getElementById("get_news").checked;
+
+  if (password !== confirmPassword) {
+    return Swal.fire('خطا', 'رمزها مطابقت ندارند', 'error');
+  }
+
+  const res = await fetch('/user/userAuth/signup', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      full_name: fullName,
+      mobile: mobile,
+      email: email,
+      username: username,
+      password: password,
+      get_news: getNews
+    })
+  });
+
+  const data = await res.json();
+  if (res.ok) {
+    Swal.fire('ثبت‌نام موفق');
+    setTimeout(() => location.href = '/logins', 1000);
+  } else {
+    Swal.fire('خطا', data.message || 'ثبت‌نام ناموفق', 'error');
+  }
+}
+
   </script>
 </body>
 </html>

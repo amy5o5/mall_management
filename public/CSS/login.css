@@ -110,3 +110,40 @@ body {
     color: white;
   }
   
+
+  .nav-button-wrapper {
+    display: flex;
+    justify-content: center;
+  }
+
+  .nav-buttons {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+
+  .btn-outline-primary-custom {
+    padding: 10px 20px;
+    min-width: 140px;
+    text-align: center;
+    border: 2px solid #002fff;
+    background-color: #fff;
+    color: #002fff;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .btn-outline-primary-custom:hover {
+    background-color: #5900ff;
+    color: #fff;
+  }
+
+  .btn-outline-primary-custom.active-tab {
+    background-color: #002fff;
+    color: #fff;
+  }

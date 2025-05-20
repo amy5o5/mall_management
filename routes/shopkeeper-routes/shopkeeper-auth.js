@@ -159,7 +159,7 @@ router.post("/shkeeper-forgot-password", (req, res) => {
             const resetToken = crypto.randomBytes(32).toString("hex");
 
             connection.query(
-                "UPDATE Shop_Owners SET reset_token = ?, reset_token_expiry = DATE_ADD(NOW(), INTERVAL 30 MINUTE) WHERE email = ?",
+                "UPDATE shpk SET reset_token = ?, reset_token_expiry = DATE_ADD(NOW(), INTERVAL 30 MINUTE) WHERE email = ?",
                 [resetToken, userEmail],
                 (err) => {
                     if (err) {

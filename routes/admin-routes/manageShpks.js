@@ -7,6 +7,7 @@ const path = require('path');
 const fs = require('fs');
 const { checkRoles } = require('../../middlewares/check-actor');
 const moment = require('moment-jalaali');
+const { checkAuth } = require('../../middlewares/checkAuth');
 
 function toPersianNumber(number) {
   const persianNumbers = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
@@ -219,7 +220,7 @@ router.get('/shopsManagement', async (req, res) => {
   }
 });
 
-router.get('/edit-shop/:shop_id', (req, res) => {
+router.get('/edit-shop/:shop_id' ,checkAuth,   (req, res) => {
   const shopId = req.params.shop_id;
 
   // دریافت اطلاعات مغازه

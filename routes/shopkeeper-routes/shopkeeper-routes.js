@@ -34,9 +34,12 @@ router.get("/set-shkeeper-new-Password/:token", (req, res) => {
   res.render("shop_keeper/shkeeper-reset-password", { token, errorMessage: null });
 });
 
-router.get("/edit-shop", async (req, res) => {
+router.get("/edit-shop",checkRoles('admin', 'shpk'), async (req, res) => {
 
-  const shopId = req.session.user.id; // تعریف درست
+
+const shopId = req.session.user.id || null;
+
+  console.log('shop id :' ,shopId);
 
   const sql = 'SELECT * FROM comments WHERE shop_id = ?';
   connection.query(sql, [shopId], (err, comments) => {

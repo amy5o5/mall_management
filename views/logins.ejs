@@ -91,8 +91,19 @@ function switchForm(id, event) {
         body: JSON.stringify({ emailOrPhone: userEmailOrPhone.value, password: userPassword.value })
       });
       const data = await res.json();
-      res.ok ? Swal.fire('ورود موفق') && setTimeout(() => location.href = '/user/profile', 1000) :
-               Swal.fire('خطا', data.message || 'ورود ناموفق', 'error');
+if (res.ok) {
+  Swal.fire({
+    title: 'ورود موفق!',
+    icon: 'success',
+    confirmButtonText: 'ادامه',
+    timer: 1000
+  }).then(() => {
+    location.href = '/user/profile';
+  });
+} else {
+  Swal.fire('خطا', data.message || 'ورود ناموفق', 'error');
+}
+
     }
 
     async function loginShop(event) {
@@ -101,9 +112,24 @@ function switchForm(id, event) {
         method: 'POST', headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({ emailOrPhone: shopEmailOrPhone.value, password: shopPassword.value })
       });
-      const data = await res.json();
-      res.ok ? Swal.fire('ورود موفق') && setTimeout(() => location.href = '/shk/edit-shop', 1000) :
-               Swal.fire('خطا', data.message || 'ورود ناموفق', 'error');
+
+const data = await res.json();
+if (res.ok) {
+  Swal.fire({
+    title: 'ورود موفق!',
+    icon: 'success',
+    confirmButtonText: 'ادامه',
+    timer: 1000
+  }).then(() => {
+    location.href = '/shk/edit-shop';
+  });
+} else {
+  Swal.fire('خطا', data.message || 'ورود ناموفق', 'error');
+}
+
+
+
+
     }
 
     async function signupUser(event) {
@@ -134,14 +160,22 @@ function switchForm(id, event) {
     })
   });
 
-  const data = await res.json();
-  if (res.ok) {
-    Swal.fire('ثبت‌نام موفق');
-    setTimeout(() => location.href = '/logins', 1000);
-  } else {
-    Swal.fire('خطا', data.message || 'ثبت‌نام ناموفق', 'error');
-  }
+
+const data = await res.json();
+if (res.ok) {
+  Swal.fire({
+    title: 'ثبت‌نام موفق!',
+    icon: 'success',
+    confirmButtonText: 'ورود به حساب'
+  }).then(() => {
+    location.href = '/logins';
+  });
+} else {
+  Swal.fire('خطا', data.message || 'ثبت‌نام ناموفق', 'error');
 }
+
+
+};
 
   </script>
 </body>

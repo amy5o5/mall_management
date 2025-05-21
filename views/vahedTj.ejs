@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8">
+  <title>واحدهای تجاری</title>
+  <link rel="stylesheet" href="/CSS/management.css">
+</head>
+<body>
+    <%- include('user/partials/header') %>
+  <div class="container">
+    <div>
+      <h1>واحدهای تجاری</h1>
+      <div class="btn-group">
+        <!-- <button>بازگشت</button>
+        <button>صفحه اصلی</button> -->
+      </div>
+    </div>
+
+    <main class="card-grid">
+      <!-- هر واحد تجاری به‌صورت یک کارت -->
+      <div class="shop-card">
+        <img src="/banner/images.jpeg" alt="Shop Image">
+        <div class="info">
+          <p><strong>موقعیت:</strong> طبقه اول - واحد A1</p>
+
+          <p><strong>نوع فعالیت:</strong> پوشاک</p>
+          <p><strong>برند:</strong> لویی ویتون</p>
+          <p><strong>شماره تماس:</strong> 0006663333</p>
+        </div>
+      </div>
+
+      <!-- کارت دوم -->
+      <div class="shop-card">
+        <img src="/banner/images.jpeg" alt="Shop Image">
+        <div class="info">
+          <p><strong>موقعیت:</strong> طبقه اول - واحد A6</p>
+          <p><strong>نوع فعالیت:</strong> پوشاک</p>
+          <p><strong>برند:</strong> دیور</p>
+          <p><strong>شماره تماس:</strong> 0999945859</p>
+        </div>
+      </div>
+
+      <!-- کارت‌های بیشتر... -->
+    </main>
+  </div>
+</body>
+<%- include('./partials/footer') %>
+</html>

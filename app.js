@@ -91,6 +91,19 @@ app.get('/logins', (req, res) => {
   res.render('logins');
 });
 
+app.get('/vahed-haye-tejari', (req,res) => {
+  res.render('vahedTj', {
+      seller: req.session.user?.role === 'shpk' ? req.session.user : null,
+      isUser: req.session.user?.role === 'user',
+      title: "مدیریت فروشگاه‌ها",
+      linkBase: "/admin/manageShpks/edit-shop",
+      date: new Intl.DateTimeFormat("fa-IR").format(new Date()),
+      time: new Date().toLocaleTimeString("fa-IR"),
+
+      currentUrl: req.originalUrl
+    });
+});
+
 /*app.get('/admin-fg-password', (req, res) => {
   res.render('admin/admin-forgot-password');
 });

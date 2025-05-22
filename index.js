@@ -151,4 +151,5 @@ app.get("/securityGuy-reset-password/:token", (req, res) => {
 //   console.log(`App listening on port ${PORT} and ${IP}`);
 // });
 
-
+const serverless = require('serverless-http');
+module.exports = serverless(app);

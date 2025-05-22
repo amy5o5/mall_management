@@ -144,11 +144,11 @@ app.get("/securityGuy-reset-password/:token", (req, res) => {
 
 
 
-const IP = process.env.IP;
-const PORT = process.env.PORT;
+// const IP = process.env.IP;
+// const PORT = process.env.PORT;
 
-app.listen(PORT, IP, () => {
-  console.log(`App listening on port ${PORT} and ${IP}`);
-});
+// app.listen(PORT, IP, () => {
+//   console.log(`App listening on port ${PORT} and ${IP}`);
+// });
 
 

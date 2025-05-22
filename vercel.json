@@ -1,15 +1,14 @@
 {
   "version": 2,
   "builds": [
-    {
-      "src": "test.js",
-      "use": "@vercel/node"
-    }
+    { "src": "index.js", "use": "@vercel/node" }
   ],
   "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "test.js"
+    { "src": "/(.*)", "dest": "index.js" }
+  ],
+  "functions": {
+    "api/index.js": {
+      "includeFiles": "views/**/*"
     }
-  ]
+  }
 }

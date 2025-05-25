@@ -148,6 +148,6 @@ const IP = process.env.IP;
 const PORT = process.env.PORT;
 
 app.listen(PORT, IP, () => {
-  console.log(`App listening on port ${PORT} and ${IP}`);
+  console.log(`App listening on port ${IP} and ${PORT}`);
 });
 

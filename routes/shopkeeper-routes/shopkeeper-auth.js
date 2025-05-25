@@ -75,7 +75,7 @@ router.post('/login', async (req, res) => {
         }
 
         if (result.length === 0) {
-            return res.status(400).json({ message: 'Invalid credentials' });
+            return res.status(400).json({ message: 'اطلاعات وارد شده نادرست است' });
         }
 
         const user = result[0];
@@ -85,7 +85,7 @@ router.post('/login', async (req, res) => {
             const isMatch = await bcrypt.compare(password, user.password);
             //console.log('Password match:', isMatch); 
             if (!isMatch) {
-                return res.status(400).json({ message: 'Invalid credentials' });
+                return res.status(400).json({ message: 'اطلاعات وارد شده نادرست است' });
             }
         } catch (error) {
             //console.log('Error comparing passwords:', error);
@@ -167,7 +167,7 @@ router.post("/shkeeper-forgot-password", (req, res) => {
                         return res.status(500).json({ message: "Database error", error: err.sqlMessage });
                     }
 
-                    const resetLink = `http://192.168.1.183:5000/shk/set-shkeeper-new-Password/${resetToken}`;
+                    const resetLink = `http://192.168.225.155:5000/shk/set-shkeeper-new-Password/${resetToken}`;
                     const mailOptions = {
                         from: process.env.EMAIL_USER,
                         to: userEmail,

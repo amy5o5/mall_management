@@ -17,6 +17,7 @@ app.set("view engine", "ejs");
 app.use(cookieParser());
 
 app.use(express.static("public"));
+
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.set("views", path.join(__dirname, "views"));
@@ -95,7 +96,7 @@ app.get('/vahed-haye-tejari', (req,res) => {
   res.render('vahedTj', {
       seller: req.session.user?.role === 'shpk' ? req.session.user : null,
       isUser: req.session.user?.role === 'user',
-      title: "مدیریت فروشگاه‌ها",
+      title: "واحد های تجاری",
       linkBase: "/admin/manageShpks/edit-shop",
       date: new Intl.DateTimeFormat("fa-IR").format(new Date()),
       time: new Date().toLocaleTimeString("fa-IR"),
@@ -103,6 +104,28 @@ app.get('/vahed-haye-tejari', (req,res) => {
       currentUrl: req.originalUrl
     });
 });
+
+app.get('/booths', (req, res) => {
+  const booths = [
+    { floor: 'طبقه اول', description: 'مناسب برای فروش ساعت و دستبند' },
+    { floor: 'طبقه اول', description: 'مناسب برای فروش شال و روسری' },
+    { floor: 'طبقه سوم', description: 'مناسب برای فروش لوازم جانبی مانند محافظ و قاب گوشی' },
+    { floor: 'طبقه سوم', description: 'مناسب برای فروش انواع خوراکی‌ها مانند لواشک و اسنک' },
+    
+  ];
+  
+  res.render('./ghorfe', { booths,
+      seller: req.session.user?.role === 'shpk' ? req.session.user : null,
+      isUser: req.session.user?.role === 'user',
+      title: "غرفه ها",
+      linkBase: "/admin/manageShpks/edit-shop",
+      date: new Intl.DateTimeFormat("fa-IR").format(new Date()),
+      time: new Date().toLocaleTimeString("fa-IR"),
+
+      currentUrl: req.originalUrl
+   });
+});
+
 
 /*app.get('/admin-fg-password', (req, res) => {
   res.render('admin/admin-forgot-password');

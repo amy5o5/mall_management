@@ -60,12 +60,13 @@
   </div>
 
   <!-- مودال نمایش تصویر -->
-  <div id="imageModal" class="modal" onclick="closeModal()">
-    <span class="close">&times;</span>
-    <div class="modal-content">
-      <img id="modalImage" src="" alt="تصویر بزرگ">
-    </div>
+<div id="imageModal" class="modal" onclick="closeModal(event)">
+  <span class="close" onclick="closeModal(event)">&times;</span>
+  <div class="modal-content">
+    <img id="modalImage" src="" alt="تصویر بزرگ">
   </div>
+</div>
+
 
   <script>
     function openModal(src) {

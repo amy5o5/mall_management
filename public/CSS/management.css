@@ -1,12 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Vazirmatn&display=swap');
 
-body {
+/* body {
   font-family: 'Vazirmatn', sans-serif;
   background-color: #f2f5f7;
   margin: 0;
   padding: 0;
   direction: rtl;
-}
+} */
 
 .container {
   max-width: 1200px;
@@ -15,7 +15,7 @@ body {
 }
 
 header {
-  display: flex;
+ 
   justify-content: space-between;
   align-items: center;
   margin-bottom: 30px;
@@ -97,7 +97,7 @@ header h1 {
 
 body {
   margin: 0;
-  padding: 20px;
+  padding: 10px;
   direction: rtl;
   font-family: var(--font-family);
   background-color: var(--background-color);
@@ -274,40 +274,42 @@ input[type="text"],
 
 
 .modal {
-  display: none;
+  display: none; /* مخفی تا باز بشه */
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.7);
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.8);
   justify-content: center;
   align-items: center;
-  z-index: 1000; /* مطمئن شو روی همه چیز نمایش داده میشه */
+  z-index: 9999;
 }
 
 .modal-content {
-  max-width: 90%;
-  max-height: 90%;
-  border-radius: 10px;
+  max-width: 90vw;
+  max-height: 90vh;
   overflow: hidden;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
-.modal img {
+.modal-content img {
   width: 100%;
   height: auto;
-  border-radius: 10px;
+  object-fit: contain;
   display: block;
+  border-radius: 10px;
 }
 
 .close {
   position: absolute;
   top: 20px;
   right: 30px;
-  font-size: 1.875rem;
+  font-size: 2rem;
   color: #fff;
   cursor: pointer;
-  z-index: 1001; /* بالاتر از تصویر باشه */
+  z-index: 10000;
 }
 
 
@@ -367,13 +369,27 @@ input[type="text"],
 }
 
 /* ===== 13. BANNER CAROUSEL OVERRIDES ===== */
-.banner-carousel img {
+.banner-carousel {
   width: 100%;
   max-height: 350px;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.banner-carousel img {
+  width: 100%;
+  height: 100%;
   object-fit: cover;
   border-radius: 8px;
-  padding: 1px;
+  display: block;
 }
+
+@media (max-width: 768px) {
+  .banner-carousel {
+    max-height: 200px;
+  }
+}
+
 
 
 /* ==== BUTTON BASE === */
@@ -495,3 +511,23 @@ input[type="text"],
   background-color: #002fff;
   color: #fff;
 }
+
+
+
+
+    .stall-box {
+      border: 2px solid #0d3ddb;
+      border-radius: 0.75rem;
+      padding: 1rem;
+      margin-bottom: 1.5rem;
+      background-color: #fff;
+    }
+    .stall-box strong {
+      display: inline-block;
+      margin-bottom: 0.25rem;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 2rem;
+      font-weight: bold
+    }

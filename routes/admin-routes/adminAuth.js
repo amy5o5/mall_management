@@ -7,53 +7,53 @@ const nodemailer = require('nodemailer');
 
 
 
-router.post('/signup', async (req, res) => {
-    const { full_name, email, username,mobile , password } = req.body;
-    //console.log(req.body);
+// router.post('/signup', async (req, res) => {
+//     const { full_name, email, username,mobile , password } = req.body;
+//     //console.log(req.body);
    
-    if (!full_name || !mobile || !email || !username || !password) {
-        return res.status(400).json({ message: 'Please provide all required fields' });
-    }
+//     if (!full_name || !mobile || !email || !username || !password) {
+//         return res.status(400).json({ message: 'Please provide all required fields' });
+//     }
 
-    try {
+//     try {
       
-        const checkExistingUserQuery = 'SELECT email, mobile, username FROM Admins WHERE email = ? OR mobile = ? OR username = ?';
-        const [existingUsers] = await connection.promise().query(checkExistingUserQuery, [email, mobile, username]);
+//         const checkExistingUserQuery = 'SELECT email, mobile, username FROM Admins WHERE email = ? OR mobile = ? OR username = ?';
+//         const [existingUsers] = await connection.promise().query(checkExistingUserQuery, [email, mobile, username]);
 
-        if (existingUsers.length > 0) {
-            const existingUser = existingUsers[0];
+//         if (existingUsers.length > 0) {
+//             const existingUser = existingUsers[0];
 
-            if (existingUser.email === email && existingUser.mobile === mobile && existingUser.username === username) {
-                return res.status(400).json({ message: 'Email, mobile number, and username already exist' });
-            } else if (existingUser.email === email && existingUser.mobile === mobile) {
-                return res.status(400).json({ message: 'Email and mobile number already exist' });
-            } else if (existingUser.email === email && existingUser.username === username) {
-                return res.status(400).json({ message: 'Email and username already exist' });
-            } else if (existingUser.mobile === mobile && existingUser.username === username) {
-                return res.status(400).json({ message: 'Mobile number and username already exist' });
-            } else if (existingUser.email === email) {
-                return res.status(400).json({ message: 'Email already exists' });
-            } else if (existingUser.mobile === mobile) {
-                return res.status(400).json({ message: 'Mobile number already exists' });
-            } else {
-                return res.status(400).json({ message: 'Username already exists' });
-            }
-        }
+//             if (existingUser.email === email && existingUser.mobile === mobile && existingUser.username === username) {
+//                 return res.status(400).json({ message: 'Email, mobile number, and username already exist' });
+//             } else if (existingUser.email === email && existingUser.mobile === mobile) {
+//                 return res.status(400).json({ message: 'Email and mobile number already exist' });
+//             } else if (existingUser.email === email && existingUser.username === username) {
+//                 return res.status(400).json({ message: 'Email and username already exist' });
+//             } else if (existingUser.mobile === mobile && existingUser.username === username) {
+//                 return res.status(400).json({ message: 'Mobile number and username already exist' });
+//             } else if (existingUser.email === email) {
+//                 return res.status(400).json({ message: 'Email already exists' });
+//             } else if (existingUser.mobile === mobile) {
+//                 return res.status(400).json({ message: 'Mobile number already exists' });
+//             } else {
+//                 return res.status(400).json({ message: 'Username already exists' });
+//             }
+//         }
 
         
-        const hashedPassword = await bcrypt.hash(password, 10);
+//         const hashedPassword = await bcrypt.hash(password, 10);
 
       
-        const insertUserQuery = 'INSERT INTO Admins (full_name, email, username,mobile , password ) VALUES (?, ?, ?, ?,?)';
-        await connection.promise().query(insertUserQuery, [full_name, email, username, mobile, hashedPassword]);
+//         const insertUserQuery = 'INSERT INTO Admins (full_name, email, username,mobile , password ) VALUES (?, ?, ?, ?,?)';
+//         await connection.promise().query(insertUserQuery, [full_name, email, username, mobile, hashedPassword]);
 
-        res.status(201).json({ message: 'User registered successfully' });
+//         res.status(201).json({ message: 'User registered successfully' });
 
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Internal server error' });
-    }
-});
+//     } catch (error) {
+//         console.error(error);
+//         res.status(500).json({ message: 'Internal server error' });
+//     }
+// });
 
 
 router.post('/login', (req, res) => {

@@ -107,9 +107,9 @@ router.post('/login', (req, res) => {
             username: user.username,
             role: user.role
         };
-        if (user.role === 'user') {
-            req.session.cookie.maxAge = 1000 * 30 * 60;
-        } 
+        // if (user.role === 'user') {
+        //     req.session.cookie.maxAge = 1000 * 30 * 60;
+        // } 
         //console.log('Session after login:', req.session); 
         // console.log(user.role);
 
@@ -170,7 +170,7 @@ router.post("/user-forgot-password", (req, res) => {
                         return res.status(500).json({ message: "Database error", error: err.sqlMessage });
                     }
 
-                    const resetLink = `http://192.168.1.183:5000/user/user-reset-password/${resetToken}`;
+                    const resetLink = `http://192.168.225.155:5000/user/user-reset-password/${resetToken}`;
                     const subject = "بازیابی رمز عبور";
                     const text = `برای تغییر رمز عبور روی لینک زیر کلیک کنید:\n${resetLink}`;
 
